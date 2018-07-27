@@ -1,13 +1,30 @@
 import React from 'react';
 import { Router, BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Menu, Icon } from 'antd';
-import Todos from '../Todos';
-import Other from '../Other';
+import { Menu, Icon, Spin } from 'antd';
+import Loadable from 'react-loadable';
+import LoadingComponent from '../../components/LoadingComponent';
+import { urlToList } from '../../utils/commons';
 import styles from './index.less';
+
+const AsyncTodos = Loadable({
+  loader: () => import('../Todos'),
+  loading: LoadingComponent,
+  delay: 200,
+});
+const AsyncOther = Loadable({
+  loader: () => import('../Other'),
+  loading: LoadingComponent,
+  delay: 200,
+});
 
 export default class App extends React.Component {
   state = {
     current: 'todos',
+  }
+  componentWillMount() {
+    const { location: { pathname } } = this.props;
+    const current = pathname.replace(/\//i,'');
+    this.setState({ current });
   }
   handleClick = ({ key }) => {
     this.setState({ current: key },() => {
@@ -37,8 +54,8 @@ export default class App extends React.Component {
         </div>
         <div className={styles.wrapper}>
           <Switch>
-            <Route path="/todos" render={props => <Todos {...props}/>} />
-            <Route path="/other" render={props => <Other {...props}/>} />
+            <Route path="/todos" render={props => <AsyncTodos {...props}/>} />
+            <Route path="/other" render={props => <AsyncOther {...props}/>} />
             <Redirect exact from="/" to="/todos" />
           </Switch>
         </div>

@@ -2,6 +2,7 @@ const path = require('path');
 const merge = require('webpack-merge'); //webpack配置文件合并
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //css压缩
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin'); //多线程压缩
+const ManifestPlugin = require('webpack-manifest-plugin'); // 生成静态志愿引用表
 const ExtendedDefinePlugin = require('extended-define-webpack-plugin'); //全局变量
 const CopyWebpackPlugin = require('copy-webpack-plugin'); //直接拷贝，比如图片文件夹
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //视图分析webpack情况
@@ -35,6 +36,9 @@ const plugins = [
   new ExtendedDefinePlugin({
     //全局变量
     __LOCAL__: false
+  }),
+  new ManifestPlugin({
+    fileName: 'asset-manifest.json'
   })
 ];
 if(process.argv[6] === '--profile') {

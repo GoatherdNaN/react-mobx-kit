@@ -1,6 +1,7 @@
 {
   "plugins": [
     "syntax-dynamic-import",
+    "react-loadable/babel",
     "transform-decorators-legacy",
     "react-hot-loader/babel",
     [

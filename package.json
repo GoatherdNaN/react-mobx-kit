@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --devtool eval --open --hot --compress --mode development --inline --profile --config config/webpack.dev.conf.js",
-    "build": "npm run buildClean  && webpack  --mode production --progress --color --config config/webpack.prod.conf.js  &&  npm run pack",
+    "build": "npm run buildClean  &&  webpack  --mode production --progress --color --config config/webpack.prod.conf.js  &&  npm run pack",
     "analyz": "npm run buildClean  &&  webpack  --mode production --progress --color --profile --config config/webpack.prod.conf.js",
     "dll": "npm run dllClean  &&  webpack  --mode production --profile --config config/webpack.dll.conf.js -p",
     "buildClean": "rimraf ./dist",
@@ -44,7 +44,7 @@
     "prop-types": "^15.6.2",
     "react-hot-loader": "^4.3.3",
     "rimraf": "^2.6.2",
-    "style-loader": "^0.21.2",
+    "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "url-loader": "^1.0.1",
     "webpack": "^4.16.1",
@@ -57,12 +57,14 @@
   "dependencies": {
     "antd": "^3.7.0",
     "classnames": "^2.2.6",
-    "express": "^4.16.3",
+    "koa": "^2.5.2",
+    "koa-router": "^7.4.0",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-loadable": "^5.4.0",
     "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^4.3.1"
   }
 }

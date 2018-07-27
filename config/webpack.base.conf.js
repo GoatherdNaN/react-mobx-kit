@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //html
 const HappyPack = require('happypack'); //多线程运行
-const merge = require('webpack-merge'); //webpack配置文件合并
 
 var happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 
@@ -10,7 +9,7 @@ module.exports = {
   entry: './src/index.js',
   resolve: {
     mainFields: ['jsnext:main', 'browser', 'main'], //npm读取先后方式  jsnext:main 是采用es6模块写法
-    extensions: [".js", ".less"],
+    extensions: [".js", ".json", ".less"],
     alias: {
       //快捷入口
       assets: path.resolve('src/assets'),
