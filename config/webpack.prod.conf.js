@@ -6,6 +6,7 @@ const ManifestPlugin = require('webpack-manifest-plugin'); // 生成静态志愿
 const ExtendedDefinePlugin = require('extended-define-webpack-plugin'); //全局变量
 const CopyWebpackPlugin = require('copy-webpack-plugin'); //直接拷贝，比如图片文件夹
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //视图分析webpack情况
+const { ReactLoadablePlugin } =require('react-loadable/webpack') ;
 
 const baseConfig = require('./webpack.base.conf'); //基础配置
 const plugins = [
@@ -35,11 +36,14 @@ const plugins = [
   }),
   new ExtendedDefinePlugin({
     //全局变量
-    __LOCAL__: false
+    __DEV__: false
   }),
   new ManifestPlugin({
     fileName: 'asset-manifest.json'
-  })
+  }),
+  new ReactLoadablePlugin({
+    filename: path.resolve('dist/react-loadable.json'),
+  }),
 ];
 if(process.argv[6] === '--profile') {
   plugins.push(//分析依赖

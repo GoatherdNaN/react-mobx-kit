@@ -21,7 +21,7 @@ module.exports =  merge(baseConfig, {
     }),
     new ExtendedDefinePlugin({
       //全局变量
-      __LOCAL__: true,
+      __DEV__: true,
     }),
   ],
 

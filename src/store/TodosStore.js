@@ -5,24 +5,11 @@ import {
 } from 'mobx'
 
 export default class TodosState {
-  @observable todos = [
-    {
-      text: 'webpack4从0搭建',
-      isDone: true
-    },
-    {
-      text: 'Mobx引入并实现Todos',
-      isDone: true
-    },
-    {
-      text: 'React SSR',
-      isDone: false
-    },
-    {
-      text: '加入jsLint',
-      isDone: false
-    },
-  ];
+  @observable todos = [];
+
+  constructor(initialState) {
+    Object.assign(this, initialState);
+  }
 
   @computed get doneCount() {
     return this.todos.filter(v => v.isDone).length;
@@ -35,6 +22,7 @@ export default class TodosState {
   @computed get allChecked() {
     return this.todos.every(v => v.isDone);
   }
+
 
   @action addTodo = text => {
     this.todos.push({
