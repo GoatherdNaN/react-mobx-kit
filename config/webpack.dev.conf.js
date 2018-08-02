@@ -9,7 +9,7 @@ module.exports =  merge(baseConfig, {
   mode: 'development', // 设置开发环境
 
   output: {
-    path: path.join(__dirname, 'dev'),
+    path: path.join(__dirname, 'dist'),
     filename: 'js/[name].js',
     publicPath: '/'
   },

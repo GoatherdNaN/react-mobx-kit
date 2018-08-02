@@ -11,6 +11,9 @@ const todosStore = new TodosStore();
 @inject('todosStore')
 @observer
 export default class TodoApp extends React.Component {
+  componentWillMount() {
+    this.props.todosStore.getInitTodos();
+  }
   render() {
     const { count, todos, deleteTodo, clearDone, changeTodoState, addTodo, allChecked, doneCount } = this.props.todosStore;
     return (

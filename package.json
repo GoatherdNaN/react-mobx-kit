@@ -57,14 +57,13 @@
   "dependencies": {
     "antd": "^3.7.0",
     "classnames": "^2.2.6",
-    "koa": "^2.5.2",
-    "koa-router": "^7.4.0",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-loadable": "^5.4.0",
     "react-router": "^4.3.1",
+    "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.3.1"
   }
 }

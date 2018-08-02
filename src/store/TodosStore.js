@@ -2,10 +2,12 @@ import {
   observable,
   computed,
   action
-} from 'mobx'
+} from 'mobx';
+import { getInitTodos } from './api';
 
 export default class TodosState {
   @observable todos = [];
+  @observable loadingTodos = false;
 
   constructor(initialState) {
     Object.assign(this, initialState);
@@ -23,6 +25,15 @@ export default class TodosState {
     return this.todos.every(v => v.isDone);
   }
 
+  @action
+  async getInitTodos() {
+    if (!this.loadingTodos) {
+      this.loadingTodos = true;
+      const initTodos = await getInitTodos();
+      this.loadingTodos = false;
+      this.todos = initTodos;
+    }
+  }
 
   @action addTodo = text => {
     this.todos.push({

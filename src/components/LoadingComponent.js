@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import { Spin } from 'antd';
 export default function LoadingComponent({ error }) {
   return <div style={{ height: '100%', textAligh: 'center' }}>

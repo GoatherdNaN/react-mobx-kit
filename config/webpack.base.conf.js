@@ -26,7 +26,7 @@ module.exports = {
         loader: 'happypack/loader?id=babel&&cacheDirectory=true',
       },
       {
-        test: /\.(png|jpe?g|gif|svg|ttf)$/,
+        test: /\.(svg|woff2?|ttf|eot|jpe?g|png|gif)(\?.*)?$/i,
         exclude: /(node_modules|bower_components)/,
         include: [path.resolve('src')],
         use: [
