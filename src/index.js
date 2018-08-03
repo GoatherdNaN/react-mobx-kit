@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import React from 'react';
-import { hydrate } from 'react-dom';
+import { render } from 'react-dom';
 import Loadable from 'react-loadable';
 import { createStoresFromState } from './store/utils';
 import createApp from './createApp';
@@ -12,6 +12,6 @@ const ROOT = document.getElementById('root');
 Loadable.preloadReady().then(() => {
   const application = createApp({ stores });
   if (typeof document !== 'undefined') {
-    hydrate(application, ROOT);
+    render(application, ROOT);
   }
 });

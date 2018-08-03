@@ -5,8 +5,6 @@ import TodoMain from '../../components/TodoMain';
 import TodoFooter from '../../components/TodoFooter';
 
 import styles from './index.less';
-import TodosStore from '../../store/TodosStore';
-const todosStore = new TodosStore();
 
 @inject('todosStore')
 @observer
