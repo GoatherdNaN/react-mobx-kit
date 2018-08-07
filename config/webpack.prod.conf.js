@@ -5,6 +5,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin'); //多线程压缩
 const ManifestPlugin = require('webpack-manifest-plugin'); // 生成静态志愿引用表
 const ExtendedDefinePlugin = require('extended-define-webpack-plugin'); //全局变量
 const CopyWebpackPlugin = require('copy-webpack-plugin'); //直接拷贝，比如图片文件夹
+const optimizeCss = require('optimize-css-assets-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin') // 清空打包目录的插件
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //视图分析webpack情况
 const { ReactLoadablePlugin } =require('react-loadable/webpack') ;
 
@@ -23,12 +25,18 @@ const plugins = [
     },
     exclude: /(node_modules|bower_components)/
   }),
-  new CopyWebpackPlugin([
-    {
-        from: path.resolve('dll'),
-        to: path.resolve('dist','dll')
-    },
-  ]),
+  new optimizeCss({
+    assetNameRegExp: /\.style\.css$/g,
+    cssProcessor: require('cssnano'),
+    cssProcessorOptions: { discardComments: { removeAll: true } },
+    canPrint: true
+  }),
+  new CleanWebpackPlugin(['dist'], {
+      root: path.join(__dirname, '..'),
+      exclude: ['dll'],
+      verbose: true,
+      dry:  false
+  }),
   new MiniCssExtractPlugin({
     //css添加hash
     filename: 'css/[name]-[hash].css',
@@ -146,6 +154,7 @@ module.exports = merge(baseConfig, {
           enforce: true
         }
       }
-    }
+    },
+    minimizer: [new optimizeCss({})],
   }
 });

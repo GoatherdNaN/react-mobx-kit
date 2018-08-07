@@ -15,10 +15,6 @@ module.exports =  merge(baseConfig, {
   },
 
   plugins: [
-    new webpack.DllReferencePlugin({
-      // context: __dirname,
-      manifest: path.resolve('dll', 'manifest.json')
-    }),
     new ExtendedDefinePlugin({
       //全局变量
       __DEV__: true,
