@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 class AppError extends React.Component {
   constructor(props) {
@@ -12,7 +11,7 @@ class AppError extends React.Component {
 
   componentDidMount() {}
 
-  componentDidCatch(error, info) {
+  componentDidCatch() {
     this.setState({ hasError: true });
     // console.error(error);
     // console.error(info);

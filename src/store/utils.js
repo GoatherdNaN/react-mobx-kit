@@ -10,15 +10,15 @@ import AllStores from './index';
 // are used here to "inject" the actual store objects into that store
 // so it can be access directly
 function linkStores(stores) {
-  Object.keys(stores).forEach((currentStore) => {
-    if (stores[currentStore].hasOwnProperty('linkedStores')) {
+  Object.keys(stores).forEach(currentStore => {
+    if (Object.prototype.hasOwnProperty.call(stores[currentStore], 'linkedStores')) {
       const linkStoreKeys = stores[currentStore].linkedStores || [];
 
       if (linkStoreKeys.length === 0) {
         console.warn(`Store ${currentStore} has an empty linkedStores property.`);
       }
 
-      linkStoreKeys.forEach((linkStore) => {
+      linkStoreKeys.forEach(linkStore => {
         stores[currentStore][linkStore] = stores[linkStore];
       });
     }
@@ -44,8 +44,8 @@ export function getFinalStores() {
 export function getFreshStores() {
   const freshStores = {};
 
-  Object.keys(AllStores).forEach((value) => {
-    freshStores[value] = new AllStores[value];
+  Object.keys(AllStores).forEach(value => {
+    freshStores[value] = new AllStores[value]();
   });
 
   linkStores(freshStores);
@@ -60,8 +60,8 @@ export function getFreshStores() {
 // on the server (above) so we start on the same page (so to say)
 export function createStoresFromState(state) {
   const createdStores = {};
-  Object.keys(AllStores).forEach((value) => {
-    createdStores[value.replace(/^\S/,s => s.toLowerCase())] = new AllStores[value](state[value]);
+  Object.keys(AllStores).forEach(value => {
+    createdStores[value.replace(/^\S/, s => s.toLowerCase())] = new AllStores[value](state[value]);
   });
 
   // tack on the stores that need to communicate with each other

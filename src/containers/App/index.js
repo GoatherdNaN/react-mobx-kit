@@ -1,29 +1,35 @@
 import React from 'react';
-import { Menu, Icon, Spin } from 'antd';
-import { renderRoutes } from 'react-router-config'
+import { Menu, Icon } from 'antd';
+import { renderRoutes } from 'react-router-config';
 import { Redirect } from 'react-router-dom';
-import { urlToList } from '../../utils/commons';
 import styles from './index.less';
 
 export default class App extends React.Component {
   state = {
     current: 'todos',
-  }
+  };
+
   componentWillMount() {
-    const { location: { pathname } } = this.props;
-    let current = pathname.replace(/\//i,'');
-    if(!current) {
+    const {
+      location: { pathname },
+    } = this.props;
+    let current = pathname.replace(/\//i, '');
+    if (!current) {
       current = 'todos';
     }
     this.setState({ current });
   }
+
   handleClick = ({ key }) => {
-    this.setState({ current: key },() => {
+    this.setState({ current: key }, () => {
       this.props.history.push(`/${key}`);
-    })
-  }
+    });
+  };
+
   render() {
-    const { location: { pathname } } = this.props;
+    const {
+      location: { pathname },
+    } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -33,25 +39,26 @@ export default class App extends React.Component {
               onClick={this.handleClick}
               selectedKeys={[this.state.current]}
               theme="dark"
-              mode="horizontal"
-            >
+              mode="horizontal">
               <Menu.Item key="todos">
-                <Icon type="todos" />Todos
+                <Icon type="todos" />
+                Todos
               </Menu.Item>
               <Menu.Item key="other">
-                <Icon type="other" />其他
+                <Icon type="other" />
+                其他
               </Menu.Item>
             </Menu>
           </div>
         </div>
         <div className={styles.wrapper}>
-          {
-            ! pathname.replace(/\//i,'')
-            ? <Redirect to="/todos" />
-            : renderRoutes(this.props.route.routes)
-          }
+          {!pathname.replace(/\//i, '') ? (
+            <Redirect to="/todos" />
+          ) : (
+            renderRoutes(this.props.route.routes)
+          )}
         </div>
       </div>
-    )
+    );
   }
 }

@@ -4,11 +4,18 @@
   "description": "webpack4 + Mobx + ReactSSR",
   "main": "index.js",
   "scripts": {
+    "precommit": "npm run lint-staged",
     "start": "webpack-dev-server --devtool eval --open --hot --compress --mode development --inline --profile --config config/webpack.dev.conf.js",
     "build": "cross-env webpack  --mode production --progress --color --config config/webpack.prod.conf.js",
     "analyzer": "cross-env ANALYZE=1 npm run build",
     "dll": "webpack  --mode production --profile --config config/webpack.dll.conf.js -p",
-    "static": "npm run build  &&  node ./staticServer/bin/www"
+    "static": "npm run build  &&  node ./staticServer/bin/www",
+    "lint:style": "stylelint \"src/**/*.less\" --syntax less",
+    "lint": "eslint --ext .js src && npm run lint:style",
+    "lint:fix": "eslint --fix --ext .js src && npm run lint:style",
+    "lint-staged": "lint-staged",
+    "lint-staged:js": "eslint --fix --ext .js",
+    "prettier": "prettier --write ./src/**/**/**/*"
   },
   "keywords": [
     "mobx",
@@ -66,5 +73,21 @@
     "react-router": "^4.3.1",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.3.1"
-  }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,less}": [
+      "prettier --wirter",
+      "git add"
+    ],
+    "**/*.{js,jsx}": "lint-staged:js",
+    "**/*.less": "stylelint --syntax less"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 9"
+  ]
 }

@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 import { Spin } from 'antd';
+
 export default function LoadingComponent({ error }) {
-  return <div style={{ height: '100%', textAligh: 'center' }}>
-    { ! error
-      ? <Spin size="large" />
-      : 'Error!'
-    }
-  </div>;
+  return (
+    <div style={{ height: '100%', textAligh: 'center' }}>
+      {!error ? <Spin size="large" /> : 'Error!'}
+    </div>
+  );
 }

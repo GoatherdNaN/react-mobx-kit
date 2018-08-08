@@ -1,6 +1,7 @@
 import Loadable from 'react-loadable';
 import LoadingComponent from './components/LoadingComponent';
 import App from './containers/App';
+
 const COMMIT_DELAY = 200;
 const AsyncTodos = Loadable({
   loader: () => import('./containers/Todos'),
@@ -20,13 +21,13 @@ export default [
       {
         path: '/todos',
         exact: true,
-        component: AsyncTodos
+        component: AsyncTodos,
       },
       {
         path: '/other',
         exact: true,
-        component: AsyncOther
-      }
-    ]
-  }
-]
+        component: AsyncOther,
+      },
+    ],
+  },
+];
