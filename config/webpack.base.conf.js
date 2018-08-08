@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin'); //html
 const HappyPack = require('happypack'); //多线程运行
 const os = require('os');
 
@@ -44,19 +43,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DllReferencePlugin({
-      context: path.resolve(__dirname, '../'), // 指定一个路径作为上下文环境，需要与DllPlugin的context参数保持一致，建议统一设置为项目根目录
-      manifest: require('../dist/dll/manifest.json'), // 指定manifest.json
-      name: 'vendor_library',  // 当前Dll的所有内容都会存放在这个参数指定变量名的一个全局变量下，注意与DllPlugin的name参数保持一致
-    }),
-    new HtmlWebpackPlugin({
-        title: 'my admin',
-        inject: 'body',
-        filename: 'index.html',
-        template: path.resolve('./index.html'), //源html
-        favicon: path.resolve('favicon.ico'),
-        minify: {
-          collapseWhitespace: true,
-        }
+      manifest: path.resolve('dll', 'manifest.json')
     }),
     new HappyPack({
       //多线程运行 默认是电脑核数-1

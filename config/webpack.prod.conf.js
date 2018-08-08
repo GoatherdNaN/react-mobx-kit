@@ -2,13 +2,14 @@ const path = require('path');
 const merge = require('webpack-merge'); //webpack配置文件合并
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //css压缩
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin'); //多线程压缩
-const ManifestPlugin = require('webpack-manifest-plugin'); // 生成静态志愿引用表
+// const ManifestPlugin = require('webpack-manifest-plugin'); // 生成静态志愿引用表
 const ExtendedDefinePlugin = require('extended-define-webpack-plugin'); //全局变量
-const CopyWebpackPlugin = require('copy-webpack-plugin'); //直接拷贝，比如图片文件夹
 const optimizeCss = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin') // 清空打包目录的插件
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //视图分析webpack情况
-const { ReactLoadablePlugin } =require('react-loadable/webpack') ;
+// const { ReactLoadablePlugin } =require('react-loadable/webpack') ;
+const CopyWebpackPlugin = require('copy-webpack-plugin'); //直接拷贝，比如图片文件夹
+const HtmlWebpackPlugin = require('html-webpack-plugin'); //html
 
 const baseConfig = require('./webpack.base.conf'); //基础配置
 const plugins = [
@@ -33,9 +34,23 @@ const plugins = [
   }),
   new CleanWebpackPlugin(['dist'], {
       root: path.join(__dirname, '..'),
-      exclude: ['dll'],
       verbose: true,
       dry:  false
+  }),
+  new CopyWebpackPlugin([
+    {
+      from: path.resolve('dll'),
+      to: path.resolve('dist'),
+      ignore: ['*.html']
+    }
+  ]),
+  new HtmlWebpackPlugin({
+    inject: 'body',
+    filename: 'index.html',
+    template: path.resolve('dll/index.html'), //源html
+    minify: {
+      collapseWhitespace: true,
+    }
   }),
   new MiniCssExtractPlugin({
     //css添加hash
@@ -46,14 +61,14 @@ const plugins = [
     //全局变量
     __DEV__: false
   }),
-  new ManifestPlugin({
-    fileName: 'asset-manifest.json'
-  }),
-  new ReactLoadablePlugin({
-    filename: path.resolve('dist/react-loadable.json'),
-  }),
+  // new ManifestPlugin({
+  //   fileName: 'asset-manifest.json'
+  // }),
+  // new ReactLoadablePlugin({
+  //   filename: path.resolve('dist/react-loadable.json'),
+  // }),
 ];
-if(process.argv[6] === '--profile') {
+if(+process.env.ANALYZE) {
   plugins.push(//分析依赖
     new BundleAnalyzerPlugin({
       analyzerMode: 'server',

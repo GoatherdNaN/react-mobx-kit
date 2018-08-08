@@ -1,5 +1,4 @@
 import React from 'react';
-import Loadable from 'react-loadable';
 import { Provider } from 'mobx-react';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
@@ -18,26 +17,13 @@ const createApp = ({ stores, isNode = false, modules }) => {
       {renderRoutes(routes)}
     </BrowserRouter>
   }
-  if(process.env.NODE_ENV === 'production'){
-    return (
-      <LocaleProvider locale={zhCN}>
-        <Loadable.Capture report={moduleName => modules.push(moduleName)}>
-          <Provider {...stores}>
-            {getRouter()}
-          </Provider>
-        </Loadable.Capture>
-      </LocaleProvider>
-    )
-  } else {
-    return (
-      <LocaleProvider locale={zhCN}>
-        <Provider {...stores}>
-          {getRouter()}
-        </Provider>
-      </LocaleProvider>
-    )
-  }
-
+  return (
+    <LocaleProvider locale={zhCN}>
+      <Provider {...stores}>
+        {getRouter()}
+      </Provider>
+    </LocaleProvider>
+  )
 }
 
 export default createApp;
