@@ -5,7 +5,7 @@
  */
 var opn = require('opn');
 var app = require('../app');
-var debug = require('debug')('wms-admin:server');
+var debug = require('debug')('react-mobx-ssr-kit:server');
 var http = require('http');
 
 /**

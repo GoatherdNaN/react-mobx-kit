@@ -33,8 +33,8 @@ export default class TodosState {
     if (!this.loadingTodos) {
       this.loadingTodos = true;
       const { code, data } = await getInitTodos();
+      this.loadingTodos = false;
       if(code && code === 200) {
-        this.loadingTodos = false;
         this.todos = data;
       }
     }
