@@ -92,11 +92,11 @@
     "react-router-dom": "^4.3.1"
   },
   "lint-staged": {
-    "**/*.{js,jsx,less}": [
+    "**/*.{js,less}": [
       "prettier --wirter",
       "git add"
     ],
-    "**/*.{js,jsx}": "lint-staged:js",
+    "**/*.{js}": "lint-staged:js",
     "**/*.less": "stylelint --syntax less"
   },
   "engines": {
