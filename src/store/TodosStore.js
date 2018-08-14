@@ -32,9 +32,11 @@ export default class TodosState {
   async getInitTodos() {
     if (!this.loadingTodos) {
       this.loadingTodos = true;
-      const initTodos = await getInitTodos();
-      this.loadingTodos = false;
-      this.todos = initTodos;
+      const { code, data } = await getInitTodos();
+      if(code && code === 200) {
+        this.loadingTodos = false;
+        this.todos = data;
+      }
     }
   }
 

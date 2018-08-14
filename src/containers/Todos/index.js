@@ -23,15 +23,21 @@ export default class TodoApp extends React.Component {
       addTodo,
       allChecked,
       doneCount,
+      loadingTodos,
     } = this.props.todosStore;
     return (
       <div className={styles.panel}>
         <h1>
-          TODOS:
+          TODOS：
           {count}
         </h1>
         <TodoHeader addTodo={addTodo} />
-        <TodoMain deleteTodo={deleteTodo} todos={todos} changeTodoState={changeTodoState} />
+        <TodoMain
+          todos={todos}
+          deleteTodo={deleteTodo}
+          loading={loadingTodos}
+          changeTodoState={changeTodoState}
+        />
         <TodoFooter
           allChecked={allChecked}
           doneCount={doneCount}
