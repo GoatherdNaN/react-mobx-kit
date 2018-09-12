@@ -90,11 +90,11 @@ module.exports =  merge(baseConfig, {
     historyApiFallback:true,
     overlay: true,
     compress: false, // 服务器返回浏览器的时候是否启动gzip压缩
-    proxy:{
-      '/api': {
-        target:"https://www.easy-mock.com/mock/5b5a7ae5b14d03439fb7f3f9",
-        changeOrigin: true,
-      },
-    }
+    // proxy:{
+    //   '/api': {
+    //     target:"https://www.easy-mock.com/mock/5b5a7ae5b14d03439fb7f3f9",
+    //     changeOrigin: true,
+    //   },
+    // }
   },
 });

@@ -80,8 +80,8 @@ export default function request(base, params = null, cache = false, jsonType = f
         ? 'application/json;charset=UTF-8'
         : 'application/x-www-form-urlencoded;charset=UTF-8',
     },
-    // mode: 'no-cors',
-    credentials: 'include',
+    mode: 'cors',
+    // credentials: 'include',
     method,
   };
   // 非get方式请求参数处理
