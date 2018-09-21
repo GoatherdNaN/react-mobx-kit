@@ -2,9 +2,11 @@ import React from 'react';
 import { Menu, Icon } from 'antd';
 import { renderRoutes } from 'react-router-config';
 import { Redirect } from 'react-router-dom';
+import withWrapError from '../../components/ErrorHandle';
 import styles from './index.less';
 
-export default class App extends React.Component {
+
+class App extends React.Component {
   state = {
     current: 'todos',
   };
@@ -61,4 +63,7 @@ export default class App extends React.Component {
       </div>
     );
   }
-}
+};
+App.displayName = 'App';
+
+export default withWrapError(App);

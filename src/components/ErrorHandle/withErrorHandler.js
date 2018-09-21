@@ -10,6 +10,7 @@ const withErrorHandler =  (errorCallback, FallbackComponent, Component) => {
     };
 
     componentDidCatch (error, info) {
+      console.log('捕获子层的错误');
       this.setState({ hasError: true, error, errorInfo: info });
 
       errorCallback(error, info, this.props);
@@ -30,6 +31,7 @@ const withErrorHandler =  (errorCallback, FallbackComponent, Component) => {
       return <Component {...this.props} />
     }
   }
+  console.log('/displayName',Component.displayName);
   ErrorHandler.displayName = `withErrorHandler(${Component.displayName || 'Component'})`;
   return ErrorHandler;
 }
