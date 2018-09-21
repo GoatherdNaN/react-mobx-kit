@@ -3,9 +3,12 @@ import { inject, observer } from 'mobx-react';
 import TodoHeader from '../../components/TodoHeader';
 import TodoMain from '../../components/TodoMain';
 import TodoFooter from '../../components/TodoFooter';
+import withWrapError from '../../components/ErrorHandle';
+
 
 import styles from './index.less';
 
+@withWrapError // 放在最上面
 @inject('todosStore')
 @observer
 export default class TodoApp extends React.Component {

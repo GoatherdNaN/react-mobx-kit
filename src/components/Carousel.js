@@ -3,13 +3,9 @@ import { Carousel } from 'antd';
 import styles from '../containers/Other/index.less';
 
 export default class Index extends Component {
-  handleChange = (...rest) => {
-    console.info('rest', rest);
-  };
-
   render() {
     return (
-      <Carousel autoplay afterChange={this.handleChange}>
+      <Carousel autoplay>
         <div className={styles.imgBox}>
           <img src={require('assets/1.jpg')} alt="图片加载错误" />
         </div>

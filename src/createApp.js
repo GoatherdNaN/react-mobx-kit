@@ -15,7 +15,9 @@ const createApp = ({ stores, isNode = false }) => {
   };
   return (
     <LocaleProvider locale={zhCN}>
-      <Provider {...stores}>{getRouter()}</Provider>
+      <Provider {...stores}>
+        {getRouter()}
+      </Provider>
     </LocaleProvider>
   );
 };
