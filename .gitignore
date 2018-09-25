@@ -7,3 +7,4 @@ yarn-error.log
 dist/
 dll/
 package-lock.json
+sh.exe.stackdump

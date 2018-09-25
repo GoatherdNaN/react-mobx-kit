@@ -33,12 +33,19 @@ module.exports = {
           {
             loader: 'url-loader', //limit 图片大小的衡量，进行base64处理
             options: {
-              limit: 1 * 1024,
-              outputPath: "images"
+              name: '[name].[ext]',
+              limit: 10*1024,
+              outputPath: 'images'
             },
           },
+          { // 压缩图片
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+            }
+          }
         ],
-      },
+      }
     ],
   },
   plugins: [
