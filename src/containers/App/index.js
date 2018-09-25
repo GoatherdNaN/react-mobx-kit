@@ -5,6 +5,11 @@ import { Redirect } from 'react-router-dom';
 import withWrapError from '../../components/ErrorHandle';
 import styles from './index.less';
 
+const ThemeContext = React.createContext({
+  background: '#f00',
+  color: '#fff'
+});
+
 
 class App extends React.Component {
   state = {
@@ -57,7 +62,9 @@ class App extends React.Component {
           {!pathname.replace(/\//i, '') ? (
             <Redirect to="/todos" />
           ) : (
-            renderRoutes(this.props.route.routes)
+            <ThemeContext.Provider value={{background: 'green', color: 'white'}}>
+              { renderRoutes(this.props.route.routes) }
+            </ThemeContext.Provider>
           )}
         </div>
       </div>
@@ -66,4 +73,5 @@ class App extends React.Component {
 };
 App.displayName = 'App';
 
+export { ThemeContext };
 export default withWrapError(App);

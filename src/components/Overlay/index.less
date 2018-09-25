@@ -1,0 +1,37 @@
+.overlayWrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  outline: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.overlay {
+  box-sizing: border-box;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  width: 1200px;
+  margin-left: -600px;
+  margin-top: -100px;
+  padding: 10px;
+  background-color: #fff;
+  // outline: rgba(0,0,0,.5) solid 9999px;
+}
+.overlayClose {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  top: 4px;
+  right: 10px;
+  color: #f00;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(238, 238, 238, 0.5);
+  }
+}
