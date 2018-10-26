@@ -1,0 +1,46 @@
+:global {
+  .operate-col {
+    a {
+      padding: 0 12px;
+      position: relative;
+      &:not(:last-child):after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        right: 0;
+        height: 16px;
+        width: 1px;
+        background-color: #ddd;
+      }
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+  
+  .searchItem {
+    display: inline-block;
+    width: 240px;
+    line-height: 40px;
+    &:not(:first-of-type) {
+      margin-left: 20px;
+    }
+    .ant-form-item {
+      width: 100%;
+      .ant-form-item-control-wrapper {
+        width: 100%;
+      }
+    }
+  }
+  .tableList {
+    .tableListOperator {
+      margin: 16px 0;
+      button {
+        margin-right: 8px;
+      }
+    }
+  }
+}

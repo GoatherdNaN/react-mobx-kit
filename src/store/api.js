@@ -1,6 +1,25 @@
-import request from '../utils/request';
-import * as URL from '../constants/url';
+import request from 'utils/request';
+import * as URL from 'constants/url';
 
-export function getInitTodos(params) {
-  return request(URL.LIST, params);
+export function getList(params) {
+  return request(URL.TABLE_LIST, params);
+}
+export function getById(params) {
+  return request(URL.TABLE_GET_BY_ID, params);
+}
+export function update(params) {
+  return request(URL.TABLE_UPDATE, params);
+}
+export function add(params) {
+  return request(URL.TABLE_NEW, params);
+}
+
+export function getResource() {
+  return request(URL.GET_RESOURCE);
+}
+export function login(params) {
+  return request(URL.LOGIN, params);
+}
+export function logout() {
+  return request(URL.LOGOUT);
 }

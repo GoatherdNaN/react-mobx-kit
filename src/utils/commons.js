@@ -14,3 +14,22 @@ export function generateUUID() {
   });
   return uuid;
 }
+
+export function toWindowTop() {
+  window.scrollTo(0, 0);
+  // document.title = 'your_title';
+}
+
+// 将树型数组格式化成一维数组
+export const formatTreeList = treeList => {
+  if(!Array.isArray(treeList)) return [];
+  const simpleArr = [];
+  const getSimpleArr = arr => {
+    arr.forEach(item => {
+      simpleArr.push(item.resourceCode);
+      if (item.children) getSimpleArr(item.children);
+    });
+  };
+  getSimpleArr(treeList);
+  return simpleArr;
+};

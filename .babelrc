@@ -1,20 +1,20 @@
 {
   "plugins": [
-    "syntax-dynamic-import",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-syntax-dynamic-import",
+    ["@babel/plugin-proposal-class-properties", { "loose": true, "decoratorsBeforeExport": true }],
     "react-loadable/babel",
-    "transform-decorators-legacy",
     "react-hot-loader/babel",
     [
       "import",
       {
-        "style": "css",
+        "style": true,
         "libraryName": "antd"
       }
     ]
   ],
   "presets": [
-    "env",
-    "react",
-    "stage-2"
+    "@babel/preset-env",
+    "@babel/preset-react"
   ]
 }

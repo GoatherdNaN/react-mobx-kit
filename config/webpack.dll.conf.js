@@ -11,9 +11,7 @@ module.exports = {
       "mobx-react",
       "react",
       "react-dom",
-      "react-router",
 			"react-loadable",
-      "react-router-config"
     ]
   },
   output: {

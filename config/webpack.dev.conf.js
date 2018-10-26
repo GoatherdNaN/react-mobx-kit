@@ -5,6 +5,7 @@ const ExtendedDefinePlugin = require('extended-define-webpack-plugin'); //全局
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //html
 
 const baseConfig = require("./webpack.base.conf.js"); //基础配置
+const theme = require("../theme.js"); //主题配置
 
 module.exports =  merge(baseConfig, {
   mode: 'development', // 设置开发环境
@@ -44,7 +45,7 @@ module.exports =  merge(baseConfig, {
 			},
       {
         test: /\.less$/,
-        include: [path.resolve('src')],
+        // include: [path.resolve('src')],
         use: [
           'style-loader',
           {
@@ -54,7 +55,7 @@ module.exports =  merge(baseConfig, {
               minimize: true,
               modules: true,
               importLoaders: 1,
-              localIdentName: '[local]_[hash:base64:6]',
+              localIdentName: '[local]',
             }
           },
           {
@@ -62,9 +63,7 @@ module.exports =  merge(baseConfig, {
             options: {
               sourceMap: true,
               javascriptEnabled: true,
-              modifyVars: {
-                'primary-color': '#531dab',
-              },
+              modifyVars: theme
             }
           }
         ]
@@ -90,11 +89,11 @@ module.exports =  merge(baseConfig, {
     historyApiFallback:true,
     overlay: true,
     compress: false, // 服务器返回浏览器的时候是否启动gzip压缩
-    // proxy:{
-    //   '/api': {
-    //     target:"https://www.easy-mock.com/mock/5b5a7ae5b14d03439fb7f3f9",
-    //     changeOrigin: true,
-    //   },
-    // }
+    proxy:{
+      '/api': {
+        target:"https://www.easy-mock.com/mock/5b5a7ae5b14d03439fb7f3f9",
+        changeOrigin: true,
+      },
+    }
   },
 });

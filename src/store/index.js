@@ -1,5 +1,7 @@
-import TodosStore from './TodosStore';
+import TableStore from './TableStore';
+import LoginStore from './LoginStore';
 
 export default {
-  TodosStore,
+  TableStore,
+  LoginStore,
 };
