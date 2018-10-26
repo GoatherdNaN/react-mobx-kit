@@ -6,7 +6,7 @@ export default [
     resourceType: 1,
     parentId: 0,
     icon: 'home',
-    children: null
+    children: null,
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ export default [
             resourceType: 2,
             parentId: 21,
             icon: '',
-            children: null
+            children: null,
           },
           {
             id: 212,
@@ -40,7 +40,7 @@ export default [
             resourceType: 2,
             parentId: 21,
             icon: '',
-            children: null
+            children: null,
           },
           {
             id: 213,
@@ -49,7 +49,7 @@ export default [
             resourceType: 2,
             parentId: 21,
             icon: '',
-            children: null
+            children: null,
           },
           {
             id: 214,
@@ -58,9 +58,9 @@ export default [
             resourceType: 2,
             parentId: 21,
             icon: '',
-            children: null
+            children: null,
           },
-        ]
+        ],
       },
       {
         id: 22,
@@ -69,8 +69,8 @@ export default [
         resourceType: 1,
         parentId: 2,
         icon: '',
-        children: null
-      }
-    ]
+        children: null,
+      },
+    ],
   },
 ]

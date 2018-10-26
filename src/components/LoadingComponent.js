@@ -13,11 +13,13 @@ export default function LoadingComponent({ error }) {
   return (
     <div style={style}>
       {!error ? (
-        <Spin size="large" style={{
+        <Spin
+          size="large"
+          style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
-          transform: 'translate(-50%, -50%)'
+          transform: 'translate(-50%, -50%)',
         }} />
       ) : 'Error!'}
     </div>

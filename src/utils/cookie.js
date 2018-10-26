@@ -4,7 +4,7 @@
  * @Description: cookie封装
  */
 import {
-  COOKIE_EXPIRE
+  COOKIE_EXPIRE,
 } from 'constants/config'
 
 // 加密字符串
@@ -27,11 +27,11 @@ function uncompileStr(code) {
 
 class Cookie {
   setCookie(name, value, expireTime) {
-    let Days = expireTime || COOKIE_EXPIRE;
-    let exp = new Date();
+    const Days = expireTime || COOKIE_EXPIRE;
+    const exp = new Date();
     exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-    const expires = 'expires=' + exp.toUTCString();
-    document.cookie = name + '=' + compileStr(value) + '; ' + expires;
+    const expires = `expires=${  exp.toUTCString()}`;
+    document.cookie = `${name  }=${  compileStr(value)  }; ${  expires}`;
   }
 
   getCookie(name) {

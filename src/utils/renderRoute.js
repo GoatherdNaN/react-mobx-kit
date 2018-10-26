@@ -19,7 +19,7 @@ export default function renderRoutes(routes, base_url = '') {
         )
       );
       return arr;
-    } else {
+    } 
       const path = route.path
         ? base_url
           ? route.root
@@ -47,6 +47,6 @@ export default function renderRoutes(routes, base_url = '') {
         />
       );
       return arr;
-    }
+    
   }, []);
 }

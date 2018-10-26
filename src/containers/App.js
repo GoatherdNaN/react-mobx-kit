@@ -6,10 +6,10 @@
 import React, { PureComponent } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom'
 import PrivateRoute from 'components/Authorized/PrivateRoute'
+import storage from 'utils/storage';
 import Layout from '../layout'
 import Login from './Login'
 
-import storage from 'utils/storage';
 
 @withRouter
 class App extends PureComponent {
@@ -26,7 +26,7 @@ class App extends PureComponent {
   }
 
   checkLogin = () => {
-    let isAuthenticated = !!storage.getItem('token');
+    const isAuthenticated = !!storage.getItem('token');
     this.setState({ isAuthenticated })
   }
   

@@ -58,7 +58,7 @@ class Layout extends Component {
 
   render() {
     const {
-      loginStore: { authList, logoutLoading }
+      loginStore: { authList, logoutLoading },
     } = this.props;
     return (
       <div className={styles.container}>

@@ -10,7 +10,7 @@ const withErrorHandler =  (errorCallback, FallbackComponent, Component) => {
     state = {
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     };
 
     componentDidCatch (error, info) {

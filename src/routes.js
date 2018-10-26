@@ -10,20 +10,20 @@ import LoadingComponent from './components/LoadingComponent';
 
 const commonLoadableConfig = {
   loading: LoadingComponent,
-  delay: 200
+  delay: 200,
 };
 
 const AsyncHome = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Home')
+  loader: () => import('./containers/Home'),
 }));
 const AsyncTable = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Table')
+  loader: () => import('./containers/Table'),
 }));
 const AsyncTableClientForm = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Table/ClientForm')
+  loader: () => import('./containers/Table/ClientForm'),
 }));
 const AsyncOther = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Other')
+  loader: () => import('./containers/Other'),
 }));
 
 const routesConfig = [
@@ -53,32 +53,32 @@ const routesConfig = [
             path: '/new',
             code: 'table-new',
             component: AsyncTableClientForm,
-            exact: true
+            exact: true,
           },
           {
             name: '查看',
             path: '/check/:id',
             code: 'table-check',
             component: AsyncTableClientForm,
-            exact: true
+            exact: true,
           },
           {
             name: '编辑',
             path: '/edit/:id',
             code: 'table-update',
             component: AsyncTableClientForm,
-            exact: true
+            exact: true,
           },
-        ]
+        ],
       },
       {
         name: '其他',
         path: '/other',
         code: 'other',
-        component: AsyncOther
-      }
-    ]
-  }
+        component: AsyncOther,
+      },
+    ],
+  },
 ];
 
 const routes = [];

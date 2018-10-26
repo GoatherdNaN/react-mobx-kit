@@ -1,12 +1,14 @@
 import { message } from 'antd'
 import { observable, flow, autorun } from 'mobx'
-import { login, getResource, logout } from './api'
 import reloadAuthList from 'components/Authorized'
 import storage from 'utils/storage'
+import { login, getResource, logout } from './api'
 
 export default class LoginStore {
   @observable authList = storage.getJSONItem('authList') || [];
+
   @observable loading = false;
+
   @observable logoutLoading = false;
 
   constructor(initialState) {
@@ -29,6 +31,7 @@ export default class LoginStore {
     }
     this.loading = false;
   });
+
   getResource = flow(function * () {
     const res = yield getResource();
     try {
@@ -37,6 +40,7 @@ export default class LoginStore {
       message.error(e);
     }
   });
+
   logout = flow(function * (callback) {
     this.logoutLoading = true;
     const res = yield logout();
