@@ -1,6 +1,5 @@
 import { message } from 'antd'
 import { observable, flow, autorun } from 'mobx'
-import reloadAuthList from 'components/Authorized'
 import storage from 'utils/storage'
 import { login, getResource, logout } from './api'
 
@@ -17,7 +16,6 @@ export default class LoginStore {
 
   updateStorage = autorun(() => {
     storage.setJSONItem('authList',this.authList);
-    reloadAuthList(this.authList);
   });
 
   login = flow(function * (params,callback) {

@@ -1,6 +1,6 @@
-import '@babel/polyfill';
+// import '@babel/polyfill';
 
-import React from 'react';
+import React from 'react';  
 import { render } from 'react-dom';
 import { Provider } from 'mobx-react';
 import { HashRouter } from 'react-router-dom';
@@ -8,7 +8,7 @@ import Loadable from 'react-loadable';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 
-import App from 'containers/App';
+import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { createStoresFromState } from './store/utils';
 

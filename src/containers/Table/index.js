@@ -1,8 +1,9 @@
 import React, { Component  } from 'react'
 import { inject, observer } from 'mobx-react'
+import { withRouter } from 'react-router-dom'
 import { Card, Badge, Form, Input, Select, Button, Popconfirm } from 'antd'
 import PageHeaderWrapper from 'components/PageHeaderWrapper'
-import AuthComponent from 'components/Authorized/AuthComponent'
+import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
 
 const FormItem = Form.Item;
@@ -10,6 +11,7 @@ const FormItem = Form.Item;
 const statusMap = ['error', 'success'];
 const status = ['停职', '在职'];
 
+@withRouter
 @Form.create()
 @inject('tableStore')
 @observer

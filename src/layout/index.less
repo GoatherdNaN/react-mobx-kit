@@ -1,8 +1,12 @@
+// @hack: ~"/*\**/";  less中hack写法
 .header {
   width: 100%;
   height: 47px;
-  display: flex;
   background-color: #001529;
+  // background-color@{hack}: blue\9\0; ie9/10hack写法
+  padding-left: 200px;
+  padding-right: 200px;
+  overflow: hidden;
   .logo {
     width: 200px;
     height: 46px;
@@ -10,17 +14,27 @@
     text-align: center;
     font-size: 22px;
     color: #619dd4;
+    float: left;
+    position: relative;
+    left: -200px;
   }
   .menu {
-    flex: 4;
+    float: left;
+    width: 100%;
+    margin-left: -200px;
     height: 46px;
   }
   .info {
-    flex: 1;
+    // flex: 1;
     padding: 0 16px;
     line-height: 46px;
     // font-size: 18px;
     text-align: right;
+    float: left;
+    width: 200px;
+    margin-left: -200px;
+    position: relative;
+    left: 200px;
   }
 }
 .wrapper {
@@ -30,10 +44,8 @@
   left: 0;
   right: 0;
   box-sizing: border-box;
-  padding: 0px 20px;
-  background-color: #FAFBFA;
-  display: flex;
-  flex-direction: column;
+  padding: 0 20px;
+  background-color: #fafbfa;
   overflow-y: auto;
   .breadCrumb {
     width: 1200px;
@@ -41,9 +53,12 @@
     padding: 4px 0;
   }
   .content {
-    flex: 1;
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    left: 50%;
     width: 1200px;
-    margin: 0 auto;
+    margin-left: -600px;
     padding: 10px 20px;
     background-color: #fff;
   }

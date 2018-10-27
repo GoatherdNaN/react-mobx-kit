@@ -5,10 +5,10 @@
  */
 import React, { PureComponent } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom'
-import PrivateRoute from 'components/Authorized/PrivateRoute'
+import { PrivateRoute } from 'components/Authorized'
 import storage from 'utils/storage';
-import Layout from '../layout'
-import Login from './Login'
+import Layout from './layout'
+import Login from 'containers/Login'
 
 
 @withRouter

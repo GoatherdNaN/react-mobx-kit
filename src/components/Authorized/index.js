@@ -1,10 +1,11 @@
-import { formatTreeList } from 'utils/commons'
-import storage from 'utils/storage'
+import AuthComponent from './AuthComponent'
+import AuthPage from './AuthPage'
+import PrivateRoute from './PrivateRoute'
+// import { check } from './checkPermissions'
 
-let authList = formatTreeList(storage.getJSONItem('authList'));
-const reloadAuthList = authority => {
-  authList = formatTreeList(authority);
+export { 
+  AuthComponent,
+  PrivateRoute,
+  // check
 };
-
-export { authList };
-export default reloadAuthList;
+export default AuthPage;

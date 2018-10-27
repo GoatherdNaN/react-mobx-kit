@@ -74,13 +74,13 @@ export default class MyMenu extends PureComponent {
   };
 
   getMenuItemPath = item => {
-    const { resourceName } = item;
+    const { resourceName, path, icon } = item;
     return (
       <Link
-        to={item.path}
-        replace={item.path === this.props.location.pathname}
+        to={path}
+        replace={path === this.props.location.pathname}
       >
-        { getIcon(item.icon) }
+        { getIcon(icon) }
         { resourceName }
       </Link>
     );

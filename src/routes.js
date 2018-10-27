@@ -75,6 +75,7 @@ const routesConfig = [
         name: '其他',
         path: '/other',
         code: 'other',
+        exact: true,
         component: AsyncOther,
       },
     ],

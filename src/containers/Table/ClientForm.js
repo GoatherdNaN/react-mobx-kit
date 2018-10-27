@@ -5,6 +5,7 @@
  */
 import React, { Component } from 'react'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 import { Form, Input, Select, DatePicker } from 'antd'
 import { inject, observer } from 'mobx-react'
 import SpinWrapper from 'components/SpinWrapper'
@@ -23,6 +24,7 @@ const formItemLayout = {
   },
 };
 
+@withRouter
 @Form.create()
 @inject('tableStore')
 @observer

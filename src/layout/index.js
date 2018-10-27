@@ -6,16 +6,17 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { Breadcrumb, Button } from 'antd'
-import { Redirect, Switch, Route, Link } from 'react-router-dom'
+import { Redirect, Switch, Route, Link, withRouter } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import withWrapError from 'components/ErrorHandle'
 import NotFound from 'components/Exception/404'
-import AuthPage from 'components/Authorized/AuthPage'
+import AuthPage from 'components/Authorized'
 import MyMenu from 'components/MyMenu'
 import routes, { breadcrumbNameMap } from '../routes'
 
 import styles from './index.less'
 
+@withRouter
 @inject('loginStore')
 @observer
 class Layout extends Component {
