@@ -12,14 +12,14 @@ export default class LoginStore {
     Object.assign(this, initialState);
   }
 
+  @action changeLoading = loading => this.loading = loading;
+  @action changeLogoutLoading = loading => this.logoutLoading = loading;
+  @action changeAuthList = authList => this.authList = authList;
+
   updateStorage = autorun(() => {
     storage.setItem('authListUD',new Date().getTime());
     storage.setJSONItem('authList',this.authList);
   });
-
-  @action changeLoading = loading => this.loading = loading;
-  @action changeLogoutLoading = loading => this.logoutLoading = loading;
-  @action changeAuthList = authList => this.authList = authList;
 
   login = flow(function * (params,callback) {
     this.changeLoading(true);
