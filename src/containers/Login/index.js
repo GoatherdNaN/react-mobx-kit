@@ -68,7 +68,7 @@ export default class Login extends Component {
   };
 
   render() {
-    const { form: { getFieldDecorator },loginStore: { loading } } = this.props;
+    const { form: { getFieldDecorator }, loginStore } = this.props;
     const { username, password, remember } = this.state;
     return (
       <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
@@ -98,7 +98,7 @@ export default class Login extends Component {
           <Button 
             type="primary" 
             htmlType="submit" 
-            loading={loading} 
+            loading={loginStore.loading} 
             className={styles.loginButton}
           >
             Log in

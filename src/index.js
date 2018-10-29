@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { render } from 'react-dom'
+import { configure } from 'mobx'
 import { Provider } from 'mobx-react'
 import { HashRouter } from 'react-router-dom'
 import Loadable from 'react-loadable'
@@ -10,15 +11,18 @@ import zhCN from 'antd/lib/locale-provider/zh_CN'
 
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
-import { createStoresFromState } from './store/utils';
-// import stores from './state'
+import createStoresFromState from './store';
+
+// 开启mobx的严格模式，规范数据修改操作只能在action中进行
+configure({
+  enforceActions: 'always'
+});
 
 
 import 'asserts/css/reset.css'
 import './index.less'
 
-const initialState = {};
-const stores = createStoresFromState(initialState);
+const stores = createStoresFromState(); // 有需要的话可以传入initialState
 const ROOT = document.getElementById('root');
 
 const createApp = stores => (

@@ -44,7 +44,7 @@ export default class Workplace extends Component {
   }
 
   static getDerivedStateFromProps(nextProps) {
-    const { match: { params },tableStore: { obj: initData } } = nextProps;
+    const { match: { params },tableStore: { singleData: initData } } = nextProps;
     if (params.id && initData) {
       return {
         initData,

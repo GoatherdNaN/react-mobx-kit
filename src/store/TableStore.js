@@ -1,22 +1,15 @@
-
-
+import { message } from 'antd'
 import { observable, action, flow } from 'mobx'
 import { INIT_SEARCH_CRITERIA } from 'constants/config'
 import { getList, getById, update, add } from './api'
 
 export default class TableStore {
   @observable list = [];
-
   @observable searchCriteria = INIT_SEARCH_CRITERIA;
-
   @observable pagination = null;
-
   @observable loading = false;
-
-  @observable obj = null;
-
+  @observable singleData = null;
   @observable initFormLoading = false;
-
   @observable confirmLoading = false;
 
   constructor(initialState) {
@@ -25,37 +18,62 @@ export default class TableStore {
 
   @action
   updateSearchCriteria = params => this.searchCriteria = Object.assign(this.searchCriteria,params || {});
-
   @action
   initSearchCriteria = () => this.searchCriteria = INIT_SEARCH_CRITERIA;
+  @action changeLoading = loading => this.loading = loading;
+  @action changeInitFormLoading = loading => this.initFormLoading = loading;
+  @action changeConfirmLoading = loading => this.confirmLoading = loading;
+  @action saveListData = ({list,pagination}) => {
+    this.list = list;
+    this.pagination = pagination;
+  }
+  // @action
+  saveSingleData = data => this.singleData = data;
+
 
   fetchList = flow(function * (params) {
-    this.loading = true;
+    this.changeLoading(true);
     this.updateSearchCriteria(params);
-    const res = yield getList(this.searchCriteria);
-    this.loading = false;
-    this.list = res.data.list;
-    this.pagination = res.data.pagination;
+    try {
+      const res = yield getList(this.searchCriteria);
+      this.saveListData(res.data);
+    } catch(e) {
+      message.error(e);
+    }
+    this.changeLoading(false);
   });
 
   fetchDataById = flow(function * (params) {
-    this.initFormLoading = true;
-    const res = yield getById(params);
-    this.initFormLoading = false;
-    this.obj = res.data;
+    this.changeInitFormLoading(true);
+     try {
+      const res = yield getById(params);
+      // this.saveSingleData(res.data);
+      this.singleData = res.data;
+    } catch(e) {
+      message.error(e);
+    }
+    this.changeInitFormLoading(false);
   });
 
   update = flow(function * (params,callback) {
-    this.confirmLoading = true;
-    const res = yield update(params);
-    callback && callback();
-    this.confirmLoading = false;
+    this.changeConfirmLoading(true);
+     try {
+      const res = yield update(params);
+      res.code == 200 && callback && callback();
+    } catch(e) {
+      message.error(e);
+    }
+    this.changeConfirmLoading(false);
   });
 
   add = flow(function * (params,callback) {
-    this.confirmLoading = true;
-    const res = yield add(params);
-    callback && callback();
-    this.confirmLoading = false;
+    this.changeConfirmLoading(true);
+     try {
+      yield add(params);
+      res.code == 200 && callback && callback();
+    } catch(e) {
+      message.error(e);
+    }
+    this.changeConfirmLoading(false);
   });
 }

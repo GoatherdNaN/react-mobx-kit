@@ -1,10 +1,15 @@
 import React from 'react'
 import { Card, Spin, Button } from 'antd'
 
-export default function SpinWrapper({initFormLoading=false,confirmLoading=false,isCheck=false,...otherProps}) {
+export default function SpinWrapper({
+  initFormLoading=false,
+  confirmLoading=false,
+  isCheck=false,
+  ...otherProps
+}) {
   return (
     <Card>
-      <h3>{otherProps.title}</h3>
+      <h2>{otherProps.title}</h2>
       <Spin spinning={initFormLoading} tip="Loading..." size="large">
         <div style={{ padding: '20px 0' }}>{otherProps.children}</div>
       </Spin>
