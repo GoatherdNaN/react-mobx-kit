@@ -1,5 +1,9 @@
-import checkPermissions from './CheckPermissions'
+import { inject, observer } from 'mobx-react'
 
-const AuthComponent = ({code, children}) => code && checkPermissions(code) ? children : null;
+const AuthComponent = inject("loginStore")(
+  observer(
+    ({loginStore, code, children}) => code && loginStore.authArr.includes(code) ? children : null
+  )
+)
 
 export default AuthComponent;

@@ -1,15 +1,24 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import P403 from 'components/Exception/403'
-import checkPermissions from './CheckPermissions'
+import LoadingComponent from '../LoadingComponent'
 
 const AuthPage = props => {
-  const { component: Component, code, render, ...rest } = props;
+  const { 
+    component: Component, 
+    render,
+    authArr,
+    code,
+    ...otherProps 
+  } = props;
   const target = (
-    <Route {...rest} render={() => (Component ? <Component {...props} /> : render(props))} />
+    <Route {...otherProps} render={() => (Component ? <Component {...props} /> : render(props))} />
   );
-  const noMatch = <Route {...rest} render={() => <P403 />} />;
-  return checkPermissions(code) ? target : noMatch;
+  const noMatch = <Route {...otherProps} render={() => <P403 />} />;
+  if(!authArr.length) {
+    return <LoadingComponent />
+  }
+  return authArr.includes(code) ? target : noMatch;
 }
 
 export default AuthPage;

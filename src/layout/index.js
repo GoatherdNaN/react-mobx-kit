@@ -59,7 +59,7 @@ class Layout extends Component {
 
   render() {
     const {
-      loginStore: { authList, logoutLoading },
+      loginStore: { authList, authArr, authLoading, logoutLoading }
     } = this.props;
     return (
       <div className={styles.container}>
@@ -86,13 +86,10 @@ class Layout extends Component {
             <Switch>
               {routes.map(item => (
                 <AuthPage
-                  authList={authList}
+                  {...item} 
                   key={item.code}
-                  path={item.path}
-                  code={item.code}
-                  component={item.component}
-                  exact={item.exact}
-                  {...typeof item.render === 'function' ? {render: item.render} : {}}
+                  authArr={authArr} 
+                  authLoading={authLoading} 
                 />
               ))}
               <Redirect from="/" to="/home" />

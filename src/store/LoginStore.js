@@ -1,10 +1,10 @@
 import { message } from 'antd'
-import { observable, flow, autorun, action } from 'mobx'
-import storage from 'utils/storage'
+import { observable, flow, action, computed, toJS } from 'mobx'
 import { login, getResource, logout } from './api'
+import { formatTreeList } from 'utils/common'
 
 export default class LoginStore {
-  @observable authList = storage.getJSONItem('authList') || [];
+  @observable authList = [];
   @observable loading = false;
   @observable logoutLoading = false;
 
@@ -16,10 +16,10 @@ export default class LoginStore {
   @action changeLogoutLoading = loading => this.logoutLoading = loading;
   @action changeAuthList = authList => this.authList = authList;
 
-  updateStorage = autorun(() => {
-    storage.setItem('authListUD',new Date().getTime());
-    storage.setJSONItem('authList',this.authList);
-  });
+  @computed
+  get authArr() {
+    return formatTreeList(toJS(this.authList));
+  };
 
   login = flow(function * (params,callback) {
     this.changeLoading(true);
@@ -49,7 +49,6 @@ export default class LoginStore {
     this.changeLogoutLoading(true)
     const res = yield logout();
     if(res && res.code == 200 && callback) {
-      // this.updateStorage(); // 注销该autorun
       callback();
     }
     this.changeLogoutLoading(false)

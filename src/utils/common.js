@@ -26,7 +26,7 @@ export function toWindowTop() {
 }
 
 // 将树型数组格式化成一维数组
-export const formatTreeList = memoize(treeList => {
+export const formatTreeList = treeList => {
   if(!Array.isArray(treeList)) return [];
   const simpleArr = [];
   const getSimpleArr = arr => {
@@ -37,4 +37,4 @@ export const formatTreeList = memoize(treeList => {
   };
   getSimpleArr(treeList);
   return simpleArr;
-},() => storage.getItem('authListUD') || new Date().getTime());
+};
