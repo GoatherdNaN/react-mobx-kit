@@ -1,19 +1,29 @@
+# mobx-admin-kit
+
+## 前言
+近日，项目中使用dva+ant完成了一个admin的开发，感觉配置上不够灵活，而且项目总体较臃肿，兼容性不能满足实际需求。于是自己尝试写一套admin的架子。这只是一个demo，所以路由、页面都是简易型，目前已完成：
+- 使用 webpack4+babel7作为编译管道，做了打包、编译速度的极致优化，以及静态资源构建优化
+- mobx替换掉dva，状态管理更加灵活轻便
+- 权限系统优化，动态且更易维护
+- 集成ant-design，easy-mock做数据模拟
+- eslint集成，提交检测
+- 兼容ie9及以上（为兼容ie9，mobx使用的是v4）
 ## 技术栈
-> 本工程主要基于react16 + Mobx + Antd + webpack4 + react-router4
+react16 + react-router4 + mobx4 + antd + webpack4 + babel7
 
-## 启动
 
+## 使用说明
+- 本项目使用包管理工具NPM，因此需要先把本项目所依赖的包下载下来：
 ```
-<!--安装前请先确保已安装node和npm-->
-npm start               启动项目
-npm run precommit       手动触发git提交的钩子函数
-npm run build           发布生产版本
-npm run analyzer        打包分析
-npm run dll             第一次build前需先运行此命令，依赖更新也要
-npm run static          打包并在静态服务器运行打包后的文件
-npm run lint:style      检查样式代码
-npm run lint            eslint
-npm run lint:fix        eslint修复
-npm run lint-staged     暂存区lint流程
-npm run lint-staged:js  暂存区js lint流程
-npm run prettier        代码风格格式化
+$ npm install
+```
+- 首次编译，先执行打包dll
+```
+$ npm run dll
+```
+
+- 启动服务器
+```
+$ npm run dev
+```
+然后你可以在localhost:8080查看效果
