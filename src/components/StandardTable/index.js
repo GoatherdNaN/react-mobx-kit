@@ -78,7 +78,6 @@ class StandardTable extends PureComponent {
       rowKey,
       isNeedOrderNumber,
     } = this.props;
-
     const willAddColumns = isNeedOrderNumber ? [{
       title: '序号',
       dataIndex: 'orderNumber',

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import P403 from 'components/Exception/403'
-import { check } from './CheckPermissions'
+import checkPermissions from './CheckPermissions'
 
 const AuthPage = props => {
   const { component: Component, code, render, ...rest } = props;
@@ -9,7 +9,7 @@ const AuthPage = props => {
     <Route {...rest} render={() => (Component ? <Component {...props} /> : render(props))} />
   );
   const noMatch = <Route {...rest} render={() => <P403 />} />;
-  return check(code) ? target : noMatch;
+  return checkPermissions(code) ? target : noMatch;
 }
 
 export default AuthPage;

@@ -5,6 +5,7 @@ import { login, getResource, logout } from './api'
 
 export default class LoginStore {
   @observable authList = storage.getJSONItem('authList') || [];
+  // @observable authList = [];
 
   @observable loading = false;
 
@@ -15,6 +16,7 @@ export default class LoginStore {
   }
 
   updateStorage = autorun(() => {
+    storage.setItem('authListUD',new Date().getTime());
     storage.setJSONItem('authList',this.authList);
   });
 
@@ -23,7 +25,10 @@ export default class LoginStore {
     const res = yield login(params);
     try {
       this.authList = res.data.authList;
-      callback && callback(res.data.token);
+      const timer = setTimeout(() => {
+        callback && callback(res.data.token);
+        clearTimeout(timer);
+      })
     } catch(e) {
       message.error(e);
     }

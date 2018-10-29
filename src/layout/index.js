@@ -86,6 +86,7 @@ class Layout extends Component {
             <Switch>
               {routes.map(item => (
                 <AuthPage
+                  authList={authList}
                   key={item.code}
                   path={item.path}
                   code={item.code}

@@ -12,33 +12,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin'); //直接拷贝，比�
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //html
 
 const baseConfig = require('./webpack.base.conf'); //基础配置
-const theme = require("../theme.js"); //主题配置
+const getLessConfig = require("./utils.js");
 
-const getLessConfig = (modules=true, modifyVars=null) => ([
-  {
-    loader: 'css-loader',
-    options: {
-      modules,
-      importLoaders: 1,
-      ...modules ? {localIdentName: '[local]_[hash:base64:6]'} : {},
-      minimize: {
-        discardComments: {
-          removeAll: true
-        },
-        discardUnused: false,
-        mergeIdents: false,
-        reduceIdents: false,
-        safe: true
-      }
-    }
-  }, {
-    loader: 'less-loader',
-    options: {
-      javascriptEnabled: true,
-      ...modifyVars ? {modifyVars} : {}
-    }
-  }
-])
 
 const plugins = [
   //压缩，生成map
@@ -143,7 +118,7 @@ module.exports = merge(baseConfig, {
         include: path.resolve('node_modules/antd'),
         use: [
           MiniCssExtractPlugin.loader, 
-          ...getLessConfig(true,theme)
+          ...getLessConfig(true)
         ]
       }
     ]

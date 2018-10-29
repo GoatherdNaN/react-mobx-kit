@@ -1,11 +1,11 @@
 const path = require('path');
-const webpack = require('webpack');
 const merge = require('webpack-merge'); //webpack配置文件合并
 const ExtendedDefinePlugin = require('extended-define-webpack-plugin'); //全局变量
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //html
 
 const baseConfig = require("./webpack.base.conf.js"); //基础配置
-const theme = require("../theme.js"); //主题配置
+const getLessConfig = require("./utils.js");
+
 
 module.exports =  merge(baseConfig, {
   mode: 'development', // 设置开发环境
@@ -45,29 +45,13 @@ module.exports =  merge(baseConfig, {
 			},
       {
         test: /\.less$/,
-        // include: [path.resolve('src')],
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            // 启用 CSSModules, className={style.xxx}
-            options: {
-              minimize: true,
-              modules: true,
-              importLoaders: 1,
-              localIdentName: '[local]',
-            }
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              sourceMap: true,
-              javascriptEnabled: true,
-              modifyVars: theme
-            }
-          }
-        ]
-      },
+        include: path.resolve('src'),
+        use: getLessConfig()
+      }, {
+        test: /\.less$/,
+        include: path.resolve('node_modules/antd'),
+        use: getLessConfig(false)
+      }
     ]
   },
 

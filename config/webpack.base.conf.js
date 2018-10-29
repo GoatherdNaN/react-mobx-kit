@@ -6,7 +6,7 @@ const os = require('os');
 var happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['@babel/polyfill','./src/index.js'],
   resolve: {
     mainFields: ['jsnext:main', 'browser', 'main'], //npm读取先后方式  jsnext:main 是采用es6模块写法
     extensions: [".js", ".json", ".less"],

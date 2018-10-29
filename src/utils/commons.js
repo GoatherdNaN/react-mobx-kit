@@ -1,3 +1,20 @@
+import storage from './storage'
+/**
+ * 缓存函数
+ */
+const memoize = (fn, getKey) => {
+  const cache = {};
+  return (...rest) => {
+    const key = getKey ? getKey(rest) : 'key';
+    let res = cache[key];
+    if (!res) {
+      res = fn(...rest);
+      cache[key] = res;
+    }
+    return res;
+  };
+};
+
 export function urlToList(url) {
   const urllist = url.split('/').filter(i => i);
   return urllist.map((urlItem, index) => {
@@ -21,7 +38,7 @@ export function toWindowTop() {
 }
 
 // 将树型数组格式化成一维数组
-export const formatTreeList = treeList => {
+export const formatTreeList = memoize(treeList => {
   if(!Array.isArray(treeList)) return [];
   const simpleArr = [];
   const getSimpleArr = arr => {
@@ -32,4 +49,4 @@ export const formatTreeList = treeList => {
   };
   getSimpleArr(treeList);
   return simpleArr;
-};
+},() => storage.getItem('authListUD') || new Date().getTime());

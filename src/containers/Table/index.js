@@ -1,4 +1,5 @@
 import React, { Component  } from 'react'
+import { toJS  } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { withRouter } from 'react-router-dom'
 import { Card, Badge, Form, Input, Select, Button, Popconfirm } from 'antd'
@@ -197,7 +198,7 @@ export default class Table extends Component  {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={{list,pagination}}
+              data={{list: toJS(list),pagination}}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

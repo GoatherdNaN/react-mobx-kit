@@ -1,13 +1,15 @@
 @import '~antd/lib/style/themes/default.less';
 
 .exception {
-  display: flex;
-  align-items: center;
-  height: 80%;
   min-height: 500px;
-
+  &:after {
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
   .imgBlock {
-    flex: 0 0 62.5%;
+    float: left;
     width: 62.5%;
     padding-right: 152px;
     zoom: 1;
@@ -35,8 +37,9 @@
   }
 
   .content {
-    flex: auto;
-
+    float: left;
+    height: 360px;
+    padding-top: 50px;
     h1 {
       color: #434e59;
       font-size: 72px;
@@ -60,30 +63,30 @@
   }
 }
 
-@media screen and (max-width: @screen-xl) {
-  .exception {
-    .imgBlock {
-      padding-right: 88px;
-    }
-  }
-}
+// @media screen and (max-width: @screen-xl) {
+//   .exception {
+//     .imgBlock {
+//       padding-right: 88px;
+//     }
+//   }
+// }
 
-@media screen and (max-width: @screen-sm) {
-  .exception {
-    display: block;
-    text-align: center;
-    .imgBlock {
-      padding-right: 0;
-      margin: 0 auto 24px;
-    }
-  }
-}
+// @media screen and (max-width: @screen-sm) {
+//   .exception {
+//     display: block;
+//     text-align: center;
+//     .imgBlock {
+//       padding-right: 0;
+//       margin: 0 auto 24px;
+//     }
+//   }
+// }
 
-@media screen and (max-width: @screen-xs) {
-  .exception {
-    .imgBlock {
-      margin-bottom: -24px;
-      overflow: hidden;
-    }
-  }
-}
+// @media screen and (max-width: @screen-xs) {
+//   .exception {
+//     .imgBlock {
+//       margin-bottom: -24px;
+//       overflow: hidden;
+//     }
+//   }
+// }
