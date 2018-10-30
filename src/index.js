@@ -15,7 +15,8 @@ import createStoresFromState from './store';
 
 // 开启mobx的严格模式，规范数据修改操作只能在action中进行
 configure({
-  enforceActions: 'always'
+  enforceActions: 'always',
+  // disableErrorBoundaries: false,
 });
 
 

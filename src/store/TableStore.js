@@ -1,4 +1,3 @@
-import { message } from 'antd'
 import { observable, action, flow } from 'mobx'
 import { INIT_SEARCH_CRITERIA } from 'constants/config'
 import { getList, getById, update, add } from './api'
@@ -27,53 +26,36 @@ export default class TableStore {
     this.list = list;
     this.pagination = pagination;
   }
-  // @action
+  @action
   saveSingleData = data => this.singleData = data;
 
 
   fetchList = flow(function * (params) {
     this.changeLoading(true);
     this.updateSearchCriteria(params);
-    try {
-      const res = yield getList(this.searchCriteria);
-      this.saveListData(res.data);
-    } catch(e) {
-      message.error(e);
-    }
+    const { code, data } = yield getList(this.searchCriteria);
+    code == 200 && this.saveListData(data);
     this.changeLoading(false);
   });
 
   fetchDataById = flow(function * (params) {
     this.changeInitFormLoading(true);
-     try {
-      const res = yield getById(params);
-      // this.saveSingleData(res.data);
-      this.singleData = res.data;
-    } catch(e) {
-      message.error(e);
-    }
+    const { code, data } = yield getById(params);
+    code == 200 && this.saveSingleData(data);
     this.changeInitFormLoading(false);
   });
 
   update = flow(function * (params,callback) {
     this.changeConfirmLoading(true);
-     try {
-      const res = yield update(params);
-      res.code == 200 && callback && callback();
-    } catch(e) {
-      message.error(e);
-    }
+    const { code } = yield update(params);
+    code == 200 && callback && callback();
     this.changeConfirmLoading(false);
   });
 
   add = flow(function * (params,callback) {
     this.changeConfirmLoading(true);
-     try {
-      yield add(params);
-      res.code == 200 && callback && callback();
-    } catch(e) {
-      message.error(e);
-    }
+    const { code } = yield add(params);
+    code == 200 && callback && callback();
     this.changeConfirmLoading(false);
   });
 }
