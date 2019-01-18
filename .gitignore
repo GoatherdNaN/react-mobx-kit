@@ -9,3 +9,4 @@ dll/
 package-lock.json
 yarn.lock
 sh.exe.stackdump
+.vscode

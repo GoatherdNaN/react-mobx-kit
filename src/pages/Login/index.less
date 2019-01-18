@@ -1,0 +1,29 @@
+@import "../../asserts/css/vars.less";
+@import "../../asserts/css/mixins.less";
+
+.loginPage {
+  .full;
+  // FF7700是该背景图的主色，ie9/ie10上，解决svg有空缺的问题
+  background: #FF7700 url(../../asserts/img/loginBackground1.svg) no-repeat 0 0;
+  background-size: cover;
+}
+.loginContainer {
+  width: 500px;
+  background-color: rgba(255,255,255,0.3);
+  .vetically;
+  header {
+    padding-left: 20px;
+    height: 50px;
+    line-height: 50px;
+    background: rgba(255,255,255,0.3);
+    color: @heading-color;
+    font-size: @sizeBig;
+  }
+}
+.loginForm {
+  padding: 20px;
+}
+.loginButton {
+  display: block;
+  width: 100%;
+}

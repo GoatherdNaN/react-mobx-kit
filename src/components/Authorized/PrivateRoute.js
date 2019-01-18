@@ -14,13 +14,14 @@ const PrivateRoute = props => {
     <Route
       {...rest}
       render={
-      () => (
-        <Redirect to={{ 
-        pathname: '/login',
-        state:{ from: props.location.pathname },
-      }} />
-)
-    } />
+        () => (
+          <Redirect to={{
+            pathname: '/login',
+            state:{ from: props.location.pathname },
+          }} />
+        )
+      }
+    />
   );
 }
 export default PrivateRoute;

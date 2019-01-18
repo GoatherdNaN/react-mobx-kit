@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "base": ["src/base"],
+      "components": ["src/components"],
+      "pages": ["src/pages"],
+      "utils": ["src/utils"],
+      "constants": ["src/constants"]
+    },
+    "target": "ES6",
+    "module": "es6",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

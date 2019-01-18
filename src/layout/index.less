@@ -1,65 +1,76 @@
+@import "../asserts/css/vars.less";
+@import "../asserts/css/mixins.less";
+
 // @hack: ~"/*\**/";  less中hack写法
-.header {
-  width: 100%;
-  height: 47px;
-  background-color: #001529;
-  // background-color@{hack}: blue\9\0; ie9/10hack写法
-  padding-left: 200px;
-  padding-right: 200px;
+// 左边菜单部分
+.leftContainer {
+  float: left;
+  height: 100%;
+}
+// 左边内容主体
+.rightContainer {
+  position: relative;
+  height: 100%;
   overflow: hidden;
-  .logo {
-    width: 200px;
-    height: 46px;
-    line-height: 46px;
-    text-align: center;
-    font-size: 22px;
-    color: #619dd4;
-    float: left;
-    position: relative;
-    left: -200px;
-  }
-  .menu {
-    float: left;
-    width: 100%;
-    margin-left: -200px;
-    height: 46px;
-  }
-  .info {
-    // flex: 1;
-    padding: 0 16px;
-    line-height: 46px;
-    // font-size: 18px;
-    text-align: right;
-    float: left;
-    width: 200px;
-    margin-left: -200px;
-    position: relative;
-    left: 200px;
+}
+.logo {
+  .spanCenter(@header-height);
+  font-size: @sizeBig;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
+  background-color: #002140;
+  overflow: hidden;
+  img {
+    height: @header-height - 10 * 2;
   }
 }
+
 .wrapper {
+  min-width: 991 - @sider-collapsed-width;
   position: absolute;
-  top: 47px;
-  bottom: 0;
   left: 0;
   right: 0;
-  box-sizing: border-box;
-  padding: 0 20px;
-  background-color: #fafbfa;
+  top: @header-height;
+  bottom: 0;
   overflow-y: auto;
-  .breadCrumb {
-    width: 1200px;
-    margin: 0 auto;
-    padding: 4px 0;
+}
+.breadCrumb {
+  background: #fff;
+  height: @breadCrumb-height;
+  padding-left: @common-padding;
+  padding-top: (@breadCrumb-height - 21) / 2; // 21是面包屑自带的高度
+  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+}
+.content {
+  // min-height: calc(100% - @common-padding * 2 - @header-height);
+  margin: @common-padding;
+  // background: #fff;
+}
+
+:global {
+  // 折叠前的边栏样式：开始
+  .ant-layout-sider {
+    flex: 0 0 @sider-opened-width!important;
+    max-width: @sider-opened-width!important;
+    min-width: @sider-opened-width!important;
+    width: @sider-opened-width!important;
   }
-  .content {
-    position: absolute;
-    top: 30px;
-    bottom: 0;
-    left: 50%;
-    width: 1200px;
-    margin-left: -600px;
-    padding: 10px 20px;
-    background-color: #fff;
+  // 设置折叠后的边栏样式
+  .ant-layout-sider-collapsed {
+    flex: 0 0 @sider-collapsed-width!important;
+    max-width: @sider-collapsed-width!important;
+    min-width: @sider-collapsed-width!important;
+    width: @sider-collapsed-width!important;
+  }
+  .ant-menu-inline-collapsed {
+    width: @sider-collapsed-width!important;
+  }
+  .ant-menu-inline-collapsed > .ant-menu-item,
+  .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item,
+  .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title,
+  .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title {
+    position: relative;
+    left: @menu-title-collapsed-paddingX - 32px!important; // antd自带的左右padding已经加了important，只能曲线救国
   }
 }

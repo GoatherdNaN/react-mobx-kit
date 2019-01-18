@@ -14,69 +14,51 @@ const commonLoadableConfig = {
 };
 
 const AsyncHome = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Home'),
+  loader: () => import('./pages/Home'),
 }));
 const AsyncTable = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Table'),
+  loader: () => import('./pages/Table'),
 }));
 const AsyncTableClientForm = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Table/ClientForm'),
+  loader: () => import('./pages/Table/ClientForm'),
 }));
 const AsyncOther = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./containers/Other'),
+  loader: () => import('./pages/Other'),
 }));
 
 const routesConfig = [
   {
-    name: '首页',
-    path: '/home',
-    code: 'home',
-    component: AsyncHome,
-    exact: true,
+    name: '工作台',
+    code: 'dashboard',
+    showBreadcrumb: false,
+    component: AsyncHome
   },
   {
-    name: '基础资料',
-    path: '/basis',
+    name: '页面',
     code: 'basis',
-    render: () => <Redirect from='/basis' to='/basis/table' />,
-    exact: true,
+    render: () => <Redirect from='/basis' to='/basis/nomalList' />,
     children: [
       {
-        name: '表格',
-        path: '/table',
-        code: 'table',
+        name: '普通列表',
+        code: 'nomalList',
         component: AsyncTable,
-        exact: true,
-        children: [
-          {
-            name: '新增',
-            path: '/new',
-            code: 'table-new',
-            component: AsyncTableClientForm,
-            exact: true,
-          },
-          {
-            name: '查看',
-            path: '/check/:id',
-            code: 'table-check',
-            component: AsyncTableClientForm,
-            exact: true,
-          },
-          {
-            name: '编辑',
-            path: '/edit/:id',
-            code: 'table-update',
-            component: AsyncTableClientForm,
-            exact: true,
-          },
-        ],
+      },
+    ],
+  },
+  {
+    name: '设置',
+    code: 'system',
+    render: () => <Redirect from='/system' to='/system/user' />,
+    children: [
+      {
+        name: '个人资料',
+        code: 'user',
+        component: AsyncTable,
       },
       {
-        name: '其他',
-        path: '/other',
-        code: 'other',
-        exact: true,
-        component: AsyncOther,
+        name: '修改密码',
+        code: 'changepwd',
+        component: AsyncTable,
       },
     ],
   },
@@ -86,10 +68,18 @@ const routes = [];
 const breadcrumbNameMap = {};
 function getRoutes(routesConfig, rootPath='') {
   routesConfig.forEach(v => {
-    v.path = rootPath + v.path;
+    // path可省略
+    v.path = rootPath + (
+      !v.path && v.code
+        ? '/' + v.code
+        : v.path
+    );
+    v.exact = (v.exact !== false); // exact 默认为true
     if(v.children) getRoutes(v.children, v.path);
     delete v.children;
-    breadcrumbNameMap[v.path] = v.name;
+    if (v.showBreadcrumb !== false) {
+      breadcrumbNameMap[v.path] = v.name;
+    }
     delete v.name;
     routes.push(v);
   });

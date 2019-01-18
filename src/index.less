@@ -1,5 +1,58 @@
+@import "./asserts/css/vars.less";
+// @import "./asserts/css/mixins.less";
+
 :global {
-  .operate-col {
+  body, td, th {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: @font-size-base;
+    color: @text-color;
+    // line-height: 24px;
+  }
+
+  body {
+    position: relative;
+    background-color: @bodyBc;
+  }
+
+  #root {
+    height: 100vh;
+  }
+  // antd icon设置字体16px
+  .anticon {
+    font-size: @sizeNomal!important;
+  }
+  // 按钮组
+  .buttonGroupLeft {
+    button:not(:first-child) {
+      margin-left: @common-padding;
+    }
+  }
+  .buttonGroupRight {
+    button:not(:last-child) {
+      margin-right: @common-padding;
+    }
+  }
+
+  .searchForm {
+    margin-top: 16px;
+  }
+
+  .searchItem {
+    display: inline-block;
+    width: 240px;
+    line-height: 40px;
+    &:not(:first-of-type) {
+      margin-left: 8px;
+    }
+    .ant-form-item {
+      width: 100%;
+      .ant-form-item-control-wrapper {
+        width: 100%;
+      }
+    }
+  }
+
+  .operateCol {
     a {
       padding: 0 12px;
       position: relative;
@@ -17,29 +70,6 @@
       }
       &:last-child {
         padding-right: 0;
-      }
-    }
-  }
-  
-  .searchItem {
-    display: inline-block;
-    width: 240px;
-    line-height: 40px;
-    &:not(:first-of-type) {
-      margin-left: 20px;
-    }
-    .ant-form-item {
-      width: 100%;
-      .ant-form-item-control-wrapper {
-        width: 100%;
-      }
-    }
-  }
-  .tableList {
-    .tableListOperator {
-      margin: 16px 0;
-      button {
-        margin-right: 8px;
       }
     }
   }

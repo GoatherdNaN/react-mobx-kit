@@ -2,35 +2,42 @@ import React, { Component  } from 'react'
 import { toJS  } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { withRouter } from 'react-router-dom'
-import { Card, Badge, Form, Input, Select, Button, Popconfirm } from 'antd'
-import PageHeaderWrapper from 'components/PageHeaderWrapper'
+import { Badge, Form, Input, Select, message } from 'antd'
+import BaseCard from 'base/BaseCard'
+import Button from 'base/Button/Button'
+import PopButton from 'base/Button/PopButton'
 import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
+import { formatTimeStamp } from 'utils/format'
 
 const FormItem = Form.Item;
+const AuthButton = AuthComponent(Button);
+const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 
 const statusMap = ['error', 'success'];
 const status = ['停职', '在职'];
 
 @withRouter
 @Form.create()
-@inject('tableStore')
+@inject('tableStore','dispatch')
 @observer
 export default class Table extends Component  {
   constructor(props) {
     super(props);
+    this.searchCriteria = {};
+    this.search();
     this.state = {
       selectedRows: []
     };
   }
 
-  componentWillMount() {
-    const { location: { query } } = this.props;
-    if(!(query && query.isNeedHoldSearchCriteria)) {
-      this.props.tableStore.initSearchCriteria();
-    }
-    this.props.tableStore.fetchList();
-  }
+  // componentWillMount() {
+  //   const { location: { query } } = this.props;
+  //   if(!(query && query.isNeedHoldSearchCriteria)) {
+  //     this.props.tableStore.initSearchCriteria();
+  //   }
+  //   this.props.tableStore.fetchList();
+  // }
 
   columns = [
     {
@@ -56,29 +63,23 @@ export default class Table extends Component  {
     },
     {
       title: '上次调度时间',
-      dataIndex: 'updatedAt'
+      dataIndex: 'updatedAt',
+      render: text => formatTimeStamp(text)
     },
     {
       title: '操作',
-      render: (text, record) => (
-        <div className="operate-col">
-          <AuthComponent code="table-check">
-            <a onClick={() => this.check(record.id)}>查看</a>
-          </AuthComponent>
-          <AuthComponent code="table-update">
-            <a onClick={() => this.edit(record.id)}>编辑</a>
-          </AuthComponent>
-          <AuthComponent code="table-remove">
-            <Popconfirm
-              placement="topRight"
-              title="确定删除该条数据吗？"
-              onConfirm={() => this.changeStatus(val.id, val.status)}
-              okText="确定"
-              cancelText="取消"
-            >
-              <a>删除</a>
-            </Popconfirm>
-          </AuthComponent>
+      render: (text) => (
+        <div className="operateCol">
+          <AuthButton type="text" hasAuth onClick={() => this.check(text.id)}>查看</AuthButton>
+          <AuthButton type="text" hasAuth onClick={() => this.edit(text.id)}>编辑</AuthButton>
+          <AuthPopButton
+            hasAuth
+            type="text"
+            confirmProps={{
+              title: "确定删除该条数据吗？",
+              onConfirm: () => this.delete(text.id)
+            }}
+          >删除</AuthPopButton>
         </div>
       ),
     },
@@ -88,26 +89,30 @@ export default class Table extends Component  {
     const { history } = this.props;
     history.push(`/basis/table/new`);
   }
-  // 查看
-  check = id => {
-    const { history } = this.props;
-    history.push(`/basis/table/check/${id}`);
+  // 删
+  delete = id => {
+    console.log('/',id);
   }
   // 改
   edit = id => {
-    const { history } = this.props;
-    history.push(`/basis/table/edit/${id}`);
+    console.log('/',id);
+  }
+  // 查
+  search = () => {
+    this.props.dispatch({
+      type: 'tableStore/fetchList',
+      payload: this.searchCriteria
+    });
   }
   /**查：开始 */
   // 表格项变动查询，如分页项
   handleStandardTableChange = pagination => {
-    const { tableStore: { searchCriteria } } = this.props;
-    const params = {
-      ...searchCriteria,
+    this.searchCriteria = {
+      ...this.searchCriteria,
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
     };
-    this.props.tableStore.fetchList(params);
+    this.search();
   }
   // 搜索
   handleSearch = e => {
@@ -115,15 +120,16 @@ export default class Table extends Component  {
     const { form } = this.props;
     form.validateFields((err, formValues) => {
       if (err) return;
-      this.props.tableStore.fetchList(formValues);
+      this.searchCriteria = formValues;
+      this.search();
     });
   }
-  // 重置
-  handleFormReset = () => {
+  // 刷新
+  handleRefresh = () => {
     const { form } = this.props;
     form.resetFields();
-    this.props.tableStore.initSearchCriteria();
-    this.props.tableStore.fetchList();
+    this.searchCriteria = {};
+    this.search();
   }
   /**查：结束 */
   handleSelectRows = rows => {
@@ -135,24 +141,22 @@ export default class Table extends Component  {
   renderSearchForm() {
     const {
       form: { getFieldDecorator },
-      tableStore: { loading, searchCriteria }
+      tableStore: {
+        ['tableStore/fetchList']: loading
+      }
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form className="searchForm" onSubmit={this.handleSearch} layout="inline">
         <div className="searchItem">
           <FormItem>
-            {getFieldDecorator('name', {
-              initialValue: searchCriteria.name,
-            })(
+            {getFieldDecorator('name')(
               <Input placeholder="请输入姓名" />
             )}
           </FormItem>
         </div>
         <div className="searchItem">
           <FormItem>
-            {getFieldDecorator('status', {
-              initialValue: searchCriteria.status,
-            })(
+            {getFieldDecorator('status')(
               <Select placeholder="请选择状态" style={{ width: '100%' }}>
                 <Option value="0">停职</Option>
                 <Option value="1">在职</Option>
@@ -161,11 +165,8 @@ export default class Table extends Component  {
           </FormItem>
         </div>
         <div className="searchItem">
-          <Button loading={loading} type="primary" htmlType="submit">
+          <Button icon="search" loading={loading} type="primary" htmlType="submit">
             查询
-          </Button>
-          <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-            重置
           </Button>
         </div>
       </Form>
@@ -177,25 +178,35 @@ export default class Table extends Component  {
     const {
       list,
       pagination,
-      loading,
+      ['tableStore/fetchList']: loading,
     } = this.props.tableStore;
-
+    const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
     return (
-      <PageHeaderWrapper title="表格">
-        <Card bordered={false}>
-          <div className="tableList">
+      <BaseCard size="small" title="普通列表" extra={
+        <div className="buttonGroupRight">
+          <AuthButton
+            code='nomalList'
+            icon="sync"
+            loading={refreshLoading}
+            type="primary"
+            onClick={this.handleRefresh}
+          >刷新</AuthButton>
+          <AuthPopButton
+            code='nomalList'
+            hasAuth={selectedRows.length}
+            noMatch={() => message.info('还没选择任何项!')}
+            icon="delete"
+          >删除</AuthPopButton>
+          <Button
+            icon="plus"
+            type="primary"
+            onClick={this.add}
+          >新建</Button>
+        </div>
+      }>
+        <div className="tableList">
             {this.renderSearchForm()}
-            <div className="tableListOperator">
-              <Button icon="plus" type="primary" onClick={this.add}>
-                新建
-              </Button>
-              <AuthComponent code="table-remove">
-                {selectedRows.length > 0 && (
-                  <Button icon="delete">删除</Button>
-                )}
-              </AuthComponent>
-            </div>
-            <StandardTable
+          <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               data={{list: toJS(list),pagination}}
@@ -204,8 +215,7 @@ export default class Table extends Component  {
               onChange={this.handleStandardTableChange}
             />
           </div>
-        </Card>
-      </PageHeaderWrapper>
+      </BaseCard>
     )
   }
 }

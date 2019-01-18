@@ -1,0 +1,43 @@
+// 清除浮动
+.clearfix() {
+  zoom: 1;
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
+}
+// 超出显示省略号
+.ellipsis {
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+}
+// 铺满
+.full(@position:absolute) {
+  position: @position;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+// 竖直居中（transform2D兼容到ie9）
+.vetically() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 行内元素（文字）平行、竖直方向居中
+.spanCenter(@height) {
+  height: @height;
+  line-height: @height;
+  text-align: center;
+}

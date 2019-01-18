@@ -23,3 +23,11 @@ export function login(params) {
 export function logout() {
   return request(URL.LOGOUT);
 }
+export function getWeather(params={}) {
+  return request(URL.BAIDU_WEATHER, {
+    location: '北京',
+    output: 'json',
+    ak: '5slgyqGDENN7Sy7pw29IUvrZ',
+    ...params
+  }, false, true);
+}

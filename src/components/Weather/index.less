@@ -1,0 +1,166 @@
+
+@weatherColor: #043567;
+@cityBarHeight: 32px;
+@unitSize: 22px;
+
+.weather {
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid #dfdfdf;
+}
+// 城市区域
+.cityBar {
+  height: @cityBarHeight;
+  line-height: 40px;
+}
+.province {
+  float: left;
+  color: #000;
+  font-size: 16px;
+}
+.changeCityBtn {
+  float: left;
+  width: 28px;
+  height: 14px;
+  margin-left: 8px;
+  margin-top: 14px;
+  background: url(./img/selectCityBtn.png) no-repeat 0 0;
+  &:hover {
+    background-image: url(./img/selectCityBtnCur.png);
+  }
+}
+.updateAt {
+  float: right;
+  height: @cityBarHeight;
+  line-height: @cityBarHeight;
+  text-align: right;
+  font-size: 12px;
+  color: #7d7d7d;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+// 当天天气信息
+.todayInfo {
+  width: 100%;
+  height: 100px;
+  display: table;
+  padding: 4px 0 16px;
+}
+.curTemperature {
+  display: table-cell;
+  vertical-align: middle;
+  color: @weatherColor;
+  text-align: center;
+}
+.temperatureNum {
+  font-size: 80px;
+  line-height: 80px;
+}
+.temperatureUnit {
+  position: relative;
+  top: -46px;
+  left: -3px;
+  font-size: @unitSize;
+}
+.curOther {
+  display: table-cell;
+  width: 106px;
+  overflow: hidden;
+  font-size: 12px;
+  color: #000;
+  div {
+    height: 26px;
+    line-height: 32px;
+    &:first-child {
+      span {
+        display: inline-block;
+        width: 90px;
+        height: 16px;
+        line-height: 16px;
+        text-align: center;
+        background-color: rgb(249, 218, 101);
+        border-radius: 8px;
+        color: #fff;
+      }
+    }
+  }
+}
+// 未来5天天气
+.temperatureCharts {
+  padding-top: 16px;
+  border-top: 1px solid #dfdfdf;
+}
+.chartsItem {
+  width: 100%;
+  height: 30px;
+  li {
+    float: left;
+    width: 20%;
+    text-align: center;
+    font-size: 12px;
+    &.today {
+      color: #1f6ebd;
+    }
+  }
+}
+.weatherIcon {
+  width: 34px;
+  height: 30px;
+  margin: 0 auto;
+  background: url(./img/weatherIcon.png) no-repeat -80px 0;
+}
+// 温馨提示：穿衣之类的
+.lifeTips {
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #dfdfdf;
+}
+.tipsList {
+  width: 100%;
+  font-size: 12px;
+  overflow: hidden;
+  li {
+    box-sizing: border-box;
+    padding: 4px 2px;
+    width: 25%;
+    height: 80px;
+    float: left;
+    background-color: #6381A1;
+    background-clip: content-box;
+    color: #fff;
+    text-align: center;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}
+.lifeTipsIcon {
+  width: 100%;
+  height: 34px;
+  line-height: 32px;
+  padding: 2px 0;
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+.lifeTipsTitle {
+  color: #c3dcf4;
+}
+
+// .pathAnimation {
+//   animation: dash 1.5s ease forwards;
+// }
+
+// @keyframes dash {
+//   from {
+//     stroke-dashoffset: 100%;
+//   }
+//   to {
+//     stroke-dashoffset: 0;
+//   }
+// }

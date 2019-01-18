@@ -1,17 +1,22 @@
 import React from 'react';
 import { Spin } from 'antd';
 
-const style = {
+const fullPageStyle = {
   position: 'fixed',
   top: 72,
   left: 0,
   right: 0,
   bottom: 0,
-}
+};
+const localPageStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%',
+};
 
-export default function LoadingComponent({ error }) {
+export default function LoadingComponent({ isGlobal = true, error }) {
   return (
-    <div style={style}>
+    <div style={isGlobal ? fullPageStyle :localPageStyle}>
       {!error ? (
         <Spin
           size="large"

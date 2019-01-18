@@ -14,8 +14,9 @@ module.exports = {
       //快捷入口
       asserts: path.resolve('src/asserts'),
       moment$: path.resolve('node_modules/moment/moment.js'),// 为了解决moment.js一个祖传的操蛋警告
+      base: path.resolve('src/base'),
       components: path.resolve('src/components'),
-      containers: path.resolve('src/containers'),
+      pages: path.resolve('src/pages'),
       utils: path.resolve('src/utils'),
       constants: path.resolve('src/constants'),
     },

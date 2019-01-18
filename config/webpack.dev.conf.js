@@ -74,8 +74,9 @@ module.exports =  merge(baseConfig, {
     overlay: true,
     compress: false, // 服务器返回浏览器的时候是否启动gzip压缩
     proxy:{
-      '/api': {
-        target:"https://www.easy-mock.com/mock/5b5a7ae5b14d03439fb7f3f9",
+      '/admin': {
+        target:"https://www.easy-mock.com/mock/5c2c6480f5f8620c46376d26",
+        // target:"http://wms-stable-test.bdfint.cn",
         changeOrigin: true,
       },
     }

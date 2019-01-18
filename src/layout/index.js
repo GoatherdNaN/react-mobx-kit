@@ -3,37 +3,59 @@
  * @Date: 2018-10-26 17:51:06
  * @Description: Layout全局容器
  */
-import React, { Component } from 'react'
+import React, { Component, Fragment, Suspense } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Breadcrumb, Button } from 'antd'
-import { Redirect, Switch, Route, Link, withRouter } from 'react-router-dom'
+import {  Layout, Breadcrumb } from 'antd'
+import { Redirect, Switch, Route, Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import withWrapError from 'components/ErrorHandle'
 import NotFound from 'components/Exception/404'
 import AuthPage from 'components/Authorized'
-import MyMenu from 'components/MyMenu'
+import LoadingComponent from 'components/LoadingComponent'
+import { TITLE } from 'constants/config'
 import routes, { breadcrumbNameMap } from '../routes'
-
+import Header from './Header'
 import styles from './index.less'
+const SideMenu = React.lazy(() => import('components/SideMenu'));
 
-@withRouter
-@inject('loginStore')
+const { Sider } = Layout;
+
+@inject('loginStore','dispatch')
 @observer
-class Layout extends Component {
+class MyLayout extends Component {
   componentWillMount() {
     const { location: { query } } = this.props;
     if(!(query && query.isFirstLoad)) {
-      this.props.loginStore.getResource();
+      this.props.dispatch({
+        type: 'loginStore/getResource'
+      });
     }
   }
-  
+
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  }
+
+  handleMenuCollapse = collapsed => {
+    this.props.loginStore.changeLayoutCollapsed(collapsed);
+  };
+
+  matchParamsPath = () => {
+    const { location: { pathname } } = this.props;
+    const breadcrumbNameMapKeys = Object.keys(breadcrumbNameMap);
+    const pathKey = breadcrumbNameMapKeys.find(key => pathToRegexp(key).test(pathname));
+    return breadcrumbNameMap[pathKey];
+  };
+
   getBreadcrumbItem = () => {
     const { location: { pathname } } = this.props;// pathToRegexp
     const pathSnippets = pathname.split('/').filter(i => i);
     return pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
       const matchKey = Object.keys(breadcrumbNameMap).find(v => pathToRegexp(v).test(url));
-      if(!matchKey) return null;
+      if (!matchKey) return null;
       const title = breadcrumbNameMap[matchKey];
       return (
         <Breadcrumb.Item key={url}>
@@ -59,48 +81,67 @@ class Layout extends Component {
 
   render() {
     const {
-      loginStore: { authList, authArr, authLoading, logoutLoading }
+      loginStore: {
+        authList,
+        authArr,
+        collapsed,
+        ['loginStore/getResource']: authLoading
+      },
     } = this.props;
+    const currRouterData = this.matchParamsPath();
     return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.logo}>Mobx Demo</div>
-          <div className={styles.menu}>
-            <MyMenu authList={authList} />
+      <Fragment>
+        <Sider
+          className={styles.leftContainer}
+          onCollapse={this.handleMenuCollapse}
+          collapsed={collapsed}
+        >
+          <div className={styles.logo}>
+            {
+              !collapsed
+                ? TITLE
+                : <img src={require('../asserts/img/logo.svg')} />
+            }
           </div>
-          <div className={styles.info}>
-            <Button 
-              ghost 
-              size="small" 
-              loading={logoutLoading} 
-              shape="circle" 
-              icon="logout" 
-              onClick={this.logout} />
+          <Suspense fallback={<LoadingComponent isGlobal={false} />}>
+            <SideMenu collapsed={collapsed} menus={authList} />
+          </Suspense>
+        </Sider>
+        <section className={styles.rightContainer}>
+          <Header collapsed={collapsed} onCollapse={this.handleMenuCollapse} />
+          <div className={styles.wrapper}>
+            {
+              !!currRouterData && (
+                <div className={styles.breadCrumb}>
+                  <Breadcrumb>
+                    <Breadcrumb.Item>
+                      <Link to="/">首页</Link>
+                    </Breadcrumb.Item>
+                    {this.getBreadcrumbItem()}
+                  </Breadcrumb>
+                </div>
+              )
+            }
+            <div className={styles.content}>
+              <Switch>
+                {routes.map(item => (
+                  <AuthPage
+                    {...item}
+                    key={item.code}
+                    authArr={authArr}
+                    authLoading={authLoading}
+                  />
+                ))}
+                <Redirect exact from="/" to="/dashboard" />
+                <Route render={NotFound} />
+              </Switch>
+            </div>
           </div>
-        </div>
-        <div className={styles.wrapper}>
-          <div className={styles.breadCrumb}>
-            <Breadcrumb>{ this.getBreadcrumbItem() }</Breadcrumb>
-          </div>
-          <div className={styles.content}>
-            <Switch>
-              {routes.map(item => (
-                <AuthPage
-                  {...item} 
-                  key={item.code}
-                  authArr={authArr} 
-                  authLoading={authLoading} 
-                />
-              ))}
-              <Redirect from="/" to="/home" />
-              <Route render={NotFound} />
-            </Switch>
-          </div>
-        </div>
-      </div>
+        </section>
+      </Fragment>
     );
   }
 };
-Layout.displayName = 'Layout';
+MyLayout.displayName = 'Layout';
 
-export default withWrapError(Layout);
+export default withWrapError(MyLayout);

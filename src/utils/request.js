@@ -1,6 +1,9 @@
+import { message } from 'antd'
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'qs';
-import { METHOD } from '../constants/config';
+import { METHOD } from 'constants/dict';
+// import storage from './storage'
+import history from '../history';
 
 function hasPrototype(object, name) {
   return Object.prototype.hasOwnProperty.call(object, name) && name in object;
@@ -31,17 +34,17 @@ function checkStatus(response) {
           const url = response.url.replace(window.location.origin, '');
           setCache(url, resp);
         } else {
-          // 处理异常
+          message.info(resp.msg || '操作失败')
         }
         resolve(resp);
       });
     });
   }
-  const error = {
-    message: codeMessage[response.status] || response.statusText,
-    name: response.status,
-    response,
-  };
+  const errortext = codeMessage[response.status] || response.statusText;
+  message.error(errortext);
+  const error = new Error(errortext);
+  error.name = response.status;
+  error.response = response;
   throw error;
 }
 
@@ -73,15 +76,17 @@ function setCache(url, data) {
  */
 export default function request(base, params = null, cache = false, jsonType = false) {
   let { url } = base;
+  // const token = storage.getItem('token');
   const { method } = base;
   const options = {
     headers: {
+      // token,
       'Content-Type': jsonType
         ? 'application/json;charset=UTF-8'
         : 'application/x-www-form-urlencoded;charset=UTF-8',
     },
-    mode: 'cors',
-    // credentials: 'include',
+    mode: jsonType ? 'cors' : 'no-cors', // 必须设置为这个模式，否则使用json数据提交时，headers设置会无效，参见链接：https://github.com/dvajs/dva/issues/282
+    credentials: 'include',
     method,
   };
   // 非get方式请求参数处理
@@ -114,8 +119,13 @@ export default function request(base, params = null, cache = false, jsonType = f
   });
   return Promise.race([fetchPromise, timeoutPromise])
     .then(checkStatus)
-    .catch(() => {
-      // if (!e) return;
+    .catch(e => {
+      if (!e) return;
+      let status = e.name
       // 处理错误网络状态码
+      if (status === 401) {
+        // @HACK
+        history.push('/login');
+      }
     });
 }

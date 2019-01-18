@@ -1,0 +1,65 @@
+@import "../asserts/css/vars.less";
+@import "../asserts/css/mixins.less";
+
+.header {
+  width: 100%;
+  height: @header-height;
+  line-height: @header-height;
+  padding: 0 @common-padding;
+  background: #fff;
+  border: 1px solid rgb(248, 248, 248);
+}
+.leftUtilLabel {
+  float: left;
+  &:not(:last-of-type) {
+    padding-right: @common-padding * 3;
+  }
+  li {
+    float: left;
+    &:not(:first-child) {
+      margin-left: @common-padding;
+    }
+  }
+}
+.shortcut {
+  span {
+    margin-left: 4px;
+    position: relative;
+    top: -1px;
+  }
+  li:not(:first-child) {
+    .shortcutItem {
+      padding-left: 10px;
+      border-left: 1px solid #ddd;
+    }
+  }
+}
+.rightUtilLabel {
+  float: right;
+  li {
+    float: right;
+    &:not(:first-child) {
+      margin-right: @common-padding * 2;
+    }
+  }
+}
+
+.utilLabel {
+  // margin-left: @common-padding;
+  cursor: pointer;
+  &:hover {
+    color: @link-color;
+  }
+}
+
+.accountInfo {
+  cursor: default!important;
+  font-size: @sizeMini;
+  color: @black;
+  p {
+    .ellipsis();
+  }
+  &:hover {
+    color: @black;
+  }
+}
