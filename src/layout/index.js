@@ -4,8 +4,9 @@
  * @Description: Layout全局容器
  */
 import React, { Component, Fragment, Suspense } from 'react'
+import classNames from 'classnames'
 import { inject, observer } from 'mobx-react'
-import {  Layout, Breadcrumb } from 'antd'
+import {  Layout, Breadcrumb, Icon } from 'antd'
 import { Redirect, Switch, Route, Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import withWrapError from 'components/ErrorHandle'
@@ -15,6 +16,7 @@ import LoadingComponent from 'components/LoadingComponent'
 import { TITLE } from 'constants/config'
 import routes, { breadcrumbNameMap } from '../routes'
 import Header from './Header'
+import history from '../history'
 import styles from './index.less'
 const SideMenu = React.lazy(() => import('components/SideMenu'));
 
@@ -23,13 +25,25 @@ const { Sider } = Layout;
 @inject('loginStore','dispatch')
 @observer
 class MyLayout extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.scrollBox = React.createRef();
+
+  }
+
+  componentDidMount() {
     const { location: { query } } = this.props;
     if(!(query && query.isFirstLoad)) {
       this.props.dispatch({
         type: 'loginStore/getResource'
       });
     }
+    // 路由变化，置顶
+    history.listen(() => {
+      if (this.scrollBox.current) {
+        this.scrollBox.current.scrollTop = 0;
+      }
+    })
   }
 
   toggle = () => {
@@ -92,6 +106,8 @@ class MyLayout extends Component {
     return (
       <Fragment>
         <Sider
+          // width={200}
+          // collapsedWidth={50}
           className={styles.leftContainer}
           onCollapse={this.handleMenuCollapse}
           collapsed={collapsed}
@@ -107,15 +123,17 @@ class MyLayout extends Component {
             <SideMenu collapsed={collapsed} menus={authList} />
           </Suspense>
         </Sider>
-        <section className={styles.rightContainer}>
+        <section className={classNames(styles.rightContainer, {
+          [styles.collapsed]: collapsed
+        })}>
           <Header collapsed={collapsed} onCollapse={this.handleMenuCollapse} />
-          <div className={styles.wrapper}>
+          <div className={styles.scrollBox} ref={this.scrollBox}>
             {
               !!currRouterData && (
                 <div className={styles.breadCrumb}>
                   <Breadcrumb>
                     <Breadcrumb.Item>
-                      <Link to="/">首页</Link>
+                      <Link to="/"><Icon type="home" /></Link>
                     </Breadcrumb.Item>
                     {this.getBreadcrumbItem()}
                   </Breadcrumb>

@@ -26,17 +26,21 @@ const formItemLayout = {
 
 @withRouter
 @Form.create()
-@inject('tableStore')
+@inject('tableStore','dispatch')
 @observer
 export default class Workplace extends Component {
   constructor(props) {
     super(props);
-    const { match: { params, path } } = props;
-    this.id = params.id;
-    this.isCheck = !!path.match(/check/g);
-    this.isNew = !params.id;
-    if(!this.isNew) {
-      props.tableStore.fetchDataById({id: params.id});
+    const { location: { query } } = props;
+    const { id } = query || {};
+    this.id = id;
+    // this.isCheck = !!path.match(/check/g);
+    // this.isNew = !params.id;
+    if(id) {
+      props.dispatch({
+        type: 'tableStore/fetchDataById',
+        payload: { id }
+      });
     }
     this.state = {
       initData: {}
@@ -44,8 +48,8 @@ export default class Workplace extends Component {
   }
 
   static getDerivedStateFromProps(nextProps) {
-    const { match: { params },tableStore: { singleData: initData } } = nextProps;
-    if (params.id && initData) {
+    const { location: { query },tableStore: { singleData: initData } } = nextProps;
+    if (query && query.id && initData) {
       return {
         initData,
       };
@@ -56,7 +60,7 @@ export default class Workplace extends Component {
   handleBack = isNeedHoldSearchCriteria => {
     const { history } = this.props;
     history.push({
-      pathname: '/basis/table',
+      pathname: '/basis/nomalList',
       query: {
         isNeedHoldSearchCriteria: !!isNeedHoldSearchCriteria
       }
@@ -81,6 +85,7 @@ export default class Workplace extends Component {
 
   render() {
     const { initData } = this.state;
+    console.log('/',initData);
     const { isCheck, isNew } = this;
     const {
       form: { getFieldDecorator },

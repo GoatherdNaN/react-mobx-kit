@@ -175,7 +175,7 @@ export default class Header extends Component {
             >
               <span className={classNames(styles.utilLabel, styles.accountInfoLabel)}>
                 <span>张三</span>
-                <Icon type="down" style={{ marginLeft: 4 }} />
+                <Icon type="caret-down" theme="filled" style={{ marginLeft: 4 }} />
               </span>
             </Dropdown>
           </li>

@@ -13,12 +13,11 @@ const AuthPage = props => {
   } = props;
   const target = (
     <Route {...otherProps} render={() => (Component ? <Component {...props} /> : render(props))} />
-    );
-    const noMatch = <Route {...otherProps} render={() => <P403 />} />;
-    if(!authArr.length) {
-      // return <LoadingComponent />
-      return target
-    }
+  );
+  const noMatch = <Route {...otherProps} render={() => <P403 />} />;
+  if(!authArr.length) {
+    return <LoadingComponent />
+  }
   return authArr.includes(code) ? target : noMatch;
 }
 

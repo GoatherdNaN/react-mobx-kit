@@ -15,11 +15,6 @@ const memoize = (fn, getKey) => {
   };
 };
 
-export function toWindowTop() {
-  window.scrollTo(0, 0);
-  // document.title = 'your_title';
-}
-
 export function checkArrayHasValue(children) {
   return isArray(children) && !!children.length
 }

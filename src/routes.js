@@ -42,6 +42,20 @@ const routesConfig = [
         name: '普通列表',
         code: 'nomalList',
         component: AsyncTable,
+        children: [
+          {
+            name: '新增',
+            code: 'nomalListNew',
+            component: AsyncTableClientForm,
+            path: 'new'
+          },
+          {
+            name: '修改',
+            code: 'nomalListEdit',
+            component: AsyncTableClientForm,
+            path: 'edit'
+          },
+        ]
       },
     ],
   },
@@ -69,11 +83,7 @@ const breadcrumbNameMap = {};
 function getRoutes(routesConfig, rootPath='') {
   routesConfig.forEach(v => {
     // path可省略
-    v.path = rootPath + (
-      !v.path && v.code
-        ? '/' + v.code
-        : v.path
-    );
+    v.path = rootPath + '/' + (v.path || v.code);
     v.exact = (v.exact !== false); // exact 默认为true
     if(v.children) getRoutes(v.children, v.path);
     delete v.children;

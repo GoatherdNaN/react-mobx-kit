@@ -9,6 +9,7 @@ import PopButton from 'base/Button/PopButton'
 import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
 import { formatTimeStamp } from 'utils/format'
+import ModalForm from './ModalForm'
 
 const FormItem = Form.Item;
 const AuthButton = AuthComponent(Button);
@@ -27,6 +28,7 @@ export default class Table extends Component  {
     this.searchCriteria = {};
     this.search();
     this.state = {
+      visible: false,
       selectedRows: []
     };
   }
@@ -63,11 +65,13 @@ export default class Table extends Component  {
     },
     {
       title: '上次调度时间',
+      width: 172,
       dataIndex: 'updatedAt',
       render: text => formatTimeStamp(text)
     },
     {
       title: '操作',
+      width: 150,
       render: (text) => (
         <div className="operateCol">
           <AuthButton type="text" hasAuth onClick={() => this.check(text.id)}>查看</AuthButton>
@@ -84,10 +88,21 @@ export default class Table extends Component  {
       ),
     },
   ];
+  // 模态框控制
+  openModal = () => {
+    this.setState({
+      visible: true,
+    })
+  }
+  closeModal = () => {
+    this.setState({
+      visible: false,
+    })
+  }
+
   // 增
   add = () => {
-    const { history } = this.props;
-    history.push(`/basis/table/new`);
+    this.openModal();
   }
   // 删
   delete = id => {
@@ -95,7 +110,14 @@ export default class Table extends Component  {
   }
   // 改
   edit = id => {
-    console.log('/',id);
+    const { history } = this.props;
+    history.push({
+      pathname: `/basis/nomalList/edit`,
+      query: {
+        id,
+        searchCriteria: this.searchCriteria
+      }
+    });
   }
   // 查
   search = () => {
@@ -165,6 +187,26 @@ export default class Table extends Component  {
           </FormItem>
         </div>
         <div className="searchItem">
+          <FormItem>
+            {getFieldDecorator('status')(
+              <Select placeholder="请选择状态" style={{ width: '100%' }}>
+                <Option value="0">停职</Option>
+                <Option value="1">在职</Option>
+              </Select>
+            )}
+          </FormItem>
+        </div>
+        <div className="searchItem">
+          <FormItem>
+            {getFieldDecorator('status')(
+              <Select placeholder="请选择状态" style={{ width: '100%' }}>
+                <Option value="0">停职</Option>
+                <Option value="1">在职</Option>
+              </Select>
+            )}
+          </FormItem>
+        </div>
+        <div className="searchItem">
           <Button icon="search" loading={loading} type="primary" htmlType="submit">
             查询
           </Button>
@@ -180,6 +222,7 @@ export default class Table extends Component  {
       pagination,
       ['tableStore/fetchList']: loading,
     } = this.props.tableStore;
+    const { visible } = this.state;
     const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
     return (
       <BaseCard size="small" title="普通列表" extra={
@@ -207,14 +250,15 @@ export default class Table extends Component  {
         <div className="tableList">
             {this.renderSearchForm()}
           <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={{list: toJS(list),pagination}}
-              columns={this.columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-            />
-          </div>
+            selectedRows={selectedRows}
+            loading={loading}
+            data={{list: toJS(list),pagination}}
+            columns={this.columns}
+            onSelectRow={this.handleSelectRows}
+            onChange={this.handleStandardTableChange}
+          />
+        </div>
+        <ModalForm visible={visible} handleClose={this.closeModal} />
       </BaseCard>
     )
   }

@@ -4,18 +4,19 @@
 :global {
   body, td, th {
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: @font-size-base;
-    color: @text-color;
+    font-size: @sizeMiddle;
+    color: @black;
     // line-height: 24px;
   }
 
   body {
-    position: relative;
     background-color: @bodyBc;
   }
 
   #root {
     height: 100vh;
+    position: relative;
+    overflow-y: hidden; // 去除横向定宽出现滚动条的影响
   }
   // antd icon设置字体16px
   .anticon {
@@ -32,11 +33,10 @@
       margin-right: @common-padding;
     }
   }
-
+  // 全局通用类
   .searchForm {
     margin-top: 16px;
   }
-
   .searchItem {
     display: inline-block;
     width: 240px;
@@ -51,7 +51,6 @@
       }
     }
   }
-
   .operateCol {
     a {
       padding: 0 12px;

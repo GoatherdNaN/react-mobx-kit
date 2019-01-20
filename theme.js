@@ -1,6 +1,6 @@
 module.exports = {
-  "@primary-color": "#1890ff",                      // 全局主色
-  "@link-color": "rgba(0, 0, 0, 0.65)",                            // 链接色
+  "@primary-color": "#1890ff",                         // 全局主色
+  "@link-color": "rgba(0, 0, 0, 0.65)",                // 链接色
   "@success-color": "#52c41a",                         // 成功色
   "@warning-color": "#faad14",                         // 警告色
   "@error-color": "#f5222d",                           // 错误色
@@ -11,5 +11,9 @@ module.exports = {
   "@disabled-color ": "rgba(0, 0, 0, .25)",            // 失效色
   "@border-radius-base": "4px",                        // 组件/浮层圆角
   "@border-color-base": "#d9d9d9",                     // 边框色
-  "@box-shadow-base": "0 2px 8px rgba(0, 0, 0, .15)"  // 浮层阴影
+  "@box-shadow-base": "0 2px 8px rgba(0, 0, 0, .15)",  // 浮层阴影
+  //menu
+  "@menu-collapsed-width": "50px",
+  // modal
+  "@modal-header-bg": "#F8F8F8"
 };

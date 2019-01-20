@@ -4,14 +4,19 @@
 // @hack: ~"/*\**/";  less中hack写法
 // 左边菜单部分
 .leftContainer {
-  float: left;
+  position: absolute;
   height: 100%;
 }
 // 左边内容主体
 .rightContainer {
   position: relative;
+  margin-left: @sider-opened-width;
+  min-width: 945px; // 991 - 50, 50是折叠后的左边栏宽度
   height: 100%;
-  overflow: hidden;
+  transition: margin-left 0.2s;
+  &.collapsed {
+    margin-left: @sider-collapsed-width;
+  }
 }
 .logo {
   .spanCenter(@header-height);
@@ -26,8 +31,7 @@
   }
 }
 
-.wrapper {
-  min-width: 991 - @sider-collapsed-width;
+.scrollBox {
   position: absolute;
   left: 0;
   right: 0;
@@ -65,12 +69,5 @@
   }
   .ant-menu-inline-collapsed {
     width: @sider-collapsed-width!important;
-  }
-  .ant-menu-inline-collapsed > .ant-menu-item,
-  .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item,
-  .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title,
-  .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title {
-    position: relative;
-    left: @menu-title-collapsed-paddingX - 32px!important; // antd自带的左右padding已经加了important，只能曲线救国
   }
 }
