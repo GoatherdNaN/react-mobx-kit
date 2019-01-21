@@ -16,7 +16,12 @@ const FormItem = Form.Item;
 @inject('tableStore','dispatch')
 @observer
 export default class ModalFrom extends Component {
-  handleSure = () => {
+  afterClose = () => {
+    const { form } = this.props;
+    form.resetFields();
+  }
+
+  handleSure = (continuity) => {
     const { form, mode, handleClose } = this.props;
     form.validateFields((err, payload) => {
       if (err) {
@@ -26,7 +31,7 @@ export default class ModalFrom extends Component {
       this.props.dispatch({
         type,
         payload,
-        callback: handleClose
+        callback: continuity === true ? this.afterClose : handleClose
       });
     });
   }
@@ -38,11 +43,10 @@ export default class ModalFrom extends Component {
       handleClose,
       initData,
       confirmLoading,
-      form: { getFieldDecorator, resetFields },
+      form: { getFieldDecorator },
     } = this.props;
 
     const isCheck = mode === OPERATE_ITEM.check.code;
-    const { title } = OPERATE_ITEM[mode];
 
     const formItemProps = {
       ...formItemBlock
@@ -53,9 +57,9 @@ export default class ModalFrom extends Component {
 
     return (
       <Modal
-        afterClose={resetFields}
-        isCheck={isCheck}
-        title={title}
+        continuity
+        afterClose={this.afterClose}
+        mode={mode}
         visible={visible}
         onCancel={handleClose}
         confirmLoading={confirmLoading}
