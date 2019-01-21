@@ -1,4 +1,4 @@
-import TableStore from './TableStore';
+import TableStore from 'pages/Table/store';
 import LoginStore from './LoginStore';
 
 const AllStores = {

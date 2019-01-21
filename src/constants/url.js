@@ -10,7 +10,6 @@ export const BAIDU_WEATHER = {
 };
 
 export const TABLE_LIST = getApi('table/list');
-export const TABLE_GET_BY_ID = getApi('table/getById',METHOD.POST);
 export const TABLE_NEW = getApi('table/new',METHOD.POST);
 export const TABLE_UPDATE = getApi('table/update',METHOD.POST);
 export const TABLE_REMOVE = getApi('table/delete',METHOD.POST);

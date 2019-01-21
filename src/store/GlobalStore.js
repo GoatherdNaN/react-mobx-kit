@@ -7,7 +7,7 @@ import { action, extendObservable } from 'mobx'
 
 export default class GlobalStore {
   // 全局loading的action
-  @action changeLoad(loadingName, loading) {
+  @action changeLoading(loadingName, loading) {
     if(loadingName in this){
       this[loadingName] = loading;
     } else {

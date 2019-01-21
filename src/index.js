@@ -18,10 +18,10 @@ import createStoresFromState from './store';
 import 'asserts/css/reset.css'
 import './index.less'
 // 开启mobx的严格模式，规范数据修改操作只能在action中进行
-configure({
-  enforceActions: 'always',
-  // disableErrorBoundaries: false,
-});
+// configure({
+//   enforceActions: 'always',
+//   // disableErrorBoundaries: false,
+// });
 message.config({
   maxCount: 1,
 });

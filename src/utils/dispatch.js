@@ -27,16 +27,16 @@ export default async function dispatch(action) {
 
   const modules = action.type.split('/');
   try {
-    this[modules[0]].changeLoad(action.type, true);
+    this[modules[0]].changeLoading(action.type, true);
     await this[modules[0]][modules[1]](action.payload, action.callback);
   } catch(e) {
     warning(e);
   } finally {
     if (
       typeof this[modules[0]] === 'object' &&
-      typeof this[modules[0]].changeLoad === 'function'
+      typeof this[modules[0]].changeLoading === 'function'
     ) {
-      this[modules[0]].changeLoad(action.type, false);
+      this[modules[0]].changeLoading(action.type, false);
     }
   }
 }

@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export const format = "YYYY-MM-DD HH:mm:ss";
+export const YMDHMS = "YYYY-MM-DD HH:mm:ss";
 
 export function disabledDate(current) {
   return current && current > moment().endOf('day');
@@ -14,9 +14,9 @@ export function disabledDateTime() {
   };
 }
 // 获取时间字符串
-export function getDate(time) {
+export function getInitDate(time) {
   if (time) {
-    return moment(time).format(format);
+    return moment(time);
   }
-  return '';
+  return null;
 }

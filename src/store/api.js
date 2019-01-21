@@ -4,9 +4,6 @@ import * as URL from 'constants/url';
 export function getList(params) {
   return request(URL.TABLE_LIST, params);
 }
-export function getById(params) {
-  return request(URL.TABLE_GET_BY_ID, params);
-}
 export function update(params) {
   return request(URL.TABLE_UPDATE, params);
 }

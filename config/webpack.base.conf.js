@@ -17,6 +17,7 @@ module.exports = {
       base: path.resolve('src/base'),
       components: path.resolve('src/components'),
       pages: path.resolve('src/pages'),
+      store: path.resolve('src/store'),
       utils: path.resolve('src/utils'),
       constants: path.resolve('src/constants'),
     },

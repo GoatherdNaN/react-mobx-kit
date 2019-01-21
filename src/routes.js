@@ -19,12 +19,6 @@ const AsyncHome = Loadable(Object.assign(commonLoadableConfig,{
 const AsyncTable = Loadable(Object.assign(commonLoadableConfig,{
   loader: () => import('./pages/Table'),
 }));
-const AsyncTableClientForm = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/Table/ClientForm'),
-}));
-const AsyncOther = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/Other'),
-}));
 
 const routesConfig = [
   {
@@ -42,20 +36,6 @@ const routesConfig = [
         name: '普通列表',
         code: 'nomalList',
         component: AsyncTable,
-        children: [
-          {
-            name: '新增',
-            code: 'nomalListNew',
-            component: AsyncTableClientForm,
-            path: 'new'
-          },
-          {
-            name: '修改',
-            code: 'nomalListEdit',
-            component: AsyncTableClientForm,
-            path: 'edit'
-          },
-        ]
       },
     ],
   },

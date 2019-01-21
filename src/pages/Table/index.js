@@ -1,8 +1,7 @@
 import React, { Component  } from 'react'
 import { toJS  } from 'mobx'
 import { inject, observer } from 'mobx-react'
-import { withRouter } from 'react-router-dom'
-import { Badge, Form, Input, Select, message } from 'antd'
+import { Form, Input, Select, message } from 'antd'
 import BaseCard from 'base/BaseCard'
 import Button from 'base/Button/Button'
 import PopButton from 'base/Button/PopButton'
@@ -10,15 +9,13 @@ import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
 import { formatTimeStamp } from 'utils/format'
 import ModalForm from './ModalForm'
+import { OPERATE_ITEM } from 'constants/config'
+import { getLabelFromDict, STATUS } from 'constants/dict'
 
 const FormItem = Form.Item;
 const AuthButton = AuthComponent(Button);
 const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 
-const statusMap = ['error', 'success'];
-const status = ['停职', '在职'];
-
-@withRouter
 @Form.create()
 @inject('tableStore','dispatch')
 @observer
@@ -29,17 +26,11 @@ export default class Table extends Component  {
     this.search();
     this.state = {
       visible: false,
+      mode: OPERATE_ITEM.add.code,
+      initData: {},
       selectedRows: []
     };
   }
-
-  // componentWillMount() {
-  //   const { location: { query } } = this.props;
-  //   if(!(query && query.isNeedHoldSearchCriteria)) {
-  //     this.props.tableStore.initSearchCriteria();
-  //   }
-  //   this.props.tableStore.fetchList();
-  // }
 
   columns = [
     {
@@ -61,7 +52,7 @@ export default class Table extends Component  {
     {
       title: '状态',
       dataIndex: 'status',
-      render: val => <Badge status={statusMap[val]} text={status[val]} />
+      render: val => getLabelFromDict(STATUS, val)
     },
     {
       title: '上次调度时间',
@@ -74,8 +65,8 @@ export default class Table extends Component  {
       width: 150,
       render: (text) => (
         <div className="operateCol">
-          <AuthButton type="text" hasAuth onClick={() => this.check(text.id)}>查看</AuthButton>
-          <AuthButton type="text" hasAuth onClick={() => this.edit(text.id)}>编辑</AuthButton>
+          <AuthButton type="text" hasAuth onClick={() => this.check(text)}>{OPERATE_ITEM.check.title}</AuthButton>
+          <AuthButton type="text" hasAuth onClick={() => this.edit(text)}>{OPERATE_ITEM.update.title}</AuthButton>
           <AuthPopButton
             hasAuth
             type="text"
@@ -88,35 +79,45 @@ export default class Table extends Component  {
       ),
     },
   ];
-  // 模态框控制
-  openModal = () => {
+  // 保存勾选
+  handleSelectRows = rows => {
     this.setState({
-      visible: true,
-    })
+      selectedRows: rows,
+    });
   }
+  // 模态框控制
   closeModal = () => {
     this.setState({
-      visible: false,
+      visible: false
     })
   }
 
   // 增
   add = () => {
-    this.openModal();
+    this.setState({
+      mode: OPERATE_ITEM.add.code,
+      initData: {},
+      visible: true,
+    });
   }
   // 删
   delete = id => {
     console.log('/',id);
   }
   // 改
-  edit = id => {
-    const { history } = this.props;
-    history.push({
-      pathname: `/basis/nomalList/edit`,
-      query: {
-        id,
-        searchCriteria: this.searchCriteria
-      }
+  edit = initData => {
+    this.setState({
+      initData,
+      mode: OPERATE_ITEM.update.code,
+      visible: true,
+    });
+  }
+  // 查看
+  check = initData => {
+    this.setState({
+      initData,
+      mode: OPERATE_ITEM.check.code,
+      visible: true,
     });
   }
   // 查
@@ -126,7 +127,6 @@ export default class Table extends Component  {
       payload: this.searchCriteria
     });
   }
-  /**查：开始 */
   // 表格项变动查询，如分页项
   handleStandardTableChange = pagination => {
     this.searchCriteria = {
@@ -153,18 +153,12 @@ export default class Table extends Component  {
     this.searchCriteria = {};
     this.search();
   }
-  /**查：结束 */
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  }
 
   renderSearchForm() {
     const {
       form: { getFieldDecorator },
       tableStore: {
-        ['tableStore/fetchList']: loading
+        ['tableStore/fetchList']: loading,
       }
     } = this.props;
     return (
@@ -180,28 +174,11 @@ export default class Table extends Component  {
           <FormItem>
             {getFieldDecorator('status')(
               <Select placeholder="请选择状态" style={{ width: '100%' }}>
-                <Option value="0">停职</Option>
-                <Option value="1">在职</Option>
-              </Select>
-            )}
-          </FormItem>
-        </div>
-        <div className="searchItem">
-          <FormItem>
-            {getFieldDecorator('status')(
-              <Select placeholder="请选择状态" style={{ width: '100%' }}>
-                <Option value="0">停职</Option>
-                <Option value="1">在职</Option>
-              </Select>
-            )}
-          </FormItem>
-        </div>
-        <div className="searchItem">
-          <FormItem>
-            {getFieldDecorator('status')(
-              <Select placeholder="请选择状态" style={{ width: '100%' }}>
-                <Option value="0">停职</Option>
-                <Option value="1">在职</Option>
+                {
+                  STATUS.map(dict => (
+                    <Option key={dict.value} value={dict.value}>{dict.label}</Option>
+                  ))
+                }
               </Select>
             )}
           </FormItem>
@@ -216,13 +193,15 @@ export default class Table extends Component  {
   }
 
   render() {
-    const { selectedRows } = this.state;
+    const { selectedRows, mode, visible, initData } = this.state;
+    const { tableStore } = this.props;
     const {
       list,
       pagination,
       ['tableStore/fetchList']: loading,
-    } = this.props.tableStore;
-    const { visible } = this.state;
+      [`tableStore/${mode}`]: confirmLoading,
+    } = tableStore;
+
     const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
     return (
       <BaseCard size="small" title="普通列表" extra={
@@ -244,7 +223,7 @@ export default class Table extends Component  {
             icon="plus"
             type="primary"
             onClick={this.add}
-          >新建</Button>
+          >{OPERATE_ITEM.add.title}</Button>
         </div>
       }>
         <div className="tableList">
@@ -258,7 +237,13 @@ export default class Table extends Component  {
             onChange={this.handleStandardTableChange}
           />
         </div>
-        <ModalForm visible={visible} handleClose={this.closeModal} />
+        <ModalForm
+          mode={mode}
+          visible={visible}
+          initData={initData}
+          handleClose={this.closeModal}
+          confirmLoading={confirmLoading}
+        />
       </BaseCard>
     )
   }

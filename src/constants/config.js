@@ -33,4 +33,28 @@ export const shortcut = [{
 },{
   name: '快捷方式4',
   path: '/ffff'
-}];
+  }];
+
+export const formItemBlock = {
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 15,
+  },
+};
+
+export const OPERATE_ITEM = {
+  add: {
+    code: 'add',
+    title: '新增',
+  },
+  update: {
+    code: 'update',
+    title: '编辑',
+  },
+  check: {
+    code: 'check',
+    title: '查看',
+  },
+}
