@@ -1,15 +1,15 @@
 import React, { Component  } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Form, Input, Select, message } from 'antd'
+import { Form, Input, Select, DatePicker, message } from 'antd'
 import { Button, Card } from 'base'
 import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
 import { formatTimeStamp } from 'utils/format'
+import { YMD } from 'utils/moment'
 import ModalForm from './ModalForm'
 import { OPERATE_ITEM } from 'constants/config'
 import { getLabelFromDict, STATUS } from 'constants/dict'
 
-const FormItem = Form.Item;
 const { Option } = Select;
 const { PopButton } = Button;
 const AuthButton = AuthComponent(Button);
@@ -78,6 +78,32 @@ export default class Table extends Component  {
       ),
     },
   ];
+  // 处理时间段
+  onStartChange = (startDate) => {
+    this.setState({
+      startDate,
+    });
+  }
+  onEndChange = (endDate) => {
+    this.setState({
+      endDate,
+    });
+  }
+  disabledStartDate = (startDate) => {
+    const { endDate } = this.state;
+    if (!startDate || !endDate) {
+      return false;
+    }
+    return startDate.valueOf() > endDate.valueOf();
+  }
+  disabledEndDate = (endDate) => {
+    const { startDate } = this.state;
+    if (!endDate || !startDate) {
+      return false;
+    }
+    return endDate.valueOf() <= startDate.valueOf();
+  }
+
   // 保存勾选
   handleSelectRows = rows => {
     this.setState({
@@ -144,6 +170,8 @@ export default class Table extends Component  {
     const { form } = this.props;
     form.validateFields((err, formValues) => {
       if (err) return;
+      formValues.startDate = formatTimeStamp(formValues.startDate, YMD);
+      formValues.endDate = formatTimeStamp(formValues.endDate, YMD);
       this.searchCriteria = formValues;
       this.search();
     });
@@ -166,45 +194,48 @@ export default class Table extends Component  {
     return (
       <Form className="searchForm" onSubmit={this.handleSearch} layout="inline">
         <div className="searchItem">
-          <FormItem>
-            {getFieldDecorator('name')(
-              <Input placeholder="请输入姓名" />
-            )}
-          </FormItem>
+          {getFieldDecorator('name')(
+            <Input allowClear placeholder="请输入姓名" />
+          )}
         </div>
-        <div className="searchItem">
-          <FormItem>
-            {getFieldDecorator('name')(
-              <Input placeholder="请输入姓名" />
-            )}
-          </FormItem>
+        <div className="searchItem" style={{ width: 196 }}>
+          {
+            getFieldDecorator('startDate')(
+              <DatePicker
+                // showTime
+                format={YMD}
+                placeholder="请选择开始时间"
+                onChange={this.onStartChange}
+                disabledDate={this.disabledStartDate}
+              />
+            )
+          }
         </div>
-        <div className="searchItem">
-          <FormItem>
-            {getFieldDecorator('name')(
-              <Input placeholder="请输入姓名" />
-            )}
-          </FormItem>
+        <div className="searchItem" style={{ width: 196 }}>
+          {
+            getFieldDecorator('endDate')(
+              <DatePicker
+                // showTime
+                format={YMD}
+                placeholder="请选择结束时间"
+                onChange={this.onEndChange}
+                disabledDate={this.disabledEndDate}
+              />
+            )
+          }
         </div>
-        <div className="searchItem">
-          <FormItem>
-            {getFieldDecorator('name')(
-              <Input placeholder="请输入姓名" />
-            )}
-          </FormItem>
-        </div>
-        <div className="searchItem">
-          <FormItem>
-            {getFieldDecorator('status')(
-              <Select placeholder="请选择状态" style={{ width: '100%' }}>
+        <div className="searchItem" style={{ width: 140 }}>
+          {
+            getFieldDecorator('status')(
+              <Select allowClear placeholder="请选择状态">
                 {
                   STATUS.map(dict => (
                     <Option key={dict.value} value={dict.value}>{dict.label}</Option>
                   ))
                 }
               </Select>
-            )}
-          </FormItem>
+            )
+          }
         </div>
         <div className="searchItem">
           <Button icon="search" loading={loading} type="primary" htmlType="submit">

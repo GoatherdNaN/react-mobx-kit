@@ -5,7 +5,7 @@
  */
 import moment from 'moment'
 // 格式化单个数据时的高阶函数
-const format = formatFun => (...args) => {
+export const format = formatFun => (...args) => {
   let result = args[0];
   try {
     result = formatFun.apply(this, args);
