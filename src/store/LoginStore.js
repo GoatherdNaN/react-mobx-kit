@@ -39,18 +39,20 @@ export default class LoginStore extends GlobalStore {
     return formatTreeList(toJS(this.authList));
   };
 
-  login = flow(function * (params,callback) {
-    const { code, data } = yield login(params);
-    if(code == 200) {
-      this.changeAuthList(data.authList);
-      if (!data.authList.length) {
-        message.info('您还没有任何权限，请联系管理员！');
-      } else if (typeof callback === 'function') {
-        const intoUrl = getInfoUrlByAuthList(data.authList);
-        callback(intoUrl, 'woshjtoken'||data.token);
+  login = this.withLoading('loading')(
+    flow(function* (params, callback) {
+      const { code, data } = yield login(params);
+      if(code == 200) {
+        this.changeAuthList(data.authList);
+        if (!data.authList.length) {
+          message.info('您还没有任何权限，请联系管理员！');
+        } else if (typeof callback === 'function') {
+          const intoUrl = getInfoUrlByAuthList(data.authList);
+          callback(intoUrl, 'woshjtoken'||data.token);
+        }
       }
-    }
-  });
+    })
+  );
 
   getResource = flow(function * () {
     const { code, data } = yield getResource();

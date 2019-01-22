@@ -4,7 +4,7 @@ import { Menu } from 'antd'
 import { toJS } from 'mobx'
 import { Link } from 'react-router-dom'
 import { RESOURCE_FIELDNAMES } from 'constants/config'
-import IconFont from 'base/IconFont'
+import { IconFont } from 'base'
 import { urlToList, checkArrayHasValue } from 'utils/common'
 import {
   checkIsLegalMenuItem,

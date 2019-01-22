@@ -1,5 +1,6 @@
 import React from 'react'
-import { Modal, Button } from 'antd'
+import { Modal } from 'antd'
+import Button from '../Button/Button'
 import { OPERATE_ITEM } from 'constants/config'
 import styles from './index.less'
 
@@ -8,13 +9,11 @@ export default function BaseModal({
   mode,
   confirmLoading,
   onCancel,
-  afterClose,
   continuity,
   children,
   ...otherProps }) {
   const extraProps = {
     title: OPERATE_ITEM[mode].title,
-    afterClose,
     onCancel,
   };
 

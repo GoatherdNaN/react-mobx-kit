@@ -57,4 +57,9 @@ export const OPERATE_ITEM = {
     code: 'check',
     title: '查看',
   },
-}
+};
+
+export const COMMON_FORM_RULES = {
+  validateFirst: true,
+  validateTrigger: 'onBlur',
+};

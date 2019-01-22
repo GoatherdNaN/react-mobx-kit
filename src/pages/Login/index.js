@@ -10,7 +10,7 @@ import styles from './index.less'
 const FormItem = Form.Item;
 
 @Form.create()
-@inject('loginStore','dispatch')
+@inject('loginStore')
 @observer
 export default class Login extends Component {
   state = {
@@ -24,8 +24,24 @@ export default class Login extends Component {
     this.loadAccountInfo();
   }
 
+  componentDidMount() {
+    // enter快捷键
+    document.addEventListener("keyup", this.onKeyUp, false);
+  }
+
+  componentWillUnmount() {
+    this.setState = () => {};
+    document.removeEventListener("keyup", this.onKeyUp, false);
+  }
+
+  onKeyUp = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSubmit();
+    }
+  }
+
   handleSubmit = (e) => {
-    e.preventDefault();
+    e && e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) {
         message.error(err);
@@ -52,11 +68,7 @@ export default class Login extends Component {
         });
       }
       const { remember, ...payload } = values;
-      this.props.dispatch({
-        type: 'loginStore/login',
-        payload,
-        callback
-      });
+      this.props.loginStore.login(payload, callback);
     });
   }
 
@@ -76,7 +88,7 @@ export default class Login extends Component {
         getFieldDecorator
       },
       loginStore: {
-        ['loginStore/login']: loading
+        loading
       },
     } = this.props;
     const { username, password, remember } = this.state;

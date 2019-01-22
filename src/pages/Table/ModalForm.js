@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { inject, observer } from 'mobx-react'
 import { Form, Input, Select, DatePicker } from 'antd'
 import moment from 'moment'
-import Modal from 'base/Modal'
+import { Modal } from 'base'
 import { YMDHMS, disabledDate, disabledDateTime, getInitDate } from 'utils/moment'
 import { formItemBlock } from 'constants/config'
 import FormConfig from './config'
@@ -13,26 +12,27 @@ const { TextArea } = Input;
 const FormItem = Form.Item;
 
 @Form.create()
-@inject('tableStore','dispatch')
-@observer
 export default class ModalFrom extends Component {
-  afterClose = () => {
-    const { form } = this.props;
+  afterClose = (continuity) => {
+    const { form, search, mode } = this.props;
     form.resetFields();
+    if (!continuity) {
+      let params;
+      if (mode === OPERATE_ITEM.add.code) {
+        params = {};
+      }
+      search(params);
+    }
   }
 
   handleSure = (continuity) => {
-    const { form, mode, handleClose } = this.props;
+    const { handleOk, form, handleClose } = this.props;
     form.validateFields((err, payload) => {
       if (err) {
         return;
       }
-      const type = `tableStore/${mode}`;
-      this.props.dispatch({
-        type,
-        payload,
-        callback: continuity === true ? this.afterClose : handleClose
-      });
+      const callback = continuity === true ? () => this.afterClose(continuity) : handleClose;
+      handleOk(payload, callback);
     });
   }
 
@@ -43,7 +43,7 @@ export default class ModalFrom extends Component {
       handleClose,
       initData,
       confirmLoading,
-      form: { getFieldDecorator },
+      form: { getFieldDecorator, resetFields },
     } = this.props;
 
     const isCheck = mode === OPERATE_ITEM.check.code;
@@ -58,7 +58,7 @@ export default class ModalFrom extends Component {
     return (
       <Modal
         continuity
-        afterClose={this.afterClose}
+        afterClose={resetFields}
         mode={mode}
         visible={visible}
         onCancel={handleClose}
@@ -71,6 +71,7 @@ export default class ModalFrom extends Component {
           <FormItem {...formItemProps} label={FormConfig.name.label}>
             {!isCheck ? getFieldDecorator('name', {
               initialValue: initData.name,
+              ...FormConfig.name.rules,
             })(
               <Input {...FormConfig.name.itemProps} />
             ) : initData.name}
@@ -78,6 +79,7 @@ export default class ModalFrom extends Component {
           <FormItem {...formItemProps} label={FormConfig.age.label}>
             {!isCheck ? getFieldDecorator('age', {
               initialValue: initData.age,
+              ...FormConfig.age.rules,
             })(
               <Input {...FormConfig.age.itemProps} />
             ) : initData.age}
@@ -85,6 +87,7 @@ export default class ModalFrom extends Component {
           <FormItem {...formItemProps} label={FormConfig.job.label}>
             {!isCheck ? getFieldDecorator('job', {
               initialValue: initData.job,
+              ...FormConfig.job.rules,
             })(
               <Input {...FormConfig.job.itemProps} />
             ) : initData.job}
@@ -92,6 +95,7 @@ export default class ModalFrom extends Component {
           <FormItem {...formItemProps} label={FormConfig.address.label}>
             {!isCheck ? getFieldDecorator('address', {
               initialValue: initData.address,
+              ...FormConfig.address.rules,
             })(
               <TextArea {...FormConfig.address.itemProps} rows={4} />
             ) : initData.address}
@@ -99,6 +103,7 @@ export default class ModalFrom extends Component {
           <FormItem {...formItemProps} label={FormConfig.status.label}>
             {!isCheck ? getFieldDecorator('status', {
               initialValue: initData.status,
+              ...FormConfig.status.rules,
             })(
               <Select {...FormConfig.status.itemProps} style={{ width: '100%' }}>
                 {
@@ -112,6 +117,7 @@ export default class ModalFrom extends Component {
           <FormItem {...formItemProps} label={FormConfig.updatedAt.label}>
             {!isCheck ? getFieldDecorator('updatedAt', {
               initialValue: getInitDate(initData.updatedAt),
+              ...FormConfig.updatedAt.rules,
             })(
               <DatePicker
                 style={{ width: '100%' }}

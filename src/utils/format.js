@@ -3,7 +3,6 @@
  * @Date: 2019-01-11 10:58:41
  * @Description: 格式化数据
  */
-import { warning } from './dispatch'
 import moment from 'moment'
 // 格式化单个数据时的高阶函数
 const format = formatFun => (...args) => {
@@ -11,7 +10,7 @@ const format = formatFun => (...args) => {
   try {
     result = formatFun.apply(this, args);
   } catch (e) {
-    warning(e);
+    window.warning(e);
   } finally {
     return result;
   }

@@ -168,7 +168,7 @@ export default class StandardTable extends PureComponent {
     if (multiple) {
       expandConfig.title = () => (
         <Fragment>
-          <Icon type="info-circle" style={{ marginRight: 10 }} />
+          <Icon type="info-circle" theme="twoTone" style={{ marginRight: 10 }} />
           已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
           {needTotalList.map(item => (
             <span style={{ marginLeft: 8 }} key={item.dataIndex}>
@@ -178,7 +178,7 @@ export default class StandardTable extends PureComponent {
               </span>
             </span>
           ))}
-          <a name="empty" onClick={this.cleanSelectedKeys} style={{ marginLeft: 24 }}>
+          <a name="empty" onClick={this.cleanSelectedKeys} style={{ marginLeft: 16 }}>
             清空
           </a>
         </Fragment>
@@ -208,7 +208,7 @@ export default class StandardTable extends PureComponent {
           loading={loading}
           rowKey={rowKey}
           rowSelection={multiple ? rowSelection : null}
-          dataSource={list}
+          dataSource={list.slice(0)}
           columns={this.columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}

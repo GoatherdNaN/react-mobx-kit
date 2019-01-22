@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import classNames from 'classnames'
-import IconFont from 'base/IconFont'
+import { IconFont } from 'base'
 import Temperature from './Temperature1'
 import styles from './index.less'
 

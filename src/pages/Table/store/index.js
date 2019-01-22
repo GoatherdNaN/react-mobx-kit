@@ -3,27 +3,33 @@ import { getList, update, add } from 'store/api'
 import GlobalStore from 'store/GlobalStore'
 
 export default class TableStore extends GlobalStore {
-  @observable list = [];
-  @observable pagination = null;
-  @observable singleData = null;
+  @observable listData = {
+    list: [],
+    pagination: null
+  };
 
-  @action saveListData = ({list,pagination}) => {
-    this.list = list;
-    this.pagination = pagination;
+  @action saveListData = (listData) => {
+    this.listData = listData;
   }
 
-  fetchList = flow(function * (params) {
-    const { code, data } = yield getList(params);
-    code == 200 && this.saveListData(data);
-  });
+  fetchList = this.withLoading('loading')(
+    flow(function* (params) {
+      const { code, data } = yield getList(params);
+      code == 200 && this.saveListData(data);
+    })
+  );
 
-  update = flow(function * (params,callback) {
-    const { code } = yield update(params);
-    code == 200 && callback && callback();
-  });
+  update = this.withLoading('confirmLoading')(
+    flow(function * (params,callback) {
+      const { code } = yield update(params);
+      code == 200 && callback && callback();
+    })
+  );
 
-  add = flow(function * (params,callback) {
-    const { code } = yield add(params);
-    code == 200 && callback && callback();
-  });
+  add = this.withLoading('confirmLoading')(
+    flow(function * (params,callback) {
+      const { code } = yield add(params);
+      code == 200 && callback && callback();
+    })
+  );
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card } from 'antd'
 
-export default function ({pageWapper=true, ...otherProps}) {
+export default function BaseCard({pageWapper=true, ...otherProps}) {
   const expandConfig = {};
   if (pageWapper) {
     const padding = 16;

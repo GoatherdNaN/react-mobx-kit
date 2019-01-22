@@ -1,10 +1,7 @@
 import React, { Component  } from 'react'
-import { toJS  } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { Form, Input, Select, message } from 'antd'
-import BaseCard from 'base/BaseCard'
-import Button from 'base/Button/Button'
-import PopButton from 'base/Button/PopButton'
+import { Button, Card } from 'base'
 import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
 import { formatTimeStamp } from 'utils/format'
@@ -13,11 +10,13 @@ import { OPERATE_ITEM } from 'constants/config'
 import { getLabelFromDict, STATUS } from 'constants/dict'
 
 const FormItem = Form.Item;
+const { Option } = Select;
+const { PopButton } = Button;
 const AuthButton = AuthComponent(Button);
 const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 
 @Form.create()
-@inject('tableStore','dispatch')
+@inject('tableStore')
 @observer
 export default class Table extends Component  {
   constructor(props) {
@@ -121,11 +120,14 @@ export default class Table extends Component  {
     });
   }
   // 查
-  search = () => {
-    this.props.dispatch({
-      type: 'tableStore/fetchList',
-      payload: this.searchCriteria
-    });
+  search = (params) => {
+    if (params !== undefined) {
+      this.searchCriteria = params;
+      if (JSON.stringify(params) === '{}') {
+        this.props.form.resetFields();
+      }
+    }
+    this.props.tableStore.fetchList(this.searchCriteria);
   }
   // 表格项变动查询，如分页项
   handleStandardTableChange = pagination => {
@@ -158,11 +160,32 @@ export default class Table extends Component  {
     const {
       form: { getFieldDecorator },
       tableStore: {
-        ['tableStore/fetchList']: loading,
+        loading,
       }
     } = this.props;
     return (
       <Form className="searchForm" onSubmit={this.handleSearch} layout="inline">
+        <div className="searchItem">
+          <FormItem>
+            {getFieldDecorator('name')(
+              <Input placeholder="请输入姓名" />
+            )}
+          </FormItem>
+        </div>
+        <div className="searchItem">
+          <FormItem>
+            {getFieldDecorator('name')(
+              <Input placeholder="请输入姓名" />
+            )}
+          </FormItem>
+        </div>
+        <div className="searchItem">
+          <FormItem>
+            {getFieldDecorator('name')(
+              <Input placeholder="请输入姓名" />
+            )}
+          </FormItem>
+        </div>
         <div className="searchItem">
           <FormItem>
             {getFieldDecorator('name')(
@@ -196,15 +219,14 @@ export default class Table extends Component  {
     const { selectedRows, mode, visible, initData } = this.state;
     const { tableStore } = this.props;
     const {
-      list,
-      pagination,
-      ['tableStore/fetchList']: loading,
-      [`tableStore/${mode}`]: confirmLoading,
+      listData,
+      loading,
+      confirmLoading,
+      [`${mode}`]: handleOk
     } = tableStore;
-
     const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
     return (
-      <BaseCard size="small" title="普通列表" extra={
+      <Card size="small" title="普通列表" extra={
         <div className="buttonGroupRight">
           <AuthButton
             code='nomalList'
@@ -231,7 +253,7 @@ export default class Table extends Component  {
           <StandardTable
             selectedRows={selectedRows}
             loading={loading}
-            data={{list: toJS(list),pagination}}
+            data={listData}
             columns={this.columns}
             onSelectRow={this.handleSelectRows}
             onChange={this.handleStandardTableChange}
@@ -239,12 +261,14 @@ export default class Table extends Component  {
         </div>
         <ModalForm
           mode={mode}
+          handleOk={handleOk}
           visible={visible}
           initData={initData}
+          search={this.search}
           handleClose={this.closeModal}
           confirmLoading={confirmLoading}
         />
-      </BaseCard>
+      </Card>
     )
   }
 }

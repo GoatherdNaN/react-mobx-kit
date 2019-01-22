@@ -18,11 +18,12 @@ import routes, { breadcrumbNameMap } from '../routes'
 import Header from './Header'
 import history from '../history'
 import styles from './index.less'
+
 const SideMenu = React.lazy(() => import('components/SideMenu'));
 
 const { Sider } = Layout;
 
-@inject('loginStore','dispatch')
+@inject('loginStore')
 @observer
 class MyLayout extends Component {
   constructor(props) {
@@ -34,9 +35,7 @@ class MyLayout extends Component {
   componentDidMount() {
     const { location: { query } } = this.props;
     if(!(query && query.isFirstLoad)) {
-      this.props.dispatch({
-        type: 'loginStore/getResource'
-      });
+      this.props.loginStore.getResource();
     }
     // 路由变化，置顶
     history.listen(() => {
