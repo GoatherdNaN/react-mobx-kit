@@ -15,5 +15,6 @@ module.exports = {
   //menu
   "@menu-collapsed-width": "50px",
   // modal
-  "@modal-header-bg": "#F8F8F8"
+  "@modal-header-bg": "#F8F8F8",
+  "@border-radius-base": 0,
 };
