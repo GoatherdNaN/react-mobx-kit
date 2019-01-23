@@ -7,6 +7,7 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import { Redirect } from 'react-router-dom'
 import LoadingComponent from './components/LoadingComponent';
+import AuthCode from 'constants/authCode'
 
 const commonLoadableConfig = {
   loading: LoadingComponent,
@@ -23,35 +24,35 @@ const AsyncTable = Loadable(Object.assign(commonLoadableConfig,{
 const routesConfig = [
   {
     name: '工作台',
-    code: 'dashboard',
+    code: AuthCode.dashboard.code,
     showBreadcrumb: false,
     component: AsyncHome
   },
   {
     name: '页面',
-    code: 'basis',
+    code: AuthCode.basis.code,
     render: () => <Redirect from='/basis' to='/basis/nomalList' />,
     children: [
       {
         name: '普通列表',
-        code: 'nomalList',
+        code: AuthCode.basis.nomalList.code,
         component: AsyncTable,
       },
     ],
   },
   {
     name: '设置',
-    code: 'system',
+    code: AuthCode.system.code,
     render: () => <Redirect from='/system' to='/system/user' />,
     children: [
       {
         name: '个人资料',
-        code: 'user',
+        code: AuthCode.system.user.code,
         component: AsyncTable,
       },
       {
         name: '修改密码',
-        code: 'changepwd',
+        code: AuthCode.system.changepwd.code,
         component: AsyncTable,
       },
     ],

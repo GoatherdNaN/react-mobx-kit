@@ -17,11 +17,11 @@ export const format = formatFun => (...args) => {
 }
 
 // 字符串超出最大长度显示省略号
-export const splitStr = format((str, maxLen=100) => {
+export const splitStr = format((str, maxLen = 100) => {
   if (str.length > maxLen) {
     return str.substring(0, maxLen) + '...'
   }
-  return splitStr
+  return str
 })
 // 格式化时间
 export const formatTimeStamp = format(

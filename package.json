@@ -14,7 +14,8 @@
     "lint:fix": "eslint --fix --ext .js src && npm run lint:style",
     "lint-staged": "lint-staged",
     "lint-staged:js": "eslint --fix --ext .js",
-    "prettier": "prettier --write ./src/**/**/**/*"
+    "prettier": "prettier --write ./src/**/**/**/*",
+    "format": "node ./formatAuthCode.js"
   },
   "keywords": [
     "mobx",

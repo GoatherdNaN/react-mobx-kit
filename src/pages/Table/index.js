@@ -8,6 +8,7 @@ import { formatTimeStamp } from 'utils/format'
 import { YMD } from 'utils/moment'
 import ModalForm from './ModalForm'
 import { OPERATE_ITEM } from 'constants/config'
+import AuthCode from 'constants/authCode'
 import { getLabelFromDict, STATUS } from 'constants/dict'
 
 const { Option } = Select;
@@ -64,8 +65,16 @@ export default class Table extends Component  {
       width: 150,
       render: (text) => (
         <div className="operateCol">
-          <AuthButton type="text" hasAuth onClick={() => this.check(text)}>{OPERATE_ITEM.check.title}</AuthButton>
-          <AuthButton type="text" hasAuth onClick={() => this.edit(text)}>{OPERATE_ITEM.update.title}</AuthButton>
+          <AuthButton
+            hasAuth
+            type="text"
+            onClick={() => this.check(text)}
+          >{OPERATE_ITEM.check.title}</AuthButton>
+          <AuthButton
+            type="text"
+            onClick={() => this.edit(text)}
+            code={AuthCode.basis.nomalList.nomalListEdit.code}
+          >{OPERATE_ITEM.update.title}</AuthButton>
           <AuthPopButton
             hasAuth
             type="text"
@@ -73,6 +82,7 @@ export default class Table extends Component  {
               title: "确定删除该条数据吗？",
               onConfirm: () => this.delete(text.id)
             }}
+            code={AuthCode.basis.nomalList.nomalListRemove.code}
           >删除</AuthPopButton>
         </div>
       ),
@@ -126,8 +136,8 @@ export default class Table extends Component  {
     });
   }
   // 删
-  delete = id => {
-    console.log('/',id);
+  delete = ids => {
+    this.props.tableStore.remove({ ids }, this.search);
   }
   // 改
   edit = initData => {
@@ -202,7 +212,6 @@ export default class Table extends Component  {
           {
             getFieldDecorator('startDate')(
               <DatePicker
-                // showTime
                 format={YMD}
                 placeholder="请选择开始时间"
                 onChange={this.onStartChange}
@@ -215,7 +224,6 @@ export default class Table extends Component  {
           {
             getFieldDecorator('endDate')(
               <DatePicker
-                // showTime
                 format={YMD}
                 placeholder="请选择结束时间"
                 onChange={this.onEndChange}
@@ -237,7 +245,7 @@ export default class Table extends Component  {
             )
           }
         </div>
-        <div className="searchItem">
+        <div className="searchItem" style={{ width: 'auto' }}>
           <Button icon="search" loading={loading} type="primary" htmlType="submit">
             查询
           </Button>
@@ -267,10 +275,11 @@ export default class Table extends Component  {
             onClick={this.handleRefresh}
           >刷新</AuthButton>
           <AuthPopButton
-            code='nomalList'
+            icon="delete"
             hasAuth={selectedRows.length}
             noMatch={() => message.info('还没选择任何项!')}
-            icon="delete"
+            onClick={() => this.delete(selectedRows.join(','))}
+            code={AuthCode.basis.nomalList.nomalListRemove.code}
           >删除</AuthPopButton>
           <Button
             icon="plus"

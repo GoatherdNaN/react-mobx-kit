@@ -1,6 +1,8 @@
-import { observable, action, flow, extendObservable } from 'mobx'
-import { getList, update, add } from 'store/api'
+import { message } from 'antd'
+import { observable, action, flow } from 'mobx'
 import GlobalStore from 'store/GlobalStore'
+import { getList, update, add, remove } from './api'
+import { SUCCESS_CODE, SUCCESS_INFO } from 'constants/config'
 
 export default class TableStore extends GlobalStore {
   @observable listData = {
@@ -15,21 +17,41 @@ export default class TableStore extends GlobalStore {
   fetchList = this.withLoading('loading')(
     flow(function* (params) {
       const { code, data } = yield getList(params);
-      code == 200 && this.saveListData(data);
-    })
-  );
-
-  update = this.withLoading('confirmLoading')(
-    flow(function * (params,callback) {
-      const { code } = yield update(params);
-      code == 200 && callback && callback();
+      code == SUCCESS_CODE && this.saveListData(data);
     })
   );
 
   add = this.withLoading('confirmLoading')(
     flow(function * (params,callback) {
       const { code } = yield add(params);
-      code == 200 && callback && callback();
+      if (code === SUCCESS_CODE) {
+        message.info(SUCCESS_INFO.add);
+        if (typeof callback === 'function') {
+          callback();
+        }
+      }
     })
   );
+
+  update = this.withLoading('confirmLoading')(
+    flow(function * (params,callback) {
+      const { code } = yield update(params);
+      if (code === SUCCESS_CODE) {
+        message.info(SUCCESS_INFO.update);
+        if (typeof callback === 'function') {
+          callback();
+        }
+      }
+    })
+  );
+
+  remove = flow(function * (params,callback) {
+    const { code } = yield remove(params);
+    if (code === SUCCESS_CODE) {
+      message.info(SUCCESS_INFO.remove);
+      if (typeof callback === 'function') {
+        callback();
+      }
+    }
+  });
 }

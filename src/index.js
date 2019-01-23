@@ -23,6 +23,7 @@ configure({
 });
 message.config({
   maxCount: 1,
+  duration: 2
 });
 
 globalConfig(window);

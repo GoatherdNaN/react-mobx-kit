@@ -126,12 +126,12 @@ export default class Header extends Component {
     const { collapsed, onCollapse } = this.props;
     const menu = (
       <Menu selectedKeys={[]} onClick={this.handleMenuClick}>
-        <Menu.Item key={MENU_KEY.accountInfo} disabled  className={styles.accountInfo}>
+        <Menu.Item key={MENU_KEY.accountInfo} disabled className={styles.accountInfo}>
           <p style={{ marginBottom: 0 }}>
-            用户名： {splitStr('张三张三张三', 5)}
+            用户名： {splitStr('张三', 5)}
           </p>
           <p style={{ marginBottom: 0 }}>
-            角色名： {splitStr('超级管理员中的超级管理员', 5)}
+            角色名： {splitStr('超级管理员', 5)}
           </p>
         </Menu.Item>
         <Menu.Divider />
@@ -170,6 +170,7 @@ export default class Header extends Component {
         <ul className={styles.rightUtilLabel}>
           <li>
             <Dropdown
+              trigger={['click']}
               overlay={menu}
               overlayClassName={styles.dropdown}
             >

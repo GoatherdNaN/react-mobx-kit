@@ -112,10 +112,11 @@ class MyLayout extends Component {
           collapsed={collapsed}
         >
           <div className={styles.logo}>
+            <img src={require('../asserts/img/logo.svg')} />
             {
               !collapsed
-                ? TITLE
-                : <img src={require('../asserts/img/logo.svg')} />
+                ? <span style={{ marginLeft: 10 }}>{TITLE}</span>
+                : ''
             }
           </div>
           <Suspense fallback={<LoadingComponent isGlobal={false} />}>

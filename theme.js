@@ -17,4 +17,6 @@ module.exports = {
   // modal
   "@modal-header-bg": "#F8F8F8",
   "@border-radius-base": 0,
+  "@modal-mask-bg": "rgba(0, 0, 0, .3)",
+  "@menu-collapsed-width": "50px",
 };

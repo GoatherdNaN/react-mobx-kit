@@ -1,5 +1,6 @@
-import TableStore from 'pages/Table/store';
 import LoginStore from './LoginStore';
+
+import TableStore from 'pages/Table/store';
 
 const AllStores = {
   TableStore,

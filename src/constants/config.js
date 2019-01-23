@@ -5,7 +5,15 @@
  */
 
 // 项目名，显示在菜单上方
-export const TITLE = "仓储后台管理中心";
+export const TITLE = "智能管理平台";
+// 请求成功code（后端定义）
+export const SUCCESS_CODE = 200;
+// 提示信息
+export const SUCCESS_INFO = {
+  add: '添加成功',
+  update: '修改成功',
+  remove: '删除成功',
+}
 // 菜单项的field配置
 export const RESOURCE_FIELDNAMES = {
   code: 'resourceCode',
