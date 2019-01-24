@@ -57,8 +57,8 @@ export default class ModalFrom extends Component {
 
     return (
       <Modal
-        // continuity
-        // canResize
+        continuity
+        canResize
         afterClose={resetFields}
         mode={mode}
         visible={visible}

@@ -20,6 +20,9 @@ const AsyncHome = Loadable(Object.assign(commonLoadableConfig,{
 const AsyncTable = Loadable(Object.assign(commonLoadableConfig,{
   loader: () => import('./pages/Table'),
 }));
+const AsyncComplexTable = Loadable(Object.assign(commonLoadableConfig,{
+  loader: () => import('./pages/ComplexTable'),
+}));
 
 const routesConfig = [
   {
@@ -37,6 +40,31 @@ const routesConfig = [
         name: '普通列表',
         code: AuthCode.basis.nomalList.code,
         component: AsyncTable,
+      },
+      {
+        name: '复杂列表',
+        code: AuthCode.basis.complexList.code,
+        component: AsyncComplexTable,
+        children: [
+          {
+            name: '查看',
+            path: '/check/:id',
+            code: AuthCode.basis.complexList.complexListNew.code,
+            component: AsyncTable,
+          },
+          {
+            name: '新增',
+            path: 'new',
+            code: AuthCode.basis.complexList.complexListNew.code,
+            component: AsyncTable,
+          },
+          {
+            name: '修改',
+            path: '/updatePwd/:id',
+            code: AuthCode.basis.complexList.complexListEdit.code,
+            component: AsyncTable,
+          },
+        ]
       },
     ],
   },
@@ -63,9 +91,10 @@ const routes = [];
 const breadcrumbNameMap = {};
 function getRoutes(routesConfig, rootPath='') {
   routesConfig.forEach(v => {
-    // path可省略
-    v.path = rootPath + '/' + (v.path || v.code);
-    v.exact = (v.exact !== false); // exact 默认为true
+    // path可省略,若省略，则默认'/' + code
+    v.path = rootPath + (v.path || `/${v.code}`);
+    // exact 默认为true
+    v.exact = (v.exact !== false);
     if(v.children) getRoutes(v.children, v.path);
     delete v.children;
     if (v.showBreadcrumb !== false) {

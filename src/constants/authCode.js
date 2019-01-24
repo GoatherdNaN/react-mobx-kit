@@ -21,6 +21,22 @@ export default {
         "name": "修改",
         "code": "nomalListEdit"
       }
+    },
+    "complexList": {
+      "name": "复杂列表",
+      "code": "complexList",
+      "complexListNew": {
+        "name": "新增",
+        "code": "complexListNew"
+      },
+      "complexListRemove": {
+        "name": "删除",
+        "code": "complexListRemove"
+      },
+      "complexListEdit": {
+        "name": "修改",
+        "code": "complexListEdit"
+      }
     }
   },
   "system": {

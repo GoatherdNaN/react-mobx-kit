@@ -1,4 +1,37 @@
-.disabled {
+@import "../../asserts/css/vars.less";
+@import "./mixin.less";
+
+@color: #fff;
+@fadePercent: 70%;
+
+.textDisabled {
   color: #bfcbd9;
   cursor: not-allowed;
+}
+
+.privateType {
+  color: #fff;
+}
+
+
+// 对应antd色系中的：@success-color @info-color @warning-color @error-color
+.success {
+  @background: @success-color;
+  @border: @success-color;
+  .privateButton(@color, @background, @border, @fadePercent);
+}
+.info {
+  @background: #909399;
+  @border: #909399;
+  .privateButton(@color, @background, @border, @fadePercent);
+}
+.warning {
+  @background: @warning-color;
+  @border: @warning-color;
+  .privateButton(@color, @background, @border, @fadePercent);
+}
+.dangerous {
+  @background: @error-color;
+  @border: @error-color;
+  .privateButton(@color, @background, @border, @fadePercent);
 }

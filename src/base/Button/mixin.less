@@ -1,0 +1,62 @@
+.button-color(@color; @background; @border) {
+  &,
+  &:focus {
+    color: @color;
+    background-color: @background;
+    border-color: @border;
+
+    // a inside Button which only work in Chrome
+    // http://stackoverflow.com/a/17253457
+    > a:only-child {
+      color: currentColor;
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: transparent;
+      }
+    }
+  }
+}
+.button-disabled(@btn-disable-color; @btn-disable-bg; @btn-disable-border) {
+  &-disabled,
+  &.disabled,
+  &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      .button-color(@btn-disable-color; @btn-disable-bg; @btn-disable-border);
+      text-shadow: none;
+      box-shadow: none;
+    }
+  }
+}
+.button-hover(@btn-hover-color; @btn-hover-bg; @btn-hover-border) {
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    .button-color(@btn-hover-color; @btn-hover-bg; @btn-hover-border);
+    text-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.privateButton(@color, @background, @border, @fadePercent) {
+  .button-color(@color, @background, @border);
+  .button-hover(
+    @color,
+    fade(@background, @fadePercent),
+    fade(@border, @fadePercent)
+  );
+  .button-disabled(
+    @color,
+    fade(@background, @fadePercent * 0.8),
+    fade(@border, @fadePercent * 0.8),
+  );
+}

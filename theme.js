@@ -1,5 +1,5 @@
 module.exports = {
-  "@primary-color": "#1890ff",                         // 全局主色
+  "@primary-color": "#409EFF",                         // 全局主色
   "@link-color": "rgba(0, 0, 0, 0.65)",                // 链接色
   "@success-color": "#52c41a",                         // 成功色
   "@warning-color": "#faad14",                         // 警告色

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'antd'
 import IconFont from '../IconFont'
-import Button from '../Button/Button'
+import Button from '../Button'
 import { OPERATE_ITEM } from 'constants/config'
 import styles from './index.less'
 
@@ -92,7 +92,7 @@ class BaseModal extends PureComponent {
       if (continuity) {
         extraProps.footer.push(
           <Button
-            type="primary"
+            type="info"
             key="continuityAdd"
             name="continuityAdd"
             loading={confirmLoading}

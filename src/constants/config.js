@@ -50,6 +50,7 @@ export const formItemBlock = {
   wrapperCol: {
     span: 15,
   },
+  colon: false, // 不要冒号
 };
 
 export const OPERATE_ITEM = {
@@ -64,6 +65,10 @@ export const OPERATE_ITEM = {
   check: {
     code: 'check',
     title: '查看',
+  },
+  export: {
+    code: 'export',
+    title: '导出',
   },
 };
 

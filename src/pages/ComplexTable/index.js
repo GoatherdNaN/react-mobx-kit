@@ -155,6 +155,10 @@ export default class Table extends Component  {
       visible: true,
     });
   }
+  // 导出
+  export = () => {
+    console.log('导出!!!')
+  }
   // 查
   search = (params) => {
     if (params !== undefined) {
@@ -265,13 +269,13 @@ export default class Table extends Component  {
     } = tableStore;
     const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
     return (
-      <Card size="small" title="普通列表" extra={
+      <Card size="small" title="复杂列表" extra={
         <div className="buttonGroupRight">
           <AuthButton
-            code='nomalList'
+            hasAuth
             icon="redo"
-            loading={refreshLoading}
             type="info"
+            loading={refreshLoading}
             onClick={this.handleRefresh}
           >刷新</AuthButton>
           <AuthPopButton
@@ -288,10 +292,16 @@ export default class Table extends Component  {
             onClick={this.add}
             code={AuthCode.basis.nomalList.nomalListNew.code}
           >{OPERATE_ITEM.add.title}</AuthButton>
+          <AuthButton
+            icon="export"
+            type="primary"
+            onClick={this.export}
+            hasAuth
+          >{OPERATE_ITEM.export.title}</AuthButton>
         </div>
       }>
         <div className="tableList">
-            {this.renderSearchForm()}
+          {this.renderSearchForm()}
           <StandardTable
             selectedRows={selectedRows}
             loading={loading}
