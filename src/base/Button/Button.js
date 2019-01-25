@@ -9,7 +9,6 @@ const privateTypes = ['success', 'info', 'warning', 'dangerous']; // 扩展的ty
 
 export default ({
   type,
-  onClick,
   className,
   disabled,
   children,
@@ -20,7 +19,7 @@ export default ({
     const textCls = classNames(className, {
       [styles.textDisabled]: disabled
     });
-    return <a className={textCls} onClick={onClick}>{ children }</a>
+    return <a className={textCls} {...otherProps}>{ children }</a>
   }
   // 扩展之：颜色按钮
   if (!antdBtnTypes.includes(type) && privateTypes.includes(type)) {
@@ -31,7 +30,6 @@ export default ({
       <Button
         className={cls}
         disabled={disabled}
-        onClick={onClick}
         {...otherProps}
       >{children}</Button>
     )
@@ -41,7 +39,6 @@ export default ({
       {...type ? { type } : {}}
       className={className}
       disabled={disabled}
-      onClick={onClick}
       {...otherProps}
     >{children}</Button>
   )
