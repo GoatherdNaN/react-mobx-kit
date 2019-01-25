@@ -7,7 +7,7 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import { Redirect } from 'react-router-dom'
 import LoadingComponent from './components/LoadingComponent';
-import AuthCode from 'constants/authCode'
+import AuthCode, { WhiteList, HOME } from 'constants/authCode'
 
 const commonLoadableConfig = {
   loading: LoadingComponent,
@@ -54,13 +54,13 @@ const routesConfig = [
           },
           {
             name: '新增',
-            path: 'new',
+            path: '/new',
             code: AuthCode.basis.complexList.complexListNew.code,
             component: AsyncTable,
           },
           {
             name: '修改',
-            path: '/updatePwd/:id',
+            path: '/update/:id',
             code: AuthCode.basis.complexList.complexListEdit.code,
             component: AsyncTable,
           },
@@ -100,12 +100,14 @@ function getRoutes(routesConfig, rootPath='') {
     if (v.showBreadcrumb !== false) {
       breadcrumbNameMap[v.path] = v.name;
     }
-    delete v.name;
+    // delete v.name;
     routes.push(v);
   });
 }
 getRoutes(routesConfig);
-export { breadcrumbNameMap };
+const inWhiteList = code => WhiteList.includes(code);
+const checkIsHome = code => code === HOME;
+export { breadcrumbNameMap, inWhiteList, checkIsHome };
 export default routes;
 
 

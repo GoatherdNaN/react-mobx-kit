@@ -16,6 +16,7 @@ import LoadingComponent from 'components/LoadingComponent'
 import { TITLE } from 'constants/config'
 import routes, { breadcrumbNameMap } from '../routes'
 import Header from './Header'
+import TagBar from './TagBar'
 import history from '../history'
 import styles from './index.less'
 
@@ -23,22 +24,23 @@ const SideMenu = React.lazy(() => import('components/SideMenu'));
 
 const { Sider } = Layout;
 
-@inject('loginStore')
+@inject('loginStore','routerStore')
 @observer
 class MyLayout extends Component {
   constructor(props) {
     super(props);
     this.scrollBox = React.createRef();
-
   }
 
   componentDidMount() {
-    const { location: { query } } = this.props;
-    if(!(query && query.isFirstLoad)) {
-      this.props.loginStore.getResource();
+    const { location: { query, pathname }, loginStore, routerStore } = this.props;
+    if (!(query && query.isFirstLoad)) {
+      loginStore.getResource();
     }
+    routerStore.addRouter(pathname);
     // 路由变化，置顶
-    history.listen(() => {
+    history.listen((location) => {
+      routerStore.addRouter(location.pathname);
       if (this.scrollBox.current) {
         this.scrollBox.current.scrollTop = 0;
       }
@@ -129,7 +131,7 @@ class MyLayout extends Component {
           <Header collapsed={collapsed} onCollapse={this.handleMenuCollapse} />
           <div className={styles.scrollBox} ref={this.scrollBox}>
             {
-              !!currRouterData && (
+              false && !!currRouterData && (
                 <div className={styles.breadCrumb}>
                   <Breadcrumb>
                     <Breadcrumb.Item>
@@ -140,6 +142,7 @@ class MyLayout extends Component {
                 </div>
               )
             }
+            <TagBar />
             <div className={styles.content}>
               <Switch>
                 {routes.map(item => (

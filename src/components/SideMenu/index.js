@@ -2,7 +2,6 @@ import React, { PureComponent, Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Menu } from 'antd'
 import { toJS } from 'mobx'
-import { Link } from 'react-router-dom'
 import { RESOURCE_FIELDNAMES } from 'constants/config'
 import { IconFont } from 'base'
 import { urlToList, checkArrayHasValue } from 'utils/common'
@@ -97,19 +96,16 @@ export default class MyMenu extends PureComponent {
     return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;;
   };
   // 去掉了http链接的支持
-  getMenuItemPath = item => {
-    const { path } = item;
-    const { location:{ pathname } } = this.props;
-    return (
-      <Link
-        to={path}
-        replace={path === pathname}
-      >
-        { getIcon(item[RESOURCE_FIELDNAMES.icon]) }
-        <span>{ item[RESOURCE_FIELDNAMES.name] }</span>
-      </Link>
-    );
-  };
+  getMenuItemPath = item => (
+    <div onClick={() => this.routeTo(item.path)}>
+      { getIcon(item[RESOURCE_FIELDNAMES.icon]) }
+      <span>{ item[RESOURCE_FIELDNAMES.name] }</span>
+    </div>
+  );
+
+  routeTo = path => {
+    this.props.history.push(path);
+  }
 
   isMainMenu = key => {
     const { menus } = this.props;

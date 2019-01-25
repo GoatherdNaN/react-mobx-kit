@@ -1,0 +1,57 @@
+@import "../asserts/css/vars.less";
+@import "../asserts/css/mixins.less";
+
+@closeBtnWidth: 20px;
+
+.tagBar {
+  display: table;
+  width: 100%;
+  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  background-color: #fff;
+}
+.operationBox {
+  display: table-cell;
+  width: @closeBtnWidth * 2;
+  height: @closeBtnWidth * 2;
+  background-color: red;
+}
+.tagList {
+  display: table-cell;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.tag {
+  float: left;
+  position: relative;
+  line-height: @closeBtnWidth * 2;
+  max-width: 160px;
+  padding: 0 @closeBtnWidth*2 0 15px;
+  border-right: 1px solid @borderColor;
+  cursor: pointer;
+  .ellipsis;
+  &:hover,
+  &.active {
+    background-color: @borderColor;
+  }
+  &.home {
+    padding: 0 18px;
+  }
+}
+.closeBtn {
+  width: @closeBtnWidth;
+  .spanCenter(@closeBtnWidth);
+  line-height: @closeBtnWidth + 2;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  margin-top: -@closeBtnWidth/2;
+  i {
+    font-size: @sizeMini;
+    color: #c2c2c2;
+    transform: scale(0.7,0.7);
+  }
+  &:hover {
+    border-radius: 50%;
+    background-color: #eee;
+  }
+}

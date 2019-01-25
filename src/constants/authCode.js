@@ -1,4 +1,4 @@
-export default {
+const AuthCode = {
   "dashboard": {
     "name": "工作台",
     "code": "dashboard"
@@ -51,4 +51,12 @@ export default {
       "code": "changepwd"
     }
   }
-}
+};
+const HOME = AuthCode.dashboard.code;
+// 权限白名单
+const WhiteList = [
+  HOME,
+];
+
+export { HOME, WhiteList };
+export default AuthCode;

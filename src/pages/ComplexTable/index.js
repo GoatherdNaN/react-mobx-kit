@@ -1,5 +1,6 @@
 import React, { Component  } from 'react'
 import { inject, observer } from 'mobx-react'
+import { withRouter } from 'react-router-dom'
 import { Form, Input, Select, DatePicker, message } from 'antd'
 import { Button, Card } from 'base'
 import { AuthComponent } from 'components/Authorized'
@@ -16,6 +17,7 @@ const { PopButton } = Button;
 const AuthButton = AuthComponent(Button);
 const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 
+@withRouter
 @Form.create()
 @inject('tableStore')
 @observer
@@ -72,7 +74,7 @@ export default class Table extends Component  {
           >{OPERATE_ITEM.check.title}</AuthButton>
           <AuthButton
             type="text"
-            onClick={() => this.edit(text)}
+            onClick={() => this.edit(text.id)}
             code={AuthCode.basis.nomalList.nomalListEdit.code}
           >{OPERATE_ITEM.update.title}</AuthButton>
           <AuthPopButton
@@ -140,12 +142,8 @@ export default class Table extends Component  {
     this.props.tableStore.remove({ ids }, this.search);
   }
   // 改
-  edit = initData => {
-    this.setState({
-      initData,
-      mode: OPERATE_ITEM.update.code,
-      visible: true,
-    });
+  edit = id => {
+    this.props.history.push('/basis/complexList/update/' + id);
   }
   // 查看
   check = initData => {
