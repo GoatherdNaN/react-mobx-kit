@@ -104,7 +104,16 @@ export default class MyMenu extends PureComponent {
   );
 
   routeTo = path => {
-    this.props.history.push(path);
+    let isFromTagBar = false;
+    if (this.props.checkPathInHistory(path)) {
+      isFromTagBar = true;
+    }
+    this.props.history.push({
+      pathname: path,
+      query: {
+        isFromTagBar
+      }
+    });
   }
 
   isMainMenu = key => {
@@ -128,7 +137,6 @@ export default class MyMenu extends PureComponent {
         pathname
       },
     } = this.props;
-    // console.log('/',menus);
     if (!menus.length) return null;
     let selectedKeys = this.getSelectedMenuKeys(pathname);
     if (!selectedKeys.length && openKeys) {

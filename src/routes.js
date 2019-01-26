@@ -34,6 +34,7 @@ const routesConfig = [
   {
     name: '页面',
     code: AuthCode.basis.code,
+    exceptInTagBar: true,
     render: () => <Redirect from='/basis' to='/basis/nomalList' />,
     children: [
       {
@@ -71,6 +72,7 @@ const routesConfig = [
   {
     name: '设置',
     code: AuthCode.system.code,
+    exceptInTagBar: true,
     render: () => <Redirect from='/system' to='/system/user' />,
     children: [
       {

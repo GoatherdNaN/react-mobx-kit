@@ -172,7 +172,6 @@ export default class Header extends Component {
             <Dropdown
               trigger={['click']}
               overlay={menu}
-              overlayClassName={styles.dropdown}
             >
               <span className={classNames(styles.utilLabel, styles.accountInfoLabel)}>
                 <span>张三</span>

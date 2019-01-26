@@ -22,8 +22,10 @@ const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 export default class Table extends Component  {
   constructor(props) {
     super(props);
-    this.searchCriteria = {};
-    this.search();
+    const { location: { query } } = props;
+    if (!(query && query.isFromTagBar)) {
+      this.search({});
+    }
     this.state = {
       visible: false,
       mode: OPERATE_ITEM.add.code,
@@ -157,22 +159,24 @@ export default class Table extends Component  {
   }
   // 查
   search = (params) => {
-    if (params !== undefined) {
-      this.searchCriteria = params;
-      if (JSON.stringify(params) === '{}') {
-        this.props.form.resetFields();
-      }
+    if (params === undefined) {
+      const { tableStore: { searchCriteria } } = this.props;
+      params = searchCriteria;
     }
-    this.props.tableStore.fetchList(this.searchCriteria);
+    if (JSON.stringify(params) === '{}') {
+      this.props.form.resetFields();
+    }
+    this.props.tableStore.fetchList(params);
   }
   // 表格项变动查询，如分页项
   handleStandardTableChange = pagination => {
-    this.searchCriteria = {
-      ...this.searchCriteria,
+    const { tableStore: { searchCriteria } } = this.props;
+    const params = {
+      ...searchCriteria,
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
     };
-    this.search();
+    this.search(params);
   }
   // 搜索
   handleSearch = e => {
@@ -182,16 +186,14 @@ export default class Table extends Component  {
       if (err) return;
       formValues.startDate = formatTimeStamp(formValues.startDate, YMD);
       formValues.endDate = formatTimeStamp(formValues.endDate, YMD);
-      this.searchCriteria = formValues;
-      this.search();
+      this.search(formValues);
     });
   }
   // 刷新
   handleRefresh = () => {
     const { form } = this.props;
     form.resetFields();
-    this.searchCriteria = {};
-    this.search();
+    this.search({});
   }
 
   renderSearchForm() {
@@ -199,12 +201,15 @@ export default class Table extends Component  {
       form: { getFieldDecorator },
       tableStore: {
         loading,
+        searchCriteria
       }
     } = this.props;
     return (
       <Form className="searchForm" onSubmit={this.handleSearch} layout="inline">
         <div className="searchItem">
-          {getFieldDecorator('name')(
+          {getFieldDecorator('name', {
+            initialValue: searchCriteria.name
+          })(
             <Input allowClear placeholder="请输入姓名" />
           )}
         </div>
@@ -234,7 +239,9 @@ export default class Table extends Component  {
         </div>
         <div className="searchItem" style={{ width: 140 }}>
           {
-            getFieldDecorator('status')(
+            getFieldDecorator('status', {
+              initialValue: searchCriteria.status
+            })(
               <Select allowClear placeholder="请选择状态">
                 {
                   STATUS.map(dict => (

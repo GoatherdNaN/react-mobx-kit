@@ -19,7 +19,7 @@ const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 
 @withRouter
 @Form.create()
-@inject('tableStore')
+@inject('complexTableStore')
 @observer
 export default class Table extends Component  {
   constructor(props) {
@@ -139,7 +139,7 @@ export default class Table extends Component  {
   }
   // 删
   delete = ids => {
-    this.props.tableStore.remove({ ids }, this.search);
+    this.props.complexTableStore.remove({ ids }, this.search);
   }
   // 改
   edit = id => {
@@ -165,7 +165,7 @@ export default class Table extends Component  {
         this.props.form.resetFields();
       }
     }
-    this.props.tableStore.fetchList(this.searchCriteria);
+    this.props.complexTableStore.fetchList(this.searchCriteria);
   }
   // 表格项变动查询，如分页项
   handleStandardTableChange = pagination => {
@@ -199,7 +199,7 @@ export default class Table extends Component  {
   renderSearchForm() {
     const {
       form: { getFieldDecorator },
-      tableStore: {
+      complexTableStore: {
         loading,
       }
     } = this.props;
@@ -258,13 +258,13 @@ export default class Table extends Component  {
 
   render() {
     const { selectedRows, mode, visible, initData } = this.state;
-    const { tableStore } = this.props;
+    const { complexTableStore } = this.props;
     const {
       listData,
       loading,
       confirmLoading,
       [`${mode}`]: handleOk
-    } = tableStore;
+    } = complexTableStore;
     const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
     return (
       <Card size="small" title="复杂列表" extra={

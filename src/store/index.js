@@ -1,8 +1,10 @@
 import LoginStore from './LoginStore';
 import RouterStore from './RouterStore'
 import TableStore from 'pages/Table/store';
+import ComplexTableStore from 'pages/ComplexTable/store';
 
 const AllStores = {
+  ComplexTableStore,
   TableStore,
   RouterStore,
   LoginStore,

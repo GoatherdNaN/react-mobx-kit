@@ -102,6 +102,7 @@ class MyLayout extends Component {
         collapsed,
         ['loginStore/getResource']: authLoading
       },
+      routerStore: { checkPathInHistory }
     } = this.props;
     const currRouterData = this.matchParamsPath();
     return (
@@ -122,7 +123,7 @@ class MyLayout extends Component {
             }
           </div>
           <Suspense fallback={<LoadingComponent isGlobal={false} />}>
-            <SideMenu collapsed={collapsed} menus={authList} />
+            <SideMenu collapsed={collapsed} menus={authList} checkPathInHistory={checkPathInHistory} />
           </Suspense>
         </Sider>
         <section className={classNames(styles.rightContainer, {

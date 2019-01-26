@@ -1,8 +1,7 @@
-import storage from './storage'
 
 const isArray = Array.isArray;
 // 缓存函数
-const memoize = (fn, getKey) => {
+export const memoize = (fn, getKey) => {
   const cache = {};
   return (...rest) => {
     const key = getKey ? getKey(rest) : 'key';
