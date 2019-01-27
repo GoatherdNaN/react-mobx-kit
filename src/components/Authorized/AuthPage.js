@@ -2,7 +2,6 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import P403 from 'components/Exception/403'
 import LoadingComponent from '../LoadingComponent'
-// import { inWhiteList } from '../../routes'
 
 const AuthPage = props => {
   const {
@@ -20,7 +19,6 @@ const AuthPage = props => {
     return <LoadingComponent />
   }
   // 白名单里的code排除
-  // return (inWhiteList(code) || authArr.includes(code)) ? target : noMatch;
   return authArr.includes(code) ? target : noMatch;
 }
 

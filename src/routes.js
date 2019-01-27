@@ -7,7 +7,7 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import { Redirect } from 'react-router-dom'
 import LoadingComponent from './components/LoadingComponent';
-import AuthCode, { WhiteList, HOME } from 'constants/authCode'
+import AuthCode, { HOME } from 'constants/authCode'
 
 const commonLoadableConfig = {
   loading: LoadingComponent,
@@ -107,9 +107,8 @@ function getRoutes(routesConfig, rootPath='') {
   });
 }
 getRoutes(routesConfig);
-const inWhiteList = code => WhiteList.includes(code);
 const checkIsHome = code => code === HOME;
-export { breadcrumbNameMap, inWhiteList, checkIsHome };
+export { breadcrumbNameMap, checkIsHome };
 export default routes;
 
 

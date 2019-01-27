@@ -54,9 +54,9 @@ const AuthCode = {
 };
 const HOME = AuthCode.dashboard.code;
 // 权限白名单
-const WhiteList = [
-  HOME,
-];
+// const WhiteList = [
+//   HOME,
+// ];
 
-export { HOME, WhiteList };
+export { HOME };
 export default AuthCode;

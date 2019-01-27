@@ -38,8 +38,8 @@ export default class TagBar extends Component {
     });
   }
 
-  handleClick = (path) => {
-    this.props.routerStore.addRouter(path, path => this.routeTo(path));
+  handleClick = (tag, index) => {
+    this.props.routerStore.triggerRouter(tag, index, path => this.routeTo(path));
   }
 
   closeTag = (e, path, index) => {
@@ -82,14 +82,18 @@ export default class TagBar extends Component {
         <Menu.Item key={OPERATION_ITEM.closeAll.key}>
           {OPERATION_ITEM.closeAll.title}
         </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item key={OPERATION_ITEM.closeOther.key}>
-          {OPERATION_ITEM.closeOther.title}
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item key={OPERATION_ITEM.lockCurrent.key}>
-          {OPERATION_ITEM[activeTag.isLock ? 'unlockCurrent' : 'lockCurrent'].title}
-        </Menu.Item>
+        {
+          !checkIsHome(activeTag.code) && [
+            <Menu.Divider key='closeOtherDivider' />,
+            <Menu.Item key={OPERATION_ITEM.closeOther.key}>
+              {OPERATION_ITEM.closeOther.title}
+            </Menu.Item>,
+            <Menu.Divider key='lockDivider' />,
+            <Menu.Item key={OPERATION_ITEM.lockCurrent.key}>
+              {OPERATION_ITEM[activeTag.isLock ? 'unlockCurrent' : 'lockCurrent'].title}
+            </Menu.Item>
+          ]
+        }
       </Menu>
     );
     return (
@@ -101,7 +105,7 @@ export default class TagBar extends Component {
               return (
                 <li
                   key={tag.code}
-                  onClick={() => this.handleClick(tag.path)}
+                  onClick={() => this.handleClick(tag, index)}
                   className={classNames(styles.tag, {
                     [styles.active]: tag.path === activeTag.path,
                     [styles.home]: isHome

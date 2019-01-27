@@ -105,7 +105,7 @@ export default class MyMenu extends PureComponent {
 
   routeTo = path => {
     let isFromTagBar = false;
-    if (this.props.checkPathInHistory(path)) {
+    if (this.props.getIndexInHistory(path) > -1) {
       isFromTagBar = true;
     }
     this.props.history.push({

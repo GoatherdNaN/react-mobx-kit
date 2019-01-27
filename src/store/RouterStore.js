@@ -4,13 +4,9 @@ import { memoize } from 'utils/common'
 import routes from '../routes';
 
 export default class RouterStore {
-    @observable activeRouter = {};
+    @observable activeTag = routes[0];
     @observable routerHistory = [routes[0]];
 
-    @computed
-    get activeTag() {
-        return toJS(this.activeRouter);
-    }
     @computed
     get history() {
         return toJS(this.routerHistory);
@@ -21,62 +17,75 @@ export default class RouterStore {
      *      2、标签操作
      *      3、地址栏输地址
      */
-    @action addRouter = (path, callback) => {
+    @action addRouter = (path) => {
         // 缓存函数优化
         const matchRoute = this.findRouteInRoutes(path);
         if (matchRoute && !matchRoute.exceptInTagBar) {
-            this.activeRouter = {isLock: false, ...matchRoute};
-            if (!this.checkPathInHistory(path)) {
+            const index = this.getIndexInHistory(path);
+            if (index < 0) {
                 // home后一位插入tag
-                this.routerHistory.splice(1, 0, this.activeRouter);
-            }
-            if (callback && typeof callback === 'function') {
-                callback(matchRoute.path);
+                const currentRouter = {isLock: false, ...matchRoute}
+                this.routerHistory.splice(1, 0, currentRouter);
+                this.activeTag = {index: 1, ...currentRouter};
+            } else {
+                this.triggerRouter(this.routerHistory[index], index);
             }
         } else {
-            this.activeRouter = {};
+            this.activeTag = {};
+        }
+    }
+
+    @action triggerRouter = (router, index, callback) => {
+        this.activeTag = { index, ...router };
+        if (callback && typeof callback === 'function') {
+            callback(router.path);
         }
     }
 
     @action closeTag = (path, index, callback) => {
         this.routerHistory.splice(index, 1);
-        if (this.activeRouter.path === path) {
-            const newActiveRouter = this.routerHistory[this.routerHistory.length - 1];
-            this.activeRouter = newActiveRouter;
+        if (this.activeTag.path === path) {
+            const newactiveTag = this.routerHistory[this.routerHistory.length - 1];
+            this.activeTag = newactiveTag;
             if (callback && typeof callback === 'function') {
-                callback(newActiveRouter.path);
+                callback(newactiveTag.path);
             }
         }
     };
 
     @action closeAllTags = (callback) => {
-        const lockTags = this.routerHistory.filter(tag => tag.isLock);
-        this.routerHistory = [routes[0], ...lockTags];
-        if (callback && typeof callback === 'function' && !this.activeRouter.isLock) {
+        if (this.activeTag.isLock) {
+            this.closeTagExceptCurrent();
+        }
+        else if(callback && typeof callback === 'function') {
+            const lockTags = this.routerHistory.filter(tag => tag.isLock);
+            this.routerHistory = [routes[0], ...lockTags];
+            this.activeTag = { index: 0, isLock: true, ...routes[0] };
             callback(routes[0].path);
         }
     }
     @action closeTagExceptCurrent = () => {
         if (this.routerHistory.length > 2) {
-            const index = this.routerHistory.findIndex(v => v.path === this.activeRouter.path);
-            const LeftHistory = this.routerHistory.slice(1, index);
-            const rightHistory = this.routerHistory.slice(index + 1, this.routerHistory.length);
+            const current = this.activeTag.index;
+            const LeftHistory = this.routerHistory.slice(1, current);
+            const rightHistory = this.routerHistory.slice(current + 1, this.routerHistory.length);
             const lockLeftTags = LeftHistory.filter(tag => tag.isLock);
             const lockRightTags = rightHistory.filter(tag => tag.isLock);
-            this.routerHistory = [routes[0], ...lockLeftTags, this.activeRouter, ...lockRightTags];
+            this.activeTag.index = lockLeftTags.length + 1;
+            this.routerHistory = [routes[0], ...lockLeftTags, this.activeTag, ...lockRightTags];
         };
     }
+
     @action triggerLock = () => {
         if (this.history.length > 1) {
-            const index = this.routerHistory.findIndex(v => v.path === this.activeRouter.path);
+            const index = this.routerHistory.findIndex(v => v.path === this.activeTag.path);
             const currentLockStatus = this.routerHistory[index].isLock;
-            this.routerHistory[index].isLock = this.activeRouter.isLock = !currentLockStatus;
+            this.routerHistory[index].isLock = this.activeTag.isLock = !currentLockStatus;
         }
     }
 
-    checkPathInHistory = path => !!(
-        this.routerHistory.find(v => v.path === path)
-    )
+    getIndexInHistory = path => this.routerHistory.findIndex(v => v.path === path);
+
     findRouteInRoutes = memoize(path => routes.find(
         route => pathToRegexp(route.path).test(path)
     ), rest => rest[0])
