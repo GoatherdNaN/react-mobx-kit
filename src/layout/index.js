@@ -130,6 +130,7 @@ class MyLayout extends Component {
           [styles.collapsed]: collapsed
         })}>
           <Header collapsed={collapsed} onCollapse={this.handleMenuCollapse} />
+          <TagBar />
           <div className={styles.scrollBox} ref={this.scrollBox}>
             {
               false && !!currRouterData && (
@@ -143,7 +144,6 @@ class MyLayout extends Component {
                 </div>
               )
             }
-            <TagBar />
             <div className={styles.content}>
               <Switch>
                 {routes.map(item => (
