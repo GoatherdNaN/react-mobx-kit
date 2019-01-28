@@ -25,5 +25,5 @@ export const splitStr = format((str, maxLen = 100) => {
 })
 // 格式化时间
 export const formatTimeStamp = format(
-  (timeStamp = '', format = 'YYYY-MM-DD HH:mm:ss') => moment(new Date(timeStamp)).format(format)
+  (timeStamp = '', format = 'YYYY-MM-DD HH:mm:ss') => timeStamp ? moment(new Date(timeStamp)).format(format) : null
 )

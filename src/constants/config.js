@@ -42,7 +42,7 @@ export const shortcut = [{
   name: '快捷方式4',
   path: '/ffff'
   }];
-
+// 弹窗
 export const formItemBlock = {
   labelCol: {
     span: 5,
@@ -52,6 +52,19 @@ export const formItemBlock = {
   },
   colon: false, // 不要冒号
 };
+// 页面
+export const formItemLayout = {
+  labelCol: {
+    xxl: { span: 3 }, // ≥1600px
+    xl: { span: 4 }, // ≥1200px
+    lg: { span: 5 }, // ≥992px
+  },
+  wrapperCol: {
+    xxl: { span: 8 },
+    xl: { span: 11 },
+    lg: { span: 13 },
+  }
+}
 
 export const OPERATE_ITEM = {
   add: {

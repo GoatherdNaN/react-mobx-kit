@@ -1,23 +1,42 @@
 import { message } from 'antd'
-import { observable, action, flow } from 'mobx'
+import { observable, action, flow, toJS } from 'mobx'
 import GlobalStore from 'store/GlobalStore'
-import { getList, update, add, remove } from './api'
+import { getList, getById, update, add, remove } from './api'
 import { SUCCESS_CODE, SUCCESS_INFO } from 'constants/config'
 
 export default class TableStore extends GlobalStore {
+  @observable searchCriteria = {};
+  @observable initData = {};
   @observable listData = {
     list: [],
     pagination: null
   };
 
+  @action saveInitData = (initData, callback) => {
+    this.initData = initData;
+    if (typeof callback === 'function') {
+      callback();
+    }
+  }
   @action saveListData = (listData) => {
     this.listData = listData;
+  }
+  @action saveSearchCriteria = (searchCriteria) => {
+    this.searchCriteria = searchCriteria;
   }
 
   fetchList = this.withLoading('loading')(
     flow(function* (params) {
+      this.saveSearchCriteria(params);
       const { code, data } = yield getList(params);
       code == SUCCESS_CODE && this.saveListData(data);
+    })
+  );
+
+  fetchById = this.withLoading('initFormLoading')(
+    flow(function* (params) {
+      const { code, data } = yield getById(params);
+      code == SUCCESS_CODE && this.saveInitData(data);
     })
   );
 
@@ -54,4 +73,6 @@ export default class TableStore extends GlobalStore {
       }
     }
   });
+
+  getDataToJs = key => toJS(this[key])
 }

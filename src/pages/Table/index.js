@@ -5,7 +5,7 @@ import { Button, Card } from 'base'
 import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
 import { formatTimeStamp } from 'utils/format'
-import { YMD } from 'utils/moment'
+import { YMD, getInitDate } from 'utils/moment'
 import ModalForm from './ModalForm'
 import { OPERATE_ITEM } from 'constants/config'
 import AuthCode from 'constants/authCode'
@@ -215,7 +215,9 @@ export default class Table extends Component  {
         </div>
         <div className="searchItem" style={{ width: 196 }}>
           {
-            getFieldDecorator('startDate')(
+            getFieldDecorator('startDate', {
+              initialValue: getInitDate(searchCriteria.startDate)
+            })(
               <DatePicker
                 format={YMD}
                 placeholder="请选择开始时间"
@@ -227,7 +229,9 @@ export default class Table extends Component  {
         </div>
         <div className="searchItem" style={{ width: 196 }}>
           {
-            getFieldDecorator('endDate')(
+            getFieldDecorator('endDate', {
+              initialValue: getInitDate(searchCriteria.endDate)
+            })(
               <DatePicker
                 format={YMD}
                 placeholder="请选择结束时间"
@@ -268,9 +272,10 @@ export default class Table extends Component  {
       listData,
       loading,
       confirmLoading,
+      searchCriteria,
       [`${mode}`]: handleOk
     } = tableStore;
-    const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
+    const refreshLoading = loading && JSON.stringify(searchCriteria) === '{}';
     return (
       <Card size="small" title="普通列表" extra={
         <div className="buttonGroupRight">

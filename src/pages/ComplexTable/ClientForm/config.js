@@ -4,6 +4,7 @@ import {
   validateChineseEnglish,
   validatePositiveInteger,
 } from 'constants/verification'
+export { formItemLayout } from 'constants/config'
 
 export default {
   name: {

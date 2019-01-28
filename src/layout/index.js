@@ -6,15 +6,14 @@
 import React, { Component, Fragment, Suspense } from 'react'
 import classNames from 'classnames'
 import { inject, observer } from 'mobx-react'
-import {  Layout, Breadcrumb, Icon } from 'antd'
-import { Redirect, Switch, Route, Link } from 'react-router-dom'
-import pathToRegexp from 'path-to-regexp'
+import {  Layout } from 'antd'
+import { Redirect, Switch, Route } from 'react-router-dom'
 import withWrapError from 'components/ErrorHandle'
 import NotFound from 'components/Exception/404'
 import AuthPage from 'components/Authorized'
 import LoadingComponent from 'components/LoadingComponent'
 import { TITLE } from 'constants/config'
-import routes, { breadcrumbNameMap } from '../routes'
+import routes from '../routes'
 import Header from './Header'
 import TagBar from './TagBar'
 import history from '../history'
@@ -57,35 +56,35 @@ class MyLayout extends Component {
     this.props.loginStore.changeLayoutCollapsed(collapsed);
   };
 
-  matchParamsPath = () => {
-    const { location: { pathname } } = this.props;
-    const breadcrumbNameMapKeys = Object.keys(breadcrumbNameMap);
-    const pathKey = breadcrumbNameMapKeys.find(key => pathToRegexp(key).test(pathname));
-    return breadcrumbNameMap[pathKey];
-  };
+  // matchParamsPath = () => {
+  //   const { location: { pathname } } = this.props;
+  //   const breadcrumbNameMapKeys = Object.keys(breadcrumbNameMap);
+  //   const pathKey = breadcrumbNameMapKeys.find(key => pathToRegexp(key).test(pathname));
+  //   return breadcrumbNameMap[pathKey];
+  // };
 
-  getBreadcrumbItem = () => {
-    const { location: { pathname } } = this.props;// pathToRegexp
-    const pathSnippets = pathname.split('/').filter(i => i);
-    return pathSnippets.map((_, index) => {
-      const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-      const matchKey = Object.keys(breadcrumbNameMap).find(v => pathToRegexp(v).test(url));
-      if (!matchKey) return null;
-      const title = breadcrumbNameMap[matchKey];
-      return (
-        <Breadcrumb.Item key={url}>
-          {
-            pathname !== url
-            ? (
-              <Link to={url}>
-                {title}
-              </Link>
-            ) : title
-          }
-        </Breadcrumb.Item>
-      );
-    });
-  }
+  // getBreadcrumbItem = () => {
+  //   const { location: { pathname } } = this.props;// pathToRegexp
+  //   const pathSnippets = pathname.split('/').filter(i => i);
+  //   return pathSnippets.map((_, index) => {
+  //     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+  //     const matchKey = Object.keys(breadcrumbNameMap).find(v => pathToRegexp(v).test(url));
+  //     if (!matchKey) return null;
+  //     const title = breadcrumbNameMap[matchKey];
+  //     return (
+  //       <Breadcrumb.Item key={url}>
+  //         {
+  //           pathname !== url
+  //           ? (
+  //             <Link to={url}>
+  //               {title}
+  //             </Link>
+  //           ) : title
+  //         }
+  //       </Breadcrumb.Item>
+  //     );
+  //   });
+  // }
 
   logout = () => {
     this.props.loginStore.logout(() => {
@@ -104,7 +103,7 @@ class MyLayout extends Component {
       },
       routerStore: { getIndexInHistory }
     } = this.props;
-    const currRouterData = this.matchParamsPath();
+    // const currRouterData = this.matchParamsPath();
     return (
       <Fragment>
         <Sider
@@ -132,7 +131,7 @@ class MyLayout extends Component {
           <Header collapsed={collapsed} onCollapse={this.handleMenuCollapse} />
           <TagBar />
           <div className={styles.scrollBox} ref={this.scrollBox}>
-            {
+            {/* {
               false && !!currRouterData && (
                 <div className={styles.breadCrumb}>
                   <Breadcrumb>
@@ -143,7 +142,7 @@ class MyLayout extends Component {
                   </Breadcrumb>
                 </div>
               )
-            }
+            } */}
             <div className={styles.content}>
               <Switch>
                 {routes.map(item => (

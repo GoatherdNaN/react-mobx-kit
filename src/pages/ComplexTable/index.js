@@ -6,8 +6,7 @@ import { Button, Card } from 'base'
 import { AuthComponent } from 'components/Authorized'
 import StandardTable from 'components/StandardTable'
 import { formatTimeStamp } from 'utils/format'
-import { YMD } from 'utils/moment'
-import ModalForm from './ModalForm'
+import { YMD, getInitDate } from 'utils/moment'
 import { OPERATE_ITEM } from 'constants/config'
 import AuthCode from 'constants/authCode'
 import { getLabelFromDict, STATUS } from 'constants/dict'
@@ -24,8 +23,19 @@ const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 export default class Table extends Component  {
   constructor(props) {
     super(props);
-    this.searchCriteria = {};
-    this.search();
+    let { location: { query }, complexTableStore: { listData } } = props;
+    query = query || {};
+    if (query.holdParams === true) {
+      this.search();
+    } else if (
+      JSON.stringify(query) === {} ||
+      query.holdParams === false ||
+      !query.isFromTagBar ||
+      !listData.list.length
+    ) {
+      this.search({});
+    }
+
     this.state = {
       visible: false,
       mode: OPERATE_ITEM.add.code,
@@ -74,7 +84,7 @@ export default class Table extends Component  {
           >{OPERATE_ITEM.check.title}</AuthButton>
           <AuthButton
             type="text"
-            onClick={() => this.edit(text.id)}
+            onClick={() => this.edit(text)}
             code={AuthCode.basis.nomalList.nomalListEdit.code}
           >{OPERATE_ITEM.update.title}</AuthButton>
           <AuthPopButton
@@ -128,30 +138,35 @@ export default class Table extends Component  {
       visible: false
     })
   }
+  // 跳转到增/改/查看 页面
+  routeToClientForm = (initData) => {
+    const { mode } = this.state;
+    const { complexTableStore, history } = this.props;
+    const params = mode !== OPERATE_ITEM.add.code && initData.id ? `/${initData.id}` : '';
+    complexTableStore.saveInitData(initData, () => history.push(`/basis/complexList/${mode}${params}`));
+  }
 
   // 增
   add = () => {
     this.setState({
-      mode: OPERATE_ITEM.add.code,
-      initData: {},
-      visible: true,
-    });
+      mode: OPERATE_ITEM.add.code
+    }, () => this.routeToClientForm({}));
   }
   // 删
   delete = ids => {
     this.props.complexTableStore.remove({ ids }, this.search);
   }
   // 改
-  edit = id => {
-    this.props.history.push('/basis/complexList/update/' + id);
+  edit = initData => {
+    this.setState({
+      mode: OPERATE_ITEM.update.code
+    }, () => this.routeToClientForm(initData));
   }
   // 查看
   check = initData => {
     this.setState({
-      initData,
-      mode: OPERATE_ITEM.check.code,
-      visible: true,
-    });
+      mode: OPERATE_ITEM.check.code
+    }, () => this.routeToClientForm(initData));
   }
   // 导出
   export = () => {
@@ -159,22 +174,24 @@ export default class Table extends Component  {
   }
   // 查
   search = (params) => {
-    if (params !== undefined) {
-      this.searchCriteria = params;
-      if (JSON.stringify(params) === '{}') {
-        this.props.form.resetFields();
-      }
+    if (params === undefined) {
+      const { complexTableStore: { getDataToJs } } = this.props;
+      params = getDataToJs('searchCriteria');
     }
-    this.props.complexTableStore.fetchList(this.searchCriteria);
+    if (JSON.stringify(params) === '{}') {
+      this.props.form.resetFields();
+    }
+    this.props.complexTableStore.fetchList(params);
   }
   // 表格项变动查询，如分页项
   handleStandardTableChange = pagination => {
-    this.searchCriteria = {
-      ...this.searchCriteria,
+    const { complexTableStore: { searchCriteria } } = this.props;
+    const params = {
+      ...searchCriteria,
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
     };
-    this.search();
+    this.search(params);
   }
   // 搜索
   handleSearch = e => {
@@ -185,7 +202,7 @@ export default class Table extends Component  {
       formValues.startDate = formatTimeStamp(formValues.startDate, YMD);
       formValues.endDate = formatTimeStamp(formValues.endDate, YMD);
       this.searchCriteria = formValues;
-      this.search();
+      this.search(formValues);
     });
   }
   // 刷新
@@ -193,7 +210,7 @@ export default class Table extends Component  {
     const { form } = this.props;
     form.resetFields();
     this.searchCriteria = {};
-    this.search();
+    this.search({});
   }
 
   renderSearchForm() {
@@ -201,18 +218,23 @@ export default class Table extends Component  {
       form: { getFieldDecorator },
       complexTableStore: {
         loading,
+        searchCriteria
       }
     } = this.props;
     return (
       <Form className="searchForm" onSubmit={this.handleSearch} layout="inline">
         <div className="searchItem">
-          {getFieldDecorator('name')(
+          {getFieldDecorator('name', {
+            initialValue: searchCriteria.name
+          })(
             <Input allowClear placeholder="请输入姓名" />
           )}
         </div>
         <div className="searchItem" style={{ width: 196 }}>
           {
-            getFieldDecorator('startDate')(
+            getFieldDecorator('startDate', {
+              initialValue: getInitDate(searchCriteria.startDate)
+            })(
               <DatePicker
                 format={YMD}
                 placeholder="请选择开始时间"
@@ -224,7 +246,9 @@ export default class Table extends Component  {
         </div>
         <div className="searchItem" style={{ width: 196 }}>
           {
-            getFieldDecorator('endDate')(
+            getFieldDecorator('endDate', {
+              initialValue: getInitDate(searchCriteria.endDate)
+            })(
               <DatePicker
                 format={YMD}
                 placeholder="请选择结束时间"
@@ -236,7 +260,9 @@ export default class Table extends Component  {
         </div>
         <div className="searchItem" style={{ width: 140 }}>
           {
-            getFieldDecorator('status')(
+            getFieldDecorator('status', {
+              initialValue: searchCriteria.status
+            })(
               <Select allowClear placeholder="请选择状态">
                 {
                   STATUS.map(dict => (
@@ -257,15 +283,14 @@ export default class Table extends Component  {
   }
 
   render() {
-    const { selectedRows, mode, visible, initData } = this.state;
+    const { selectedRows } = this.state;
     const { complexTableStore } = this.props;
     const {
-      listData,
       loading,
-      confirmLoading,
-      [`${mode}`]: handleOk
+      listData,
+      getDataToJs
     } = complexTableStore;
-    const refreshLoading = loading && JSON.stringify(this.searchCriteria) === '{}';
+    const refreshLoading = loading && JSON.stringify(getDataToJs('searchCriteria')) === '{}';
     return (
       <Card size="small" title="复杂列表" extra={
         <div className="buttonGroupRight">
@@ -309,15 +334,6 @@ export default class Table extends Component  {
             onChange={this.handleStandardTableChange}
           />
         </div>
-        <ModalForm
-          mode={mode}
-          handleOk={handleOk}
-          visible={visible}
-          initData={initData}
-          search={this.search}
-          handleClose={this.closeModal}
-          confirmLoading={confirmLoading}
-        />
       </Card>
     )
   }

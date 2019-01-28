@@ -1,7 +1,5 @@
-import pathToRegexp from 'path-to-regexp'
 import { observable, action, computed, toJS } from 'mobx';
-import { memoize } from 'utils/common'
-import routes from '../routes';
+import routes, { findRouteInRoutes } from '../routes';
 
 export default class RouterStore {
     @observable activeTag = routes[0];
@@ -19,7 +17,7 @@ export default class RouterStore {
      */
     @action addRouter = (path) => {
         // 缓存函数优化
-        const matchRoute = this.findRouteInRoutes(path);
+        const matchRoute = findRouteInRoutes(path);
         if (matchRoute && !matchRoute.exceptInTagBar) {
             const index = this.getIndexInHistory(path);
             if (index < 0) {
@@ -37,7 +35,7 @@ export default class RouterStore {
 
     @action triggerRouter = (router, index, callback) => {
         this.activeTag = { index, ...router };
-        if (callback && typeof callback === 'function') {
+        if (typeof callback === 'function') {
             callback(router.path);
         }
     }
@@ -47,7 +45,7 @@ export default class RouterStore {
         if (this.activeTag.path === path) {
             const newactiveTag = this.routerHistory[this.routerHistory.length - 1];
             this.activeTag = newactiveTag;
-            if (callback && typeof callback === 'function') {
+            if (typeof callback === 'function') {
                 callback(newactiveTag.path);
             }
         }
@@ -57,7 +55,7 @@ export default class RouterStore {
         if (this.activeTag.isLock) {
             this.closeTagExceptCurrent();
         }
-        else if(callback && typeof callback === 'function') {
+        else if(typeof callback === 'function') {
             const lockTags = this.routerHistory.filter(tag => tag.isLock);
             this.routerHistory = [routes[0], ...lockTags];
             this.activeTag = { index: 0, isLock: true, ...routes[0] };
@@ -85,8 +83,4 @@ export default class RouterStore {
     }
 
     getIndexInHistory = path => this.routerHistory.findIndex(v => v.path === path);
-
-    findRouteInRoutes = memoize(path => routes.find(
-        route => pathToRegexp(route.path).test(path)
-    ), rest => rest[0])
 }

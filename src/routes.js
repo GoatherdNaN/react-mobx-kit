@@ -5,9 +5,12 @@
  */
 import React from 'react';
 import Loadable from 'react-loadable';
+import pathToRegexp from 'path-to-regexp'
 import { Redirect } from 'react-router-dom'
 import LoadingComponent from './components/LoadingComponent';
 import AuthCode, { HOME } from 'constants/authCode'
+import { OPERATE_ITEM } from 'constants/config'
+import { memoize } from 'utils/common'
 
 const commonLoadableConfig = {
   loading: LoadingComponent,
@@ -22,6 +25,9 @@ const AsyncTable = Loadable(Object.assign(commonLoadableConfig,{
 }));
 const AsyncComplexTable = Loadable(Object.assign(commonLoadableConfig,{
   loader: () => import('./pages/ComplexTable'),
+}));
+const AsyncComplexTableClientForm = Loadable(Object.assign(commonLoadableConfig,{
+  loader: () => import('./pages/ComplexTable/ClientForm'),
 }));
 
 const routesConfig = [
@@ -48,22 +54,25 @@ const routesConfig = [
         component: AsyncComplexTable,
         children: [
           {
-            name: '查看',
-            path: '/check/:id',
+            name: OPERATE_ITEM.check.title,
+            exceptInTagBar: true,
+            path: `/${OPERATE_ITEM.check.code}/:id`,
             code: AuthCode.basis.complexList.complexListNew.code,
-            component: AsyncTable,
+            component: AsyncComplexTableClientForm,
           },
           {
-            name: '新增',
-            path: '/new',
+            name: OPERATE_ITEM.add.title,
+            exceptInTagBar: true,
+            path: `/${OPERATE_ITEM.add.code}`,
             code: AuthCode.basis.complexList.complexListNew.code,
-            component: AsyncTable,
+            component: AsyncComplexTableClientForm,
           },
           {
-            name: '修改',
-            path: '/update/:id',
+            name: OPERATE_ITEM.update.title,
+            exceptInTagBar: true,
+            path: `/${OPERATE_ITEM.update.code}/:id`,
             code: AuthCode.basis.complexList.complexListEdit.code,
-            component: AsyncTable,
+            component: AsyncComplexTableClientForm,
           },
         ]
       },
@@ -97,18 +106,20 @@ function getRoutes(routesConfig, rootPath='') {
     v.path = rootPath + (v.path || `/${v.code}`);
     // exact 默认为true
     v.exact = (v.exact !== false);
-    if(v.children) getRoutes(v.children, v.path);
-    delete v.children;
     if (v.showBreadcrumb !== false) {
       breadcrumbNameMap[v.path] = v.name;
     }
-    // delete v.name;
     routes.push(v);
+    if(v.children) getRoutes(v.children, v.path);
+    delete v.children;
   });
 }
 getRoutes(routesConfig);
 const checkIsHome = code => code === HOME;
-export { breadcrumbNameMap, checkIsHome };
+const findRouteInRoutes = memoize(path => routes.find(
+  route => pathToRegexp(route.path).test(path)
+), rest => rest[0])
+export { breadcrumbNameMap, findRouteInRoutes, checkIsHome };
 export default routes;
 
 

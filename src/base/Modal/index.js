@@ -110,7 +110,8 @@ class BaseModal extends PureComponent {
           关闭
         </Button>
       ]
-    } else {
+    }
+    else {
       extraProps.onOk = onOk;
       extraProps.onCancel = onCancel;
       extraProps.confirmLoading = confirmLoading;

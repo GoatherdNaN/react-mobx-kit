@@ -14,7 +14,7 @@ export default class TableStore extends GlobalStore {
   @computed
   get searchCriteria() {
     return toJS(this.searchParams)
-}
+  }
 
   @action saveListData = (listData) => {
     this.listData = listData;

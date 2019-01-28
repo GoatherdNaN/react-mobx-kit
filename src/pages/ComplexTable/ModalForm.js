@@ -4,7 +4,7 @@ import moment from 'moment'
 import { Modal } from 'base'
 import { YMDHMS, disabledDate, disabledDateTime, getInitDate } from 'utils/moment'
 import { formItemBlock } from 'constants/config'
-import FormConfig from './config'
+import FormConfig from './ClientForm/config'
 import { OPERATE_ITEM } from 'constants/config'
 import { getLabelFromDict, STATUS } from 'constants/dict'
 
