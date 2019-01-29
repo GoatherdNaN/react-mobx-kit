@@ -7,7 +7,7 @@ import SpinWrapper from 'components/SpinWrapper'
 import { YMDHMS, disabledDate, disabledDateTime, getInitDate } from 'utils/moment'
 import FormConfig, { formItemLayout } from './config'
 import { getLabelFromDict, STATUS } from 'constants/dict'
-import { findRouteInRoutes } from '../../../routes'
+import { findRouteByPath } from '../../../routes'
 import { OPERATE_ITEM } from 'constants/config'
 
 const { TextArea } = Input;
@@ -25,7 +25,7 @@ export default class ClientForm extends Component {
       location: { pathname },
       complexTableStore: { getDataToJs },
     } = props;
-    const currentRouterInfo = findRouteInRoutes(pathname);
+    const currentRouterInfo = findRouteByPath(pathname);
     const initData = getDataToJs('initData');
     this.mode = Object.values(OPERATE_ITEM).find(v => v.title === currentRouterInfo.name).code;
     if ( params.id && (

@@ -12,40 +12,28 @@ import AuthCode, { HOME } from 'constants/authCode'
 import { OPERATE_ITEM } from 'constants/config'
 import { memoize } from 'utils/common'
 
-const commonLoadableConfig = {
-  loading: LoadingComponent,
+const withLoadable = path => Loadable({
   delay: 200,
-};
+  loading: LoadingComponent,
+  loader: () => import('./' + path)
+});
 
-const AsyncHome = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/Home'),
-}));
-const AsyncTable = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/Table'),
-}));
-const AsyncComplexTable = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/ComplexTable'),
-}));
-const AsyncComplexTableClientForm = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/ComplexTable/ClientForm'),
-}));
-const AsyncUserInfo = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/UserInfo'),
-}));
-const AsyncChangePwd = Loadable(Object.assign(commonLoadableConfig,{
-  loader: () => import('./pages/ChangePwd'),
-}));
+const AsyncHome = withLoadable('pages/Home');
+const AsyncTable = withLoadable('pages/Table');
+const AsyncComplexTable = withLoadable('pages/ComplexTable');
+const AsyncComplexTableClientForm = withLoadable('pages/ComplexTable/ClientForm');
+const AsyncUserInfo = withLoadable('pages/UserInfo');
+const AsyncChangePwd = withLoadable('pages/ChangePwd');
+
 /**
- * name: 路由的title，用于tagBar
- * code
- * showBreadcrumb
- * exceptInTagBar
+ * code： 权限判断字段
+ * exceptInTagBar： 不展示在tagBar吗
+ * name: 路由的title，用于tagBar，以及页面上title位的备用项
  */
 const routesConfig = [
   {
     name: '工作台',
     code: AuthCode.dashboard.code,
-    showBreadcrumb: false,
     component: AsyncHome
   },
   {
@@ -109,28 +97,42 @@ const routesConfig = [
   },
 ];
 
-const routes = [];
-const breadcrumbNameMap = {};
-function getRoutes(routesConfig, rootPath='') {
-  routesConfig.forEach(v => {
-    // path可省略,若省略，则默认'/' + code
-    v.path = rootPath + (v.path || `/${v.code}`);
-    // exact 默认为true
-    v.exact = (v.exact !== false);
-    if (v.showBreadcrumb !== false) {
-      breadcrumbNameMap[v.path] = v.name;
-    }
-    routes.push(v);
-    if(v.children) getRoutes(v.children, v.path);
-    delete v.children;
+// 迭代算法将路由展开
+function walkRoutes(data, cb) {
+  let iterations = data.map((target) => {
+    target.exact = (target.exact !== false);
+    return { rootPath: '', target};
   });
+  let current;
+  const mapCallback = (target) => {
+    target.exact = (target.exact !== false);
+    return { rootPath: current.rootPath + (current.target.path || `/${current.target.code}`), target }
+  };
+  while(((current = iterations.pop()), current)) {
+    const result = cb(current.target, current.rootPath);
+    if(result !== undefined) return result;
+    if(current.target.children) {
+      const openChildList = current.target.children.map(mapCallback);
+      iterations = iterations.concat(openChildList);
+    }
+  }
 }
-getRoutes(routesConfig);
+
+// const breadcrumbNameMap = {};
+const routes = [];
+walkRoutes(routesConfig, (route, rootPath) => {
+  const path = rootPath + (route.path || `/${route.code}`);
+  const { children, ...routeItem } = route;
+  routes.unshift({...routeItem, path});
+})
+// 通过code判断是否为首页
 const checkIsHome = code => code === HOME;
-const findRouteInRoutes = memoize(path => routes.find(
+// 通过path获取路由信息
+const findRouteByPath = memoize(path => routes.find(
   route => pathToRegexp(route.path).test(path)
 ), rest => rest[0])
-export { breadcrumbNameMap, findRouteInRoutes, checkIsHome };
+
+export { findRouteByPath, checkIsHome };
 export default routes;
 
 

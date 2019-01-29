@@ -1,5 +1,5 @@
 import { observable, action, toJS } from 'mobx'
-import routes, { findRouteInRoutes } from '../routes'
+import routes, { findRouteByPath } from '../routes'
 import { sessionStorage } from 'utils/storage'
 
 export default class RouterStore {
@@ -12,8 +12,7 @@ export default class RouterStore {
      *      3、地址栏输地址
      */
     @action addRouter = (path) => {
-        // 缓存函数优化
-        const matchRoute = findRouteInRoutes(path);
+        const matchRoute = findRouteByPath(path);
         if (matchRoute && !matchRoute.exceptInTagBar) {
             const index = this.getIndexInHistory(path);
             if (index < 0) {
@@ -39,7 +38,7 @@ export default class RouterStore {
     @action closeTag = (path, index, callback) => {
         this.routerHistory.splice(index, 1);
         if (this.activeTag.path === path) {
-            const newactiveTag = this.routerHistory[this.routerHistory.length - 1];
+            const newactiveTag = this.routerHistory[1] || this.routerHistory[0];
             this.activeTag = newactiveTag;
             if (typeof callback === 'function') {
                 callback(newactiveTag.path);
