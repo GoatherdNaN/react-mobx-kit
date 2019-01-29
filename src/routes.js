@@ -29,7 +29,18 @@ const AsyncComplexTable = Loadable(Object.assign(commonLoadableConfig,{
 const AsyncComplexTableClientForm = Loadable(Object.assign(commonLoadableConfig,{
   loader: () => import('./pages/ComplexTable/ClientForm'),
 }));
-
+const AsyncUserInfo = Loadable(Object.assign(commonLoadableConfig,{
+  loader: () => import('./pages/UserInfo'),
+}));
+const AsyncChangePwd = Loadable(Object.assign(commonLoadableConfig,{
+  loader: () => import('./pages/ChangePwd'),
+}));
+/**
+ * name: 路由的title，用于tagBar
+ * code
+ * showBreadcrumb
+ * exceptInTagBar
+ */
 const routesConfig = [
   {
     name: '工作台',
@@ -87,12 +98,12 @@ const routesConfig = [
       {
         name: '个人资料',
         code: AuthCode.system.user.code,
-        component: AsyncTable,
+        component: AsyncUserInfo,
       },
       {
         name: '修改密码',
         code: AuthCode.system.changepwd.code,
-        component: AsyncTable,
+        component: AsyncChangePwd,
       },
     ],
   },

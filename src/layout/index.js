@@ -13,6 +13,7 @@ import NotFound from 'components/Exception/404'
 import AuthPage from 'components/Authorized'
 import LoadingComponent from 'components/LoadingComponent'
 import { TITLE } from 'constants/config'
+import { sessionStorage } from 'utils/storage'
 import routes from '../routes'
 import Header from './Header'
 import TagBar from './TagBar'
@@ -43,7 +44,18 @@ class MyLayout extends Component {
       if (this.scrollBox.current) {
         this.scrollBox.current.scrollTop = 0;
       }
-    })
+    });
+    window.addEventListener("beforeunload", this.onBeforeUnload, false);
+  }
+
+  componentWillUnmount() {
+    this.setState = () => {};
+    document.removeEventListener("beforeunload", this.onBeforeUnload, false);
+  }
+
+  onBeforeUnload = () => {
+    const { getDataToJs } = this.props.routerStore;
+    sessionStorage.setJSONItem('routerHistory', getDataToJs('routerHistory'));
   }
 
   toggle = () => {

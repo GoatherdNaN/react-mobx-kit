@@ -12,11 +12,19 @@ module.exports = {
   "@border-radius-base": "4px",                        // 组件/浮层圆角
   "@border-color-base": "#d9d9d9",                     // 边框色
   "@box-shadow-base": "0 2px 8px rgba(0, 0, 0, .15)",  // 浮层阴影
+  // side
+  "@layout-sider-background": "#304156",
   //menu
   "@menu-collapsed-width": "50px",
+  "@menu-dark-color": "#BFCBD9",
+  "@menu-dark-bg": "#304156",
+  "@menu-dark-arrow-color": "#fff",
+  "@menu-dark-submenu-bg": "#1F2D3D",
+  // "@menu-dark-highlight-color": "@primary-color",
+  "@menu-dark-item-active-bg": "#1F2D3D",
   // modal
   "@modal-header-bg": "#F8F8F8",
   "@border-radius-base": 0,
   "@modal-mask-bg": "rgba(0, 0, 0, .3)",
   "@menu-collapsed-width": "50px",
-};
+}

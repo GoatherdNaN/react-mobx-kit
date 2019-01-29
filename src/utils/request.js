@@ -2,7 +2,7 @@ import { message } from 'antd'
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'qs';
 import { METHOD } from 'constants/dict';
-// import storage from './storage'
+import { sessionStorage } from './storage'
 import history from '../history';
 
 function hasPrototype(object, name) {
@@ -51,17 +51,17 @@ function checkStatus(response) {
 function cacheUrl(url) {
   if (hasPrototype(sessionStorage, url)) {
     // 有这个key
-    if (sessionStorage.getItem(url) !== '0') {
-      return sessionStorage.getItem(url);
+    if (sessionStorage.getJSONItem(url) !== '0') {
+      return sessionStorage.getJSONItem(url);
     }
   } else {
-    sessionStorage.setItem(url, '0');
+    sessionStorage.setJSONItem(url, '0');
   }
 }
 
 function setCache(url, data) {
-  if (hasPrototype(sessionStorage, url) && sessionStorage.getItem(url) === '0') {
-    sessionStorage.setItem(url, JSON.stringify(data));
+  if (hasPrototype(sessionStorage, url) && sessionStorage.getJSONItem(url) === '0') {
+    sessionStorage.setJSONItem(url, JSON.stringify(data));
   }
 }
 
@@ -76,7 +76,7 @@ function setCache(url, data) {
  */
 export default function request(base, params = null, cache = false, jsonType = false) {
   let { url } = base;
-  // const token = storage.getItem('token');
+  // const token = storage.getJSONItem('token');
   const { method } = base;
   const options = {
     headers: {

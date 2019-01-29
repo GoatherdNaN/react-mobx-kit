@@ -1,31 +1,26 @@
 import { message } from 'antd'
-import { observable, action, flow, computed, toJS } from 'mobx'
+import { observable, action, flow, toJS } from 'mobx'
 import GlobalStore from 'store/GlobalStore'
 import { getList, update, add, remove } from './api'
 import { SUCCESS_CODE, SUCCESS_INFO } from 'constants/config'
 
 export default class TableStore extends GlobalStore {
-  @observable searchParams = {};
+  @observable searchCriteria = {};
   @observable listData = {
     list: [],
     pagination: null
   };
 
-  @computed
-  get searchCriteria() {
-    return toJS(this.searchParams)
-  }
-
   @action saveListData = (listData) => {
     this.listData = listData;
   }
-  @action saveSearchParams = (searchParams) => {
-    this.searchParams = searchParams;
+  @action saveSearchCriteria = (searchCriteria) => {
+    this.searchCriteria = searchCriteria;
   }
 
   fetchList = this.withLoading('loading')(
     flow(function* (params) {
-      this.saveSearchParams(params);
+      this.saveSearchCriteria(params);
       const { code, data } = yield getList(params);
       code == SUCCESS_CODE && this.saveListData(data);
     })
@@ -64,4 +59,6 @@ export default class TableStore extends GlobalStore {
       }
     }
   });
+
+  getDataToJs = key => toJS(this[key])
 }

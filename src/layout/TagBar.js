@@ -74,7 +74,7 @@ export default class TagBar extends Component {
     const {
       routerStore: {
         activeTag,
-        history
+        getDataToJs,
       }
     } = this.props;
     const menu = (
@@ -100,7 +100,7 @@ export default class TagBar extends Component {
       <div className={styles.tagBar}>
         <ul className={styles.tagList}>
           {
-            history.map((tag, index) => {
+            getDataToJs('routerHistory').map((tag, index) => {
               const isHome = checkIsHome(tag.code);
               return (
                 <li

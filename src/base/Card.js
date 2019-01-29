@@ -1,7 +1,8 @@
 import React from 'react'
 import { Card } from 'antd'
+import { findRouteInRoutes } from '../routes'
 
-export default function BaseCard({pageWapper=true, ...otherProps}) {
+export default function BaseCard({pageWapper=true, title, ...otherProps}) {
   const expandConfig = {};
   if (pageWapper) {
     const padding = 16;
@@ -12,8 +13,16 @@ export default function BaseCard({pageWapper=true, ...otherProps}) {
     expandConfig.bodyStyle = {
       padding: `0 ${padding}px ${padding}px`,
     };
+    if (!title) {
+      try {
+        const currentRouterInfo = findRouteInRoutes(location.pathname);
+        title = currentRouterInfo.name;
+      } catch {
+        title = null;
+      }
+    }
   }
   return (
-    <Card {...expandConfig} {...otherProps} />
+    <Card title={title} {...expandConfig} {...otherProps} />
   )
 }

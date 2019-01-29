@@ -31,7 +31,9 @@ export default class ClientForm extends Component {
     if ( params.id && (
       !initData ||
       JSON.stringify(initData) === '{}'
-      )) {
+    )) {
+      // 只有进入此页面后执行了刷新操作才会执行
+      this.isRefreshed = true;
       props.complexTableStore.fetchById({ id: params.id });
     }
   }
@@ -49,7 +51,10 @@ export default class ClientForm extends Component {
   }
 
   back = (holdParams) => {
-    const query = (holdParams === true || holdParams === false) ? { holdParams } : { isFromTagBar: true };
+    if (this.isRefreshed) {
+      holdParams = false;
+    }
+    const query = typeof holdParams === 'boolean' ? { holdParams } : { isFromTagBar: true };
     this.props.history.push({
       pathname: '/basis/complexList',
       query

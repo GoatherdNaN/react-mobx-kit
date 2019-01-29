@@ -48,7 +48,7 @@ const AuthCode = {
     },
     "changepwd": {
       "name": "修改密码",
-      "code": "changepwd"
+      "code": "changePwd"
     }
   }
 };

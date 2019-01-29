@@ -22,8 +22,8 @@ const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 export default class Table extends Component  {
   constructor(props) {
     super(props);
-    const { location: { query } } = props;
-    if (!(query && query.isFromTagBar)) {
+    const { location: { query }, tableStore: { getDataToJs } } = props;
+    if (!(query && query.isFromTagBar) || !getDataToJs('listData').list.length) {
       this.search({});
     }
     this.state = {
@@ -160,8 +160,8 @@ export default class Table extends Component  {
   // 查
   search = (params) => {
     if (params === undefined) {
-      const { tableStore: { searchCriteria } } = this.props;
-      params = searchCriteria;
+      const { tableStore: { getDataToJs } } = this.props;
+      params = getDataToJs('searchCriteria');
     }
     if (JSON.stringify(params) === '{}') {
       this.props.form.resetFields();
@@ -272,12 +272,12 @@ export default class Table extends Component  {
       listData,
       loading,
       confirmLoading,
-      searchCriteria,
+      getDataToJs,
       [`${mode}`]: handleOk
     } = tableStore;
-    const refreshLoading = loading && JSON.stringify(searchCriteria) === '{}';
+    const refreshLoading = loading && JSON.stringify(getDataToJs('searchCriteria')) === '{}';
     return (
-      <Card size="small" title="普通列表" extra={
+      <Card size="small" extra={
         <div className="buttonGroupRight">
           <AuthButton
             code='nomalList'

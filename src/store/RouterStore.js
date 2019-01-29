@@ -1,14 +1,10 @@
-import { observable, action, computed, toJS } from 'mobx';
-import routes, { findRouteInRoutes } from '../routes';
+import { observable, action, toJS } from 'mobx'
+import routes, { findRouteInRoutes } from '../routes'
+import { sessionStorage } from 'utils/storage'
 
 export default class RouterStore {
     @observable activeTag = routes[0];
-    @observable routerHistory = [routes[0]];
-
-    @computed
-    get history() {
-        return toJS(this.routerHistory);
-    }
+    @observable routerHistory = sessionStorage.getJSONItem('routerHistory') || [routes[0]];
     /**
      * 3钟情况处理：
      *      1、页面操作导致的路由变化，比如点击菜单，点击按钮跳转路由之类的
@@ -81,6 +77,8 @@ export default class RouterStore {
             this.routerHistory[index].isLock = this.activeTag.isLock = !currentLockStatus;
         }
     }
+
+    getDataToJs = key => toJS(this[key]);
 
     getIndexInHistory = path => this.routerHistory.findIndex(v => v.path === path);
 }

@@ -4,7 +4,7 @@
  * @Description: 兼容sessionStorage
  */
 const keyGetter = function(key) {
-  return `edlan-${key}`;
+  return `mobx-admin-${key}`;
 };
 class Storage {
   constructor(storage) {
@@ -41,5 +41,6 @@ class Storage {
     this.storage.clear();
   }
 }
-
+const sessionStorage = new Storage(window.sessionStorage);
+export { sessionStorage };
 export default new Storage();

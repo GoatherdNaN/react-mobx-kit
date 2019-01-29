@@ -23,7 +23,7 @@ const AuthPopButton = AuthComponent(PopButton,{ stopPop: true });
 export default class Table extends Component  {
   constructor(props) {
     super(props);
-    let { location: { query }, complexTableStore: { listData } } = props;
+    let { location: { query }, complexTableStore: { getDataToJs } } = props;
     query = query || {};
     if (query.holdParams === true) {
       this.search();
@@ -31,7 +31,7 @@ export default class Table extends Component  {
       JSON.stringify(query) === {} ||
       query.holdParams === false ||
       !query.isFromTagBar ||
-      !listData.list.length
+      !getDataToJs('listData').list.length
     ) {
       this.search({});
     }
@@ -292,7 +292,7 @@ export default class Table extends Component  {
     } = complexTableStore;
     const refreshLoading = loading && JSON.stringify(getDataToJs('searchCriteria')) === '{}';
     return (
-      <Card size="small" title="复杂列表" extra={
+      <Card size="small" extra={
         <div className="buttonGroupRight">
           <AuthButton
             hasAuth

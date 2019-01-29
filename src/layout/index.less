@@ -24,7 +24,8 @@
   font-weight: bold;
   color: #fff;
   letter-spacing: 2px;
-  background-color: #002140;
+  // background-color: #002140;
+  background-color: rgba(170, 170, 170, 0.1);
   overflow: hidden;
   img {
     height: @header-height - 10 * 2;
@@ -72,4 +73,8 @@
     width: @sider-collapsed-width!important;
   }
   // menu折叠宽度在theme.js中配置
+  // 去掉subMenu上的阴影
+  .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    box-shadow: none;
+  }
 }

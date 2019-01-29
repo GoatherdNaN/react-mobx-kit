@@ -4,7 +4,7 @@ const isArray = Array.isArray;
 export const memoize = (fn, getKey) => {
   const cache = {};
   return (...rest) => {
-    const key = getKey ? getKey(rest) : 'key';
+    const key = typeof getKey === 'function' ? getKey(rest) : 'key';
     let res = cache[key];
     if (!res) {
       res = fn(...rest);
