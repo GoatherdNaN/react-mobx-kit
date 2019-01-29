@@ -91,6 +91,10 @@ class LineTemp extends PureComponent {
     this.draw(); // 执行动画
   }
 
+  componentWillUnmount() {
+    this.setState = () => { };
+  }
+
   componentWillReceiveProps(nextProps) {
     const { dots } = this.props;
     if (JSON.stringify(dots) !== JSON.stringify(nextProps.dots)) {

@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { Form, Input, Select, DatePicker } from 'antd'
 import moment from 'moment'
 import { Modal } from 'base'
-import { YMDHMS, disabledDate, disabledDateTime, getInitDate } from 'utils/moment'
+import { YMDHMS, disabledDate, getInitDate } from 'utils/moment'
 import { formItemBlock } from 'constants/config'
 import FormConfig from './config'
 import { OPERATE_ITEM } from 'constants/config'
 import { getLabelFromDict, STATUS } from 'constants/dict'
 
 const { TextArea } = Input;
+const { Option } = Select;
 const FormItem = Form.Item;
 
 @Form.create()
@@ -124,7 +125,6 @@ export default class ModalFrom extends Component {
                 style={{ width: '100%' }}
                 format={YMDHMS}
                 disabledDate={disabledDate}
-                disabledTime={disabledDateTime}
                 showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
               />
             ) : initData.updatedAt}

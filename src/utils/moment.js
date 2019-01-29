@@ -4,15 +4,32 @@ import { format } from './format'
 export const YMDHMS = "YYYY-MM-DD HH:mm:ss";
 export const YMD = "YYYY-MM-DD";
 
+const now = {
+  Y: +moment().format('YYYY'),
+  M: +moment().format('MM'),
+  D: +moment().format('DD'),
+  H: +moment().format('HH'),
+  m: +moment().format('mm'),
+  s: +moment().format('ss')
+};
+
+function range(start, end) {
+  const result = [];
+  for (let i = start; i < end; i++) {
+    result.push(i);
+  }
+  return result;
+}
+
 export function disabledDate(current) {
   return current && current > moment().endOf('day');
 }
 
 export function disabledDateTime() {
   return {
-    disabledHours: () => range(0, 24).splice(4, 20),
-    disabledMinutes: () => range(30, 60),
-    disabledSeconds: () => [55, 56],
+    disabledHours: () => [],
+    disabledMinutes: () => [],
+    disabledSeconds: () => [], // 一般来说无需精确到秒
   };
 }
 // 获取时间字符串
