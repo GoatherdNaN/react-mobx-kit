@@ -70,8 +70,9 @@ export default class RouterStore {
     }
 
     @action triggerLock = () => {
-        if (this.history.length > 1) {
+        if (this.routerHistory.length > 1) {
             const index = this.routerHistory.findIndex(v => v.path === this.activeTag.path);
+            if (index === -1) return;
             const currentLockStatus = this.routerHistory[index].isLock;
             this.routerHistory[index].isLock = this.activeTag.isLock = !currentLockStatus;
         }
