@@ -4,13 +4,14 @@ import { withRouter } from 'react-router-dom'
 import { Form, Input, Select, DatePicker } from 'antd'
 import { inject, observer } from 'mobx-react'
 import SpinWrapper from 'components/SpinWrapper'
-import { YMDHMS, disabledDate, disabledDateTime, getInitDate } from 'utils/moment'
+import { YMDHMS, disabledDate, getInitDate } from 'utils/moment'
 import FormConfig, { formItemLayout } from './config'
 import { getLabelFromDict, STATUS } from 'constants/dict'
 import { findRouteByPath } from '../../../routes'
 import { OPERATE_ITEM } from 'constants/config'
 
 const { TextArea } = Input;
+const { Option } = Select;
 const FormItem = Form.Item;
 
 @withRouter
@@ -84,6 +85,7 @@ export default class ClientForm extends Component {
         onCancel={this.back}
         initFormLoading={initFormLoading}
         confirmLoading={confirmLoading}
+        pageWapper={false}
       >
         <Form>
           <FormItem {...formItemProps} label={FormConfig.name.label}>
@@ -141,7 +143,6 @@ export default class ClientForm extends Component {
                 style={{ width: '100%' }}
                 format={YMDHMS}
                 disabledDate={disabledDate}
-                disabledTime={disabledDateTime}
                 showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
               />
             ) : initData.updatedAt}
